@@ -58,6 +58,14 @@ router.get('/logout', function(req, res){
   res.redirect('/');
 });
 
+
+// GET denied
+// To show this page if user is not authenticated and tries to access user page, or is not an admin but tries to 
+// enter admin page
+router.get('/denied', function(req, res){
+  res.render('access_denied');
+})
+
 //   Simple route middleware to ensure user is authenticated.
 //   Use this route middleware on any resource that needs to be protected.  If
 //   the request is authenticated (typically via a persistent login session),
@@ -65,7 +73,7 @@ router.get('/logout', function(req, res){
 //   login page.
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
-  res.redirect('/login');
+  res.redirect('/denied');
 };
 
 // Super Admin authentication middleware
@@ -73,7 +81,7 @@ function ensureSuperAdmin(req, res, next){
   if (req.user.superAdmin){
     return next();
   }
-  res.redirect('/login');
+  res.redirect('/denied');
 }
 
 module.exports = router;
