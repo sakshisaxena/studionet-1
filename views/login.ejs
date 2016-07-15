@@ -18,10 +18,13 @@
     <div class="row">
 			<div class="container">
 				<div class="col-xs-4 col-xs-offset-4">
-					<h3 style="text-align: center">StudioNet Home Page</h3>
-					<a class="btn btn-block btn-info" href="/login">Login</a>
+					<h3 style="text-align: center">StudioNet Login Page</h3>
+					<form action="/auth/openid" method="post">
+						<input type="hidden" id=user_id type="text" name="openid_identifier" value="https://openid.nus.edu.sg/"/><br/>
+						<input class="btn btn-primary btn-lg btn-block" type="submit" value="Login With IVLE"/>
+					</form>
 				</div>
 			</div>
-		</div>    
+		</div>
   </body>
 </html>
