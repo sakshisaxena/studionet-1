@@ -1,4 +1,4 @@
-var app = angular.module('studionetAdmin', ['ui.router']);
+var app = angular.module('studionetAdmin', ['ui.router', 'ngResource']);
 
 app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider){
 
@@ -22,14 +22,23 @@ app.controller('HomeCtrl', ['$scope', function($scope){
 	$scope.test = 'Hello world!';
 }]);
 
-app.controller('ModulesCtrl', ['$scope', function($scope){
+app.controller('ModulesCtrl', ['$scope', 'modules', function($scope, modules){
+	$scope.modules = modules.query();
 
+	$scope.deleteModule = function(module){
+		modules.delete(module, function(){
+			// success callback
+			$scope.modules.splice($scope.modules.indexOf(modules), 1);
+		});
+	};
+	
 }]);
 
-app.factory('modules', function($scope){
-	var o = {
-		modules: []
-	}
-
-	return o;
-});
+app.factory('modules', ['$resource', function($resource){
+	// trying out $resource instead of $http
+	return $resource('/api/modules/:id', {}, {
+		update: {
+			method: 'PUT'
+		}
+	});
+}]);

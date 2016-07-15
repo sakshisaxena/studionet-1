@@ -62,7 +62,19 @@ router.route('/:id')
 
 	// deletes an existing module
 	.delete(auth.ensureAuthenticated, auth.ensureSuperAdmin, function(req, res){
-		res.send('Deleting a module');
+		var query = [
+			'MATCH (m:module)',
+			'WHERE ID(m)=' + req.params.id,
+			'DELETE m'
+		].join('\n');
+
+		db.query(query, function(error, result){
+			if (error)
+				console.log('Error deleting module of id ' + req.params.id + ' : ', error);
+			else
+				// return the first item because query always returns an array but REST API expects a single object
+				res.send(result[0]);
+		})
 	});
 
 
