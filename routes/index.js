@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
+var auth = require('./auth');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -13,12 +14,12 @@ router.get('/login', function(req, res, next){
 });
 
 // GET admin page
-router.get('/admin', ensureAuthenticated, ensureSuperAdmin, function(req, res){
+router.get('/admin', auth.ensureAuthenticated, auth.ensureSuperAdmin, function(req, res){
 	res.render('admin');
 });
 
 // GET user page
-router.get('/user', ensureAuthenticated, function(req, res){
+router.get('/user', auth.ensureAuthenticated, function(req, res){
 	res.render('user');
 });
 
@@ -64,24 +65,6 @@ router.get('/logout', function(req, res){
 // enter admin page
 router.get('/denied', function(req, res){
   res.render('access_denied');
-})
-
-//   Simple route middleware to ensure user is authenticated.
-//   Use this route middleware on any resource that needs to be protected.  If
-//   the request is authenticated (typically via a persistent login session),
-//   the request will proceed.  Otherwise, the user will be redirected to the
-//   login page.
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
-  res.redirect('/denied');
-};
-
-// Super Admin authentication middleware
-function ensureSuperAdmin(req, res, next){
-  if (req.user.superAdmin){
-    return next();
-  }
-  res.redirect('/denied');
-}
+});
 
 module.exports = router;

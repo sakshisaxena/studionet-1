@@ -23,5 +23,13 @@ app.controller('HomeCtrl', ['$scope', function($scope){
 }]);
 
 app.controller('ModulesCtrl', ['$scope', function($scope){
-	$scope.test = 'ModulesCtrl test!';
+
 }]);
+
+app.factory('modules', function($scope){
+	var o = {
+		modules: []
+	}
+
+	return o;
+});
