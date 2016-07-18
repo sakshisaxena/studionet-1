@@ -69,14 +69,36 @@ router.route('/:id')
 			if (error)
 				console.log('Error retreiving module of id ' + req.params.id + ' : ', error);
 			else
-				res.send(result);
+				// return the first item because query always returns an array but REST API expects a single object
+			res.send(result[0]);
 		});
 
 	})
 
 	// updates an existing module
 	.put(auth.ensureAuthenticated, auth.ensureSuperAdmin, function(req, res){
-		res.send('Updating a module');
+		var query = [
+			'MATCH (m:module)',
+			'WHERE ID(m)=' + req.params.id,
+			'WITH m',
+			'SET m.name={nameParam}, m.code={codeParam}, m.contributionTypes={typesParam}',
+			'RETURN m'
+		].join('\n');
+
+		var params = {
+			nameParam: req.body.name,
+			codeParam: req.body.code,
+			typesParam: req.body.contributionTypes
+		};
+
+		db.query(query, params, function(error, result){
+			if (error)
+				console.log('Error updating module of id ' + req.params.id + ' : ', error);
+			else
+				// return the first item because query always returns an array but REST API expects a single object
+ 				res.send(result[0]);
+		});
+
 	})
 
 	// deletes an existing module

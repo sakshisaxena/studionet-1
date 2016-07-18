@@ -33,7 +33,7 @@ app.controller('ModulesCtrl', ['$scope', 'modules', function($scope, modules){
 	$scope.deleteModule = function(module){
 		modules.delete(module, function(){
 			// success callback
-			$scope.modules.splice($scope.modules.indexOf(modules), 1);
+			$scope.modules.splice($scope.modules.indexOf(module), 1);
 		});
 	};
 
@@ -46,11 +46,13 @@ app.controller('ModulesCtrl', ['$scope', 'modules', function($scope, modules){
 			code: $scope.moduleCode,
 			// convert array into string array, ngTagsInput gives an object array for some reason
 			contributionTypes: $scope.contributionTypes.map((o) => o.text) 
-		}, function(){
+		}, function(module){
 			// update the modules doing a resource query
 			// can consider doing a local push instead..
-			$scope.modules = modules.query();
-			
+			// $scope.modules = modules.query();
+
+			$scope.modules.push(module);
+
 		});
 
 		$scope.moduleName = '';
