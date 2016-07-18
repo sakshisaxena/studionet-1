@@ -70,7 +70,7 @@ router.route('/:id')
 				console.log('Error retreiving module of id ' + req.params.id + ' : ', error);
 			else
 				// return the first item because query always returns an array but REST API expects a single object
-			res.send(result[0]);
+				res.send(result[0]);
 		});
 
 	})
