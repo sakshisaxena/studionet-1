@@ -12,7 +12,12 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 		.state('modules', {
 			url: '/modules',
 			templateUrl: '/admin/templates/modules.html',
-			controller: 'ModulesCtrl'
+			controller: 'ModulesCtrl',
+			resolve: {
+				usersPromise: ['users', function(users){
+					return users.getAll();
+				}]
+			}
 		})
 		.state('module', {
 			url: '/modules/:id',
@@ -32,8 +37,23 @@ app.controller('HomeCtrl', ['$scope', function($scope){
 	$scope.test = 'Hello world!';
 }]);
 
-app.controller('ModulesCtrl', ['$scope', 'modules', function($scope, modules){
+app.controller('ModulesCtrl', ['$scope', 'modules', 'users', function($scope, modules, users){
 	$scope.modules = modules.query();
+	$scope.usersList = users.users;
+
+	$scope.moderators = [{modtype: 'existing'}];
+
+	$scope.addNewModField = function(){
+		$scope.moderators.push({modtype: 'existing'});
+	};
+
+	$scope.removeModField = function(moderator){
+		$scope.moderators.splice($scope.moderators.indexOf(moderator), 1);
+	};
+
+	$scope.modIsExisting = function(moderator){
+		return moderator.modtype === 'existing';
+	};
 
 	$scope.deleteModule = function(module){
 		modules.delete(module, function(){
@@ -57,6 +77,29 @@ app.controller('ModulesCtrl', ['$scope', 'modules', function($scope, modules){
 			// $scope.modules = modules.query();
 
 			$scope.modules.push(module);
+
+			$scope.moderators.forEach(function(moderator){
+				// check if existing or new user
+				if (moderator.modtype === 'existing'){
+					// user already exists in db
+					users.createModExisting({
+						nusOpenId: moderator.nusOpenIdExisting,
+						moduleId: module.id
+					});
+
+				}
+				else {
+					// need to create a new user
+					users.createModNew({
+						name: moderator.name,
+						nusOpenId: moderator.nusOpenId,
+						canEdit: moderator.canEdit==='true',
+						year: moderator.year,
+						moduleId: module.id
+					});
+				}
+
+			});
 
 		});
 
@@ -110,3 +153,38 @@ app.factory('modules', ['$resource', function($resource){
 		}
 	});
 }]);
+
+app.factory('users', ['$http', function($http){
+	/*
+	return $resource('/api/users/:id', {}, {
+		update: {
+			method: 'PUT'
+		}
+	});
+	*/
+
+	var o = {
+		users: []
+	};
+
+	o.getAll = function(){
+		return $http.get('/api/users').success(function(data){
+			angular.copy(data, o.users);
+		});
+	};
+
+	o.createModNew = function(moderator){
+		return $http.post('/api/moderators/new', moderator).success(function(data){
+			o.users.push(data[0]);
+		});
+	};
+
+	o.createModExisting = function(moderator){
+		return $http.post('/api/moderators/existing', moderator).success(function(data){
+			o.users.push(data[0]);
+		});
+	};
+
+	return o;
+}]);
+

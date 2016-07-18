@@ -13,7 +13,7 @@
 			</div>
 		</div>
 		<div class="col-xs-12">
-			<form ng-submit="addModule()">
+			<form ng-submit="addModule()" novalidate>
 				<h3>Add a new module</h3>
 				<div class="form-group">
 					<input type="text" class="form-control" placeholder="Module Code" ng-model="moduleCode" required>
@@ -23,6 +23,48 @@
 				</div>
 				<div class="form-group">
 					<tags-input ng-model="contributionTypes"></tags-input>
+				</div>
+				<div class="form-group">
+					<label>Add moderators</label>
+					<div ng-repeat="moderator in moderators">
+						<div class="row">
+							<div class="container">
+								<div class="col-xs-4">
+									<select class="form-control" ng-model="moderator.modtype">
+										<option value="existing">Existing User</option>
+										<option value="new">New User</option>
+									</select>
+								</div>
+								<div class="col-xs-8">
+									<!-- Either a search for existing users or create new user form -->
+									<div ng-if="modIsExisting(moderator)">
+										<select class="form-control" ng-options="user.nusOpenId as user.nusOpenId + ' ' + user.name for user in usersList" ng-model="moderator.nusOpenIdExisting"></select>
+										<button ng-click="removeModField(moderator)" class="btn btn-danger pull-right">
+											Remove
+										</button>
+									</div>
+									<div ng-if="!modIsExisting(moderator)">
+										<div class="form-group">
+											<input class="form-control" type="text" placeholder="Moderator Name" ng-model="moderator.name"><br>
+											<input class="form-control" type="text" placeholder="Moderator NUS Open ID" ng-model="moderator.nusOpenId"><br>
+											<input class="form-control" type="number" placeholder="Moderator Year" ng-model="moderator.year"><br>
+											<label>Can Edit?</label>
+											<select class="form-control" ng-model="moderator.canEdit">
+												<option value=true>True</option>
+												<option value=false>False</option>
+											</select>
+										</div>
+										<button ng-click="removeModField(moderator)" class="btn btn-danger pull-right">
+											Remove
+										</button>
+									</div>
+									<br><br><br>
+								</div>
+								<br>
+							</div>
+						</div>
+					</div>
+					<button class="btn btn-default" ng-click="addNewModField()">Add another moderator</button>
 				</div>
 				<button type="submit" class="btn btn-primary">Add module</button>
 			</form>
