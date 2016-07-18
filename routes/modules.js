@@ -31,7 +31,26 @@ router.route('/')
 
 	// add a new module
 	.post(auth.ensureAuthenticated, auth.ensureSuperAdmin, function(req, res){
-		res.send('Adding a module');
+
+		var query = [
+			'CREATE (m:module {name: {nameParam}, code: {codeParam}, contributionTypes: {typesParam}})',
+			'RETURN m'
+		].join('\n');
+
+		var params = {
+			nameParam: req.body.name,
+			codeParam: req.body.code,
+			typesParam: req.body.contributionTypes
+		};
+
+		db.query(query, params, function(error, result){
+			if (error)
+				console.log('Error adding module to the database: ', error);
+			else
+				// return the first item because query always returns an array but REST API expects a single object
+				res.send(result[0]);
+		});
+
 	});
 
 // route: /api/modules/:id

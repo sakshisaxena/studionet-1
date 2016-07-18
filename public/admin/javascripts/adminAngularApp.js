@@ -1,6 +1,6 @@
-var app = angular.module('studionetAdmin', ['ui.router', 'ngResource']);
+var app = angular.module('studionetAdmin', ['ui.router', 'ngResource', 'ngTagsInput']);
 
-app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider){
+app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', function($stateProvider, $urlRouterProvider, tagsInputConfigProvider){
 
 	// admin 'routes'
 	$stateProvider
@@ -16,6 +16,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $ur
 		});
 
 	$urlRouterProvider.otherwise('/');
+
+	tagsInputConfigProvider
+		.setDefaults('tagsInput', {
+			placeholder: 'Contribution Types'
+		});
 }]);
 
 app.controller('HomeCtrl', ['$scope', function($scope){
@@ -31,6 +36,27 @@ app.controller('ModulesCtrl', ['$scope', 'modules', function($scope, modules){
 			$scope.modules.splice($scope.modules.indexOf(modules), 1);
 		});
 	};
+
+	$scope.addModule = function(){
+		if (!$scope.moduleCode || $scope.moduleCode === '' || !$scope.moduleName || $scope.moduleName === '' || !$scope.contributionTypes || $scope.contributionTypes === [])
+			return;
+
+		modules.save({
+			name: $scope.moduleName,
+			code: $scope.moduleCode,
+			// convert array into string array, ngTagsInput gives an object array for some reason
+			contributionTypes: $scope.contributionTypes.map((o) => o.text) 
+		}, function(){
+			// update the modules doing a resource query
+			// can consider doing a local push instead..
+			$scope.modules = modules.query();
+			
+		});
+
+		$scope.moduleName = '';
+		$scope.moduleCode = '';
+		$scope.contributionTypes = [];
+	}
 	
 }]);
 
