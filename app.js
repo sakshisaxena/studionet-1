@@ -8,10 +8,12 @@ var passport = require('passport');
 var bodyParser = require('body-parser');
 
 // require route files
+var profile = require('./routes/profile');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var modules = require('./routes/modules');
 var moderators = require('./routes/moderators');
+
 
 var app = express();
 
@@ -43,6 +45,7 @@ var initPassport = require('./config/passport');
 initPassport(passport);
 
 app.use('/', routes);
+app.use('/api/profile', profile);
 app.use('/api/users', users);
 app.use('/api/modules', modules);
 app.use('/api/moderators', moderators);

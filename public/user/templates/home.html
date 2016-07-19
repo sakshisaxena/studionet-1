@@ -1,0 +1,17 @@
+<div class="row">
+	<div class="container">
+		<div class="col-xs-12">
+			<h2>Home</h2>
+			<div>
+				<h3>Logged In As:</h3>
+				<p><strong>Name: </strong> {{profile.name}}</p>
+				<p><strong>NUS Open ID: </strong> {{profile.nusOpenId}}</p>
+				<p><strong>Year: </strong>{{profile.year}}</p>
+				<p><strong>Can Edit: </strong>{{profile.canEdit}}</p>
+				<p><strong>Last Logged In: </strong>{{profile.lastLoggedIn | date: 'medium'}}</p>
+				<p><strong>ID: </strong>{{profile.id}}</p>
+				<p><strong>Super Admin: </strong>{{profile.superAdmin}}</p>
+			</div>
+		</div>
+	</div>
+</div>

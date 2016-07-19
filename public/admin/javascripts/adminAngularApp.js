@@ -87,10 +87,11 @@ app.controller('ModulesCtrl', ['$scope', 'modules', 'users', 'modulesPromise', f
 	};
 
 	$scope.deleteModule = function(module){
-		modules.delete(module, function(){
-			// success callback
-			$scope.modules.splice($scope.modules.indexOf(module), 1);
-		});
+		if(confirm('Really delete module ' + module.code + ': ' + module.name))
+			modules.delete(module, function(){
+				// success callback
+				$scope.modules.splice($scope.modules.indexOf(module), 1);
+			});
 	};
 
 	$scope.addModule = function(){
