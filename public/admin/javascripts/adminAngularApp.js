@@ -186,6 +186,11 @@ app.controller('UsersCtrl', ['$scope', 'users', function($scope, users){
 	$scope.test = 'Hello';
 	$scope.users = users.users;
 	$scope.option = 'nusOpenId';
+	$scope.showForm = false;
+
+	$scope.toggleForm = function(){
+		$scope.showForm = !$scope.showForm;
+	}
 
 	$scope.clearSearch = function(){
 		$scope.search = {};
