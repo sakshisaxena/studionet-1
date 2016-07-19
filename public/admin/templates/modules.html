@@ -1,18 +1,12 @@
 <div class="row">
 	<div class="container">
 		<div class="col-xs-12">
-			<h1>Modules <button class="btn btn-default pull-right" ui-sref="home">Back to Admin dashboard</button></h1>
+			<h1>Modules 
+			<button class="btn btn-default pull-right" ui-sref="home">Back to Admin dashboard</button>
+			<button class="btn btn-default pull-right" ng-click="toggleForm()">Add a new module</button>
+			</h1>
 		</div>
-		<div class="col-xs-12">
-			<div ng-repeat="module in modules">
-				<div class="well">
-					<h3>Module Code: {{module.code}} <button class="btn btn-danger pull-right" ng-click="deleteModule(module)">Delete this module</button></h3>
-					<p><strong>Module Name: </strong>{{module.code}} <button class="btn btn-info pull-right" ui-sref="module({id: module.id})">Edit this module</button></p>
-					<p><strong>Module Contribution Types: </strong>{{module.contributionTypes}}</p>
-				</div>
-			</div>
-		</div>
-		<div class="col-xs-12">
+		<div class="col-xs-12" ng-if="showForm">
 			<form ng-submit="addModule()" novalidate>
 				<h3>Add a new module</h3>
 				<div class="form-group">
@@ -25,7 +19,7 @@
 					<tags-input ng-model="contributionTypes"></tags-input>
 				</div>
 				<div class="form-group">
-					<label>Add moderators</label>
+					<label>Add moderators <button class="btn btn-default" ng-click="addNewModField()">Add another moderator</button> </label>
 					<div ng-repeat="moderator in moderators">
 						<div class="row">
 							<div class="container">
@@ -63,10 +57,19 @@
 							</div>
 						</div>
 					</div>
-					<button class="btn btn-default" ng-click="addNewModField()">Add another moderator</button>
 				</div>
 				<button type="submit" class="btn btn-primary">Add module</button>
 			</form>
+			<br><br>
+		</div>
+		<div class="col-xs-12">
+			<div ng-repeat="module in modules">
+				<div class="well">
+					<h3>Module Code: {{module.code}} <button class="btn btn-danger pull-right" ng-click="deleteModule(module)">Delete this module</button></h3>
+					<p><strong>Module Name: </strong>{{module.code}} <button class="btn btn-info pull-right" ui-sref="module({id: module.id})">Edit this module</button></p>
+					<p><strong>Module Contribution Types: </strong>{{module.contributionTypes}}</p>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

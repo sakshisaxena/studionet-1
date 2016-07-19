@@ -66,8 +66,13 @@ app.controller('ModulesCtrl', ['$scope', 'modules', 'users', 'modulesPromise', f
 	// get modules data before page loads
 	$scope.modules = modulesPromise;
 	$scope.usersList = users.users;
+	$scope.showForm = false;
 
 	$scope.moderators = [{modtype: 'existing'}];
+
+	$scope.toggleForm = function(){
+		$scope.showForm = !$scope.showForm;
+	}
 
 	$scope.addNewModField = function(){
 		$scope.moderators.push({modtype: 'existing'});
