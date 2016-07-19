@@ -16,13 +16,27 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 			resolve: {
 				usersPromise: ['users', function(users){
 					return users.getAll();
+				}],
+				// get modules data before page loads
+				modulesPromise: ['modules', function(modules){
+					return modules.query();
 				}]
 			}
 		})
 		.state('module', {
 			url: '/modules/:id',
 			templateUrl: '/admin/templates/module.html',
-			controller: 'ModuleCtrl'
+			controller: 'ModuleCtrl',
+			resolve: {
+				// get data first
+				modulePromise: ['$q', 'modules', '$stateParams', function($q, modules, $stateParams){
+					var defer = $q.defer();
+				  modules.get({id: $stateParams.id}, function(module){
+						defer.resolve(module);
+					});
+					return defer.promise;
+				}]
+			}
 		});
 
 	$urlRouterProvider.otherwise('/');
@@ -37,8 +51,10 @@ app.controller('HomeCtrl', ['$scope', function($scope){
 	$scope.test = 'Hello world!';
 }]);
 
-app.controller('ModulesCtrl', ['$scope', 'modules', 'users', function($scope, modules, users){
-	$scope.modules = modules.query();
+app.controller('ModulesCtrl', ['$scope', 'modules', 'users', 'modulesPromise', function($scope, modules, users, modulesPromise){
+	// $scope.modules = modules.query();
+	// get modules data before page loads
+	$scope.modules = modulesPromise;
 	$scope.usersList = users.users;
 
 	$scope.moderators = [{modtype: 'existing'}];
@@ -110,14 +126,23 @@ app.controller('ModulesCtrl', ['$scope', 'modules', 'users', function($scope, mo
 	
 }]);
 
-app.controller('ModuleCtrl', ['$scope', '$stateParams', 'modules', function($scope, $stateParams, modules){
+app.controller('ModuleCtrl', ['$scope', '$stateParams', 'modules', 'modulePromise', function($scope, $stateParams, modules, modulePromise){
 	// consider placing this in resolve during route?
+	/*
 	$scope.module = modules.get({id: $stateParams.id}, function(){
 		// success callback
 		$scope.moduleCode = $scope.module.code;
 		$scope.moduleName = $scope.module.name;
 		$scope.contributionTypes = $scope.module.contributionTypes;
 	});
+	*/
+
+	// doing it in resolve, get data first then load page
+	$scope.module = modulePromise;
+	$scope.moduleCode = $scope.module.code;
+	$scope.moduleName = $scope.module.name;
+	$scope.contributionTypes = $scope.module.contributionTypes;
+
 
 	$scope.updateModule = function(){
 		if (!$scope.moduleCode || $scope.moduleCode === '' || !$scope.moduleName || $scope.moduleName === '' || !$scope.contributionTypes || $scope.contributionTypes === [])
