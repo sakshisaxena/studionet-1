@@ -6,7 +6,8 @@ var db = require('seraph')({
   pass: process.env.DB_PASS
 });
 
-router.get('/', auth.ensureAuthenticated, function(req, res){
+// get just the user data for this account
+router.get('/user', auth.ensureAuthenticated, function(req, res){
   // update last logged in
   var query = [
     'MATCH (u:user)',
@@ -19,11 +20,10 @@ router.get('/', auth.ensureAuthenticated, function(req, res){
   var params = {
     loginDateParam: Date.now()
   };
-  console.log(query);
 
   db.query(query, params, function(error, result){
     if (error)
-      console.log('Error updating login date for user: ' + req.user.nusOpenId + ', ' + error);
+      console.log('Error getting user profile: ' + req.user.nusOpenId + ', ' + error);
     else
       // send back the profile with new login date
       res.send(result[0]);
@@ -31,6 +31,27 @@ router.get('/', auth.ensureAuthenticated, function(req, res){
 
   // send back the profile
   // res.send(req.user);
+});
+
+
+// get just the modules that this user is in
+router.get('/modules', auth.ensureAuthenticated, function(req, res){
+  
+  var query = [
+    'MATCH (u:user)',
+    'WHERE ID(u)=' + req.user.id,
+    'WITH u',
+    'MATCH (m)-[r:MEMBER]->(u)',
+    'RETURN m'
+  ].join('\n');
+
+  db.query(query, function(error, result){
+    if (error)
+      console.log('Error getting current user\'s module');
+    else
+      res.send(result);
+  });
+
 });
 
 module.exports = router;

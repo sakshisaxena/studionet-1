@@ -1,6 +1,7 @@
 var app = angular.module('studionet', ['ui.router', 'ngTagsInput'])
 									.run(['profile', function(profile){
-										profile.getProfile();
+										profile.getUser();
+										profile.getModules();
 									}]);
 
 app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', function($stateProvider, $urlRouterProvider, tagsInputConfigProvider){
@@ -10,7 +11,8 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 		.state('home', {
 			url: '/',
 			templateUrl: '/user/templates/home.html',
-			controller: 'HomeCtrl'
+			controller: 'HomeCtrl',
+
 		});
 
 	$urlRouterProvider.otherwise('/');
@@ -18,19 +20,28 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 
 app.controller('HomeCtrl', ['$scope', 'profile', function($scope, profile){
 	$scope.test = 'Hello';
-	$scope.profile = profile.profile;
+	$scope.user = profile.user;
+	$scope.modules = profile.modules;
+	console.log($scope.modules);
 }]);
 
 app.factory('profile', ['$http', function($http){
 	var o ={
-		profile: {}
+		user: {},
+		modules: [],
 	};
 
-	o.getProfile = function(){
-		return $http.get('/api/profile').success(function(data){
-			angular.copy(data, o.profile);
+	o.getUser = function(){
+		return $http.get('/api/profile/user').success(function(data){
+			angular.copy(data, o.user);
+		});
+	};
+
+	o.getModules = function(){
+		return $http.get('/api/profile/modules').success(function(data){
+			angular.copy(data, o.modules);
 		});
 	};
 
 	return o;
-}])
+}]);
