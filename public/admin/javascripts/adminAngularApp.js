@@ -16,13 +16,37 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 			resolve: {
 				usersPromise: ['users', function(users){
 					return users.getAll();
+				}],
+				// get modules data before page loads
+				modulesPromise: ['modules', function(modules){
+					return modules.query();
 				}]
 			}
 		})
 		.state('module', {
 			url: '/modules/:id',
 			templateUrl: '/admin/templates/module.html',
-			controller: 'ModuleCtrl'
+			controller: 'ModuleCtrl',
+			resolve: {
+				// get data first
+				modulePromise: ['$q', 'modules', '$stateParams', function($q, modules, $stateParams){
+					var defer = $q.defer();
+				  modules.get({id: $stateParams.id}, function(module){
+						defer.resolve(module);
+					});
+					return defer.promise;
+				}]
+			}
+		})
+		.state('users', {
+			url: '/users',
+			templateUrl: '/admin/templates/users.html',
+			controller: 'UsersCtrl',
+			resolve: {
+				usersPromise: ['users', function(users){
+					return users.getAll();
+				}]
+			}
 		});
 
 	$urlRouterProvider.otherwise('/');
@@ -37,8 +61,10 @@ app.controller('HomeCtrl', ['$scope', function($scope){
 	$scope.test = 'Hello world!';
 }]);
 
-app.controller('ModulesCtrl', ['$scope', 'modules', 'users', function($scope, modules, users){
-	$scope.modules = modules.query();
+app.controller('ModulesCtrl', ['$scope', 'modules', 'users', 'modulesPromise', function($scope, modules, users, modulesPromise){
+	// $scope.modules = modules.query();
+	// get modules data before page loads
+	$scope.modules = modulesPromise;
 	$scope.usersList = users.users;
 
 	$scope.moderators = [{modtype: 'existing'}];
@@ -93,13 +119,15 @@ app.controller('ModulesCtrl', ['$scope', 'modules', 'users', function($scope, mo
 					users.createModNew({
 						name: moderator.name,
 						nusOpenId: moderator.nusOpenId,
-						canEdit: moderator.canEdit==='true',
+						canEdit: moderator.canEdit,
 						year: moderator.year,
 						moduleId: module.id
 					});
 				}
 
 			});
+
+			$scope.moderators = [{modtype: 'existing'}]
 
 		});
 
@@ -110,14 +138,23 @@ app.controller('ModulesCtrl', ['$scope', 'modules', 'users', function($scope, mo
 	
 }]);
 
-app.controller('ModuleCtrl', ['$scope', '$stateParams', 'modules', function($scope, $stateParams, modules){
+app.controller('ModuleCtrl', ['$scope', '$stateParams', 'modules', 'modulePromise', function($scope, $stateParams, modules, modulePromise){
 	// consider placing this in resolve during route?
+	/*
 	$scope.module = modules.get({id: $stateParams.id}, function(){
 		// success callback
 		$scope.moduleCode = $scope.module.code;
 		$scope.moduleName = $scope.module.name;
 		$scope.contributionTypes = $scope.module.contributionTypes;
 	});
+	*/
+
+	// doing it in resolve, get data first then load page
+	$scope.module = modulePromise;
+	$scope.moduleCode = $scope.module.code;
+	$scope.moduleName = $scope.module.name;
+	$scope.contributionTypes = $scope.module.contributionTypes;
+
 
 	$scope.updateModule = function(){
 		if (!$scope.moduleCode || $scope.moduleCode === '' || !$scope.moduleName || $scope.moduleName === '' || !$scope.contributionTypes || $scope.contributionTypes === [])
@@ -144,6 +181,39 @@ app.controller('ModuleCtrl', ['$scope', '$stateParams', 'modules', function($sco
 	}
 
 }]);
+
+app.controller('UsersCtrl', ['$scope', 'users', function($scope, users){
+	$scope.test = 'Hello';
+	$scope.users = users.users;
+	$scope.option = 'nusOpenId';
+	$scope.showForm = false;
+
+	$scope.toggleForm = function(){
+		$scope.showForm = !$scope.showForm;
+	}
+
+	$scope.clearSearch = function(){
+		$scope.search = {};
+	};
+
+	$scope.addNewUser = function(){
+		if (!$scope.userName || $scope.userName === '' || !$scope.userNusOpenId || $scope.userNusOpenId === '' || !$scope.userYear || $scope.userYear === '')
+			return;
+
+		users.createNewUser({
+			name: $scope.userName,
+			nusOpenId: $scope.userNusOpenId,
+			year: $scope.userYear,
+			canEdit: $scope.userCanEdit
+		});
+
+		$scope.userName = '';
+		$scope.userNusOpenId = '';
+		$scope.userYear = '';
+		$scope.userCanEdit = '';
+	}
+
+}])
 
 app.factory('modules', ['$resource', function($resource){
 	// trying out $resource instead of $http
@@ -175,15 +245,21 @@ app.factory('users', ['$http', function($http){
 
 	o.createModNew = function(moderator){
 		return $http.post('/api/moderators/new', moderator).success(function(data){
-			o.users.push(data[0]);
+			o.users.push(data);
 		});
 	};
 
 	o.createModExisting = function(moderator){
 		return $http.post('/api/moderators/existing', moderator).success(function(data){
-			o.users.push(data[0]);
+			o.users.push(data);
 		});
 	};
+
+	o.createNewUser = function(user){
+		return $http.post('/api/users', user).success(function(data){
+			o.users.push(data);
+		});
+	}
 
 	return o;
 }]);
