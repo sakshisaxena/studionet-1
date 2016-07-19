@@ -27,7 +27,28 @@ router.route('/')
 
 	// add a new user
 	.post(auth.ensureAuthenticated, auth.ensureSuperAdmin, function(req, res){
-		res.send('Placeholder');
+		
+		var query = [
+			'CREATE (u:user {name: {nameParam}, nusOpenId: {nusOpenIdParam}, canEdit: {canEditParam}, year: {yearParam}, lastLoggedIn: {lastLoggedInParam}, superAdmin: {superAdminParam}})',
+			'RETURN u'
+		].join('\n');
+
+		var params = {
+			nameParam: req.body.name,
+			nusOpenIdParam: req.body.nusOpenId,
+			canEditParam: req.body.canEdit,
+			yearParam: req.body.year,
+			lastLoggedInParam: Date.now(),
+			superAdminParam: false
+		};
+
+		db.query(query, params, function(error, result){
+			if (error)
+				console.log('Error creating new user: ', error);
+			else
+				res.send(result[0]);
+		});
+
 	});
 
 router.route('/:id')

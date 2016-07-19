@@ -119,13 +119,15 @@ app.controller('ModulesCtrl', ['$scope', 'modules', 'users', 'modulesPromise', f
 					users.createModNew({
 						name: moderator.name,
 						nusOpenId: moderator.nusOpenId,
-						canEdit: moderator.canEdit==='true',
+						canEdit: moderator.canEdit,
 						year: moderator.year,
 						moduleId: module.id
 					});
 				}
 
 			});
+
+			$scope.moderators = [{modtype: 'existing'}]
 
 		});
 
@@ -183,6 +185,28 @@ app.controller('ModuleCtrl', ['$scope', '$stateParams', 'modules', 'modulePromis
 app.controller('UsersCtrl', ['$scope', 'users', function($scope, users){
 	$scope.test = 'Hello';
 	$scope.users = users.users;
+	$scope.option = 'nusOpenId';
+
+	$scope.clearSearch = function(){
+		$scope.search = {};
+	};
+
+	$scope.addNewUser = function(){
+		if (!$scope.userName || $scope.userName === '' || !$scope.userNusOpenId || $scope.userNusOpenId === '' || !$scope.userYear || $scope.userYear === '')
+			return;
+
+		users.createNewUser({
+			name: $scope.userName,
+			nusOpenId: $scope.userNusOpenId,
+			year: $scope.userYear,
+			canEdit: $scope.userCanEdit
+		});
+
+		$scope.userName = '';
+		$scope.userNusOpenId = '';
+		$scope.userYear = '';
+		$scope.userCanEdit = '';
+	}
 
 }])
 
@@ -216,15 +240,21 @@ app.factory('users', ['$http', function($http){
 
 	o.createModNew = function(moderator){
 		return $http.post('/api/moderators/new', moderator).success(function(data){
-			o.users.push(data[0]);
+			o.users.push(data);
 		});
 	};
 
 	o.createModExisting = function(moderator){
 		return $http.post('/api/moderators/existing', moderator).success(function(data){
-			o.users.push(data[0]);
+			o.users.push(data);
 		});
 	};
+
+	o.createNewUser = function(user){
+		return $http.post('/api/users', user).success(function(data){
+			o.users.push(data);
+		});
+	}
 
 	return o;
 }]);
