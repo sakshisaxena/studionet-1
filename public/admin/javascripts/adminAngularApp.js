@@ -37,6 +37,16 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 					return defer.promise;
 				}]
 			}
+		})
+		.state('users', {
+			url: '/users',
+			templateUrl: '/admin/templates/users.html',
+			controller: 'UsersCtrl',
+			resolve: {
+				usersPromise: ['users', function(users){
+					return users.getAll();
+				}]
+			}
 		});
 
 	$urlRouterProvider.otherwise('/');
@@ -169,6 +179,12 @@ app.controller('ModuleCtrl', ['$scope', '$stateParams', 'modules', 'modulePromis
 	}
 
 }]);
+
+app.controller('UsersCtrl', ['$scope', 'users', function($scope, users){
+	$scope.test = 'Hello';
+	$scope.users = users.users;
+
+}])
 
 app.factory('modules', ['$resource', function($resource){
 	// trying out $resource instead of $http
