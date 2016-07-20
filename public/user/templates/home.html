@@ -1,0 +1,32 @@
+<div class="row">
+	<div class="container">
+		<div class="col-xs-12">
+			<h2>Home</h2>
+			<button class="btn btn-default pull-right" ui-sref="admin" ng-if="isAdmin">Admin Panel</button>
+			<button class="btn btn-default pull-right" ui-sref="home">User Panel</button>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="container">
+		<div class="col-xs-12">
+			<div>
+				<h3>Logged In As:</h3>
+				<p><strong>Name: </strong> {{user.name}}</p>
+				<p><strong>NUS Open ID: </strong> {{user.nusOpenId}}</p>
+				<p><strong>Year: </strong>{{user.year}}</p>
+				<p><strong>Can Edit: </strong>{{user.canEdit}}</p>
+				<p><strong>Last Logged In: </strong>{{user.lastLoggedIn | date: 'medium'}}</p>
+				<p><strong>ID: </strong>{{user.id}}</p>
+				<p><strong>Super Admin: </strong>{{user.superAdmin}}</p>
+				<p>
+					<strong>Modules:</strong>
+					<ul ng-repeat="module in modules">
+						<li>{{module.m.code}}: {{module.m.name}} | Role: {{module.r.properties.role}}</li>
+					</ul>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>

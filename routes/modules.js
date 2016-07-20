@@ -119,4 +119,25 @@ router.route('/:id')
 	});
 
 
+
+router.route('/:id/users')
+	
+	// get all users for this module (all roles)
+	.get(auth.ensureAuthenticated, function(req, res){
+		var query = [
+			'MATCH (m:module)',
+			'WHERE ID(m)=' + req.params.id,
+			'WITH m',
+			'MATCH (m)-[r:MEMBER]->(u)',
+			'RETURN u'
+		].join('\n');
+
+		db.query(query, function(error, result){
+			if (error)
+				console.log('Error getting all users of module id: ' + req.params.id + ',' + error);
+			else
+				res.send(result);
+		});
+	})
+
 module.exports = router;
