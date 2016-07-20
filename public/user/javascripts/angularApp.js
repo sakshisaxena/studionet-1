@@ -12,7 +12,26 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 			url: '/',
 			templateUrl: '/user/templates/home.html',
 			controller: 'HomeCtrl',
-
+		})
+		.state('admin', {
+			url: '/admin',
+			templateUrl: '/user/templates/admin.html',
+			controller: 'AdminCtrl',
+			resolve: {
+				// ensure that profile is loaded before admin rights are decided
+				userProfile: ['profile', function(profile){
+					return profile.getUser() && profile.getModules();
+				}],
+				adminRights: ['$q', 'profile', 'userProfile', function($q, profile, userProfile){
+					var isAdmin = profile.modules.reduce(function(res, curr){
+						return res || curr.r.properties.role==='Admin';
+					}, false);
+					if (!isAdmin)
+						return $q.reject('Not authorized!');
+					else
+						return $q.resolve('Welcome admin!');
+				}]
+			}
 		});
 
 	$urlRouterProvider.otherwise('/');
@@ -22,8 +41,11 @@ app.controller('HomeCtrl', ['$scope', 'profile', function($scope, profile){
 	$scope.test = 'Hello';
 	$scope.user = profile.user;
 	$scope.modules = profile.modules;
-	console.log($scope.modules);
 }]);
+
+app.controller('AdminCtrl', ['$scope', function($scope){
+	$scope.test = 'Hello';
+}])
 
 app.factory('profile', ['$http', function($http){
 	var o ={

@@ -42,7 +42,7 @@ router.get('/modules', auth.ensureAuthenticated, function(req, res){
     'WHERE ID(u)=' + req.user.id,
     'WITH u',
     'MATCH (m)-[r:MEMBER]->(u)',
-    'RETURN m'
+    'RETURN m, r'
   ].join('\n');
 
   db.query(query, function(error, result){
