@@ -15,3 +15,25 @@
 		</div>
 	</div>
 </div>
+
+<div class="row">
+	<div class="container">
+		<div class="col-xs-12">
+			<h3>List of modules that you are an admin of:</h3>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="container">
+		<div class="col-xs-12">
+			<div ng-repeat="module in modules">
+				<div class="well">
+					<h4>Module Code: {{module.m.code}} <button class="btn btn-info pull-right" ui-sref="moduleAdmin({moduleCode: module.m.code})">View this module</button></h4>
+					<p><strong>Module Name: </strong>{{module.m.name}}</p>
+					<p><strong>Module Contribution Types: </strong>{{module.m.contributionTypes}}</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
