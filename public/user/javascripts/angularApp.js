@@ -55,9 +55,12 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 					else
 						return $q.resolve('Welcome admin!');
 				}],
-				moduleInfo: [function(){
-					return;
+				moduleInfo: ['userProfile', 'module', 'profile', '$stateParams', function(userProfile, module, profile, $stateParams){
+					var myMod = profile.modules.find((mod) => mod.m.code === $stateParams.moduleCode);
+					angular.copy(myMod, module.module);
+					return module.getModuleUsers(module.module.m.id);
 				}]
+				
 			}
 		});
 
@@ -79,8 +82,9 @@ app.controller('AdminCtrl', ['$scope', 'profile', function($scope, profile){
 	$scope.modules = profile.modules;
 }]);
 
-app.controller('ModuleAdminCtrl', ['$scope', function($scope){
-
+app.controller('ModuleAdminCtrl', ['$scope', 'module', function($scope, module){
+	$scope.moduleInfo = module.module;
+	$scope.moduleUsers = module.users;
 }]);
 
 app.factory('profile', ['$http', function($http){
@@ -101,5 +105,26 @@ app.factory('profile', ['$http', function($http){
 		});
 	};
 
+	return o;
+}]);
+
+app.factory('module', ['$http', function($http){
+
+	var o = {
+		module: {},
+		users: []
+	};
+
+	o.getModuleInfo = function(id){
+		return $http.get('/api/modules/' + id).success(function(data){
+			angular.copy(data, o.module);
+		});
+	};
+
+	o.getModuleUsers = function(id){
+		return $http.get('/api/modules/' + id + '/users').success(function(data){
+			angular.copy(data, o.users);
+		});
+	};
 	return o;
 }]);
