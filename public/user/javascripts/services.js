@@ -40,4 +40,19 @@ angular.module('studionet')
 		});
 	};
 	return o;
+}])
+
+.factory('users', ['$http', function($http){
+
+	var o = {
+		users: []
+	};
+
+	o.getAllUsers = function(){
+		return $http.get('/api/users').success(function(data){
+			angular.copy(data, o.users);
+		});
+	};
+	return o;
+
 }]);

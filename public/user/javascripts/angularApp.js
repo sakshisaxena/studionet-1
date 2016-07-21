@@ -1,7 +1,9 @@
 var app = angular.module('studionet', ['ui.router', 'ngTagsInput'])
 									.run(['profile', function(profile){
+										/*
 										profile.getUser();
 										profile.getModules();
+										*/
 									}]);
 
 app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', function($stateProvider, $urlRouterProvider, tagsInputConfigProvider){
@@ -12,6 +14,11 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 			url: '/',
 			templateUrl: '/user/templates/home.html',
 			controller: 'HomeCtrl',
+			resolve: {
+				userProfile: ['profile', function(profile){
+					return profile.getUser() && profile.getModules();
+				}]
+			}
 		})
 		.state('admin', {
 			// admin front
@@ -21,10 +28,10 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 			resolve: {
 				// ensure that profile is loaded before admin rights are decided
 				userProfile: ['profile', function(profile){
-					if (angular.equals({},profile.user) || angular.equals([], profile.modules)){
+					//if (angular.equals({},profile.user) || angular.equals([], profile.modules)){
 						// Need to get the data (probably refreshed browser)
 						return profile.getUser() && profile.getModules();
-					}
+					//}
 					// else already have the data, don't need to do anything
 				}],
 				adminRights: ['$q', 'profile', 'userProfile', function($q, profile, userProfile){
@@ -42,10 +49,10 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 			controller: 'ModuleAdminCtrl',
 			resolve: {
 				userProfile: ['profile', function(profile){
-					if (angular.equals({},profile.user) || angular.equals([], profile.modules)){
+					// if (angular.equals({},profile.user) || angular.equals([], profile.modules)){
 						// Need to get the data (probably refreshed browser)
 						return profile.getUser() && profile.getModules();
-					}
+					// }
 				}],
 				adminRights: ['$q', 'profile', 'userProfile', '$stateParams', function($q, profile, userProfile, $stateParams){
 					// must be admin of THIS module
@@ -59,10 +66,31 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 					var myMod = profile.modules.find((mod) => mod.m.code === $stateParams.moduleCode);
 					angular.copy(myMod, module.module);
 					return module.getModuleUsers(module.module.m.id);
-				}]
-				
+				}]			
 			}
-		});
+		})
+		.state('moduleAdmin.addUser', {
+			url: '/add',
+			templateUrl: '/user/templates/moduleAdmin.addUser.html',
+			controller: 'ModuleAdminCtrl',
+			resolve: {
+				allUsers: ['users', function(users){
+					return users.getAllUsers();
+				}]
+			}
+		})
+		.state('moduleAdmin.restrictUser', {
+			url: '/restrict', 
+			templateUrl: '/user/templates/moduleAdmin.restrictUser.html'
+		})
+		.state('moduleAdmin.editTypes', {
+			url: '/types', 
+			templateUrl: '/user/templates/moduleAdmin.editTypes.html'
+		})
+		.state('moduleAdmin.editRoles', {
+			url:'/roles',
+			templateUrl: '/user/templates/moduleAdmin.editRoles.html'
+		})
 
 	$urlRouterProvider.otherwise('/');
 }]);
