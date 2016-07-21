@@ -1,2 +1,22 @@
-<p>{{moduleInfo}}</p>
+<div class="row">
+	<div class="container">
+		<div class="col-xs-12">
+			<h2>Admin Page for Module {{moduleInfo.m.code}} <button class="btn btn-default pull-right" ui-sref="admin">Back to admin panel</button></h2>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="container">
+		<div class="col-xs-12">
+			<div class="well">
+				<h4>Module Code: {{moduleInfo.m.code}}</button></h4>
+				<p><strong>Module Name: </strong>{{moduleInfo.m.name}}</p>
+				<p><strong>Module Contribution Types: </strong>{{moduleInfo.m.contributionTypes}}</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+
 <p>{{moduleUsers}}</p>
