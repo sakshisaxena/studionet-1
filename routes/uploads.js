@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var multer = require('multer');
 var mkdirp = require('mkdirp');
-var fs = require('fs');
 var db = require('seraph')({
 	user: process.env.DB_USER,
 	pass: process.env.DB_PASS
@@ -39,13 +38,7 @@ var avatarStorage = multer.diskStorage({
 		});
 	},
 	filename: function(req, file, cb){
-		var dest = './public/uploads/' + req.user.nusOpenId;
-		var fileName = req.user.nusOpenId+'_avatar'+file.originalname.slice(file.originalname.lastIndexOf('.'));
-		fs.exists(dest+req.user.nusOpenId+'_avatar.*', function(exists){
-			if (exists)
-				fs.unlink(dest+req.user.nusOpenId+'_avatar.*');
-		})
-		cb(null, fileName);
+		cb(null, req.user.nusOpenId+'_avatar'+file.originalname.slice(file.originalname.lastIndexOf('.')));
 	}
 });
 
