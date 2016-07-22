@@ -91,9 +91,9 @@ router.post('/avatar', auth.ensureAuthenticated, multer({
 
 router.get('/avatar/:nusOpenId', auth.ensureAuthenticated, function(req, res){
 	var avatar = glob.sync('./uploads/' + req.params.nusOpenId + '/' + req.params.nusOpenId + '_avatar.*');
+	// sendFile does not like /../  ...
 	res.sendFile(path.resolve(__dirname + '/../') +'/' + avatar[0]);
 
-	//res.sendFile('./uploads/'+ req.params.nusOpenId + '/' + req.params.nusOpenId + '_avatar')
 });
 
 module.exports = router;
