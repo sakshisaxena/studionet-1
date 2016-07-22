@@ -1,6 +1,6 @@
 angular.module('studionet')
 
-.controller('HomeCtrl', ['$scope', 'profile', 'Upload', function($scope, profile, Upload){
+.controller('HomeCtrl', ['$scope', 'profile', 'Upload', '$timeout', function($scope, profile, Upload, $timeout){
 	$scope.user = profile.user;
 	$scope.modules = profile.modules;
 
@@ -17,6 +17,10 @@ angular.module('studionet')
     file.upload.then(function (response) {
       $timeout(function () {
         file.result = response.data;
+
+         // force a reload for avatar
+	      var random = (new Date()).toString();
+	      $scope.user.avatar = $scope.user.avatar + "?cb=" + random;
       });
     }, function (response) {
       if (response.status > 0)
