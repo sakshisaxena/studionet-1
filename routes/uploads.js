@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var multer = require('multer');
 var mkdirp = require('mkdirp');
+var glob = require('glob');
+var fs = require('fs');
 var db = require('seraph')({
 	user: process.env.DB_USER,
 	pass: process.env.DB_PASS
@@ -11,6 +13,7 @@ var auth = require('./auth');
 var storage = multer.diskStorage({
 	destination: function(req, file, cb) {
 		var dest = './public/uploads/' + req.body.username;
+
 		mkdirp(dest, function(err){
 			if (err)
 				console.log(err);
@@ -28,6 +31,16 @@ var storage = multer.diskStorage({
 var avatarStorage = multer.diskStorage({
 	destination: function(req, file, cb) {
 		var dest = './public/uploads/' + req.user.nusOpenId;
+
+		console.log('before glob');
+		var toDelete = glob.sync('./public/uploads/E0002744/E0002744_avatar.*');
+		toDelete.forEach(function(item, index, array){
+			fs.unlink(item, function(err){
+				if (err) throw err;
+				console.log(item + ' deleted!');
+			})
+		});
+
 		mkdirp(dest, function(err){
 			if (err)
 				console.log(err);

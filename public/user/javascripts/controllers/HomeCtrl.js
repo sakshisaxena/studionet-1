@@ -20,7 +20,9 @@ angular.module('studionet')
 
          // force a reload for avatar
 	      var random = (new Date()).toString();
-	      $scope.user.avatar = $scope.user.avatar + "?cb=" + random;
+	      profile.getUser().then(function(){
+		      $scope.user.avatar = $scope.user.avatar + "?cb=" + random;
+		    });
       });
     }, function (response) {
       if (response.status > 0)
