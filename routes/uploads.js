@@ -3,6 +3,7 @@ var router = express.Router();
 var multer = require('multer');
 var mkdirp = require('mkdirp');
 var glob = require('glob');
+var path = require('path');
 var fs = require('fs');
 var db = require('seraph')({
 	user: process.env.DB_USER,
@@ -12,7 +13,7 @@ var auth = require('./auth');
 
 var storage = multer.diskStorage({
 	destination: function(req, file, cb) {
-		var dest = './public/uploads/' + req.body.username;
+		var dest = './uploads/' + req.body.username;
 
 		mkdirp(dest, function(err){
 			if (err)
@@ -30,9 +31,9 @@ var storage = multer.diskStorage({
 
 var avatarStorage = multer.diskStorage({
 	destination: function(req, file, cb) {
-		var dest = './public/uploads/' + req.user.nusOpenId;
+		var dest = './uploads/' + req.user.nusOpenId;
 
-		var toDelete = glob.sync('./public/uploads/'+ req.user.nusOpenId+ '/' + req.user.nusOpenId + '_avatar.*');
+		var toDelete = glob.sync('./uploads/'+ req.user.nusOpenId+ '/' + req.user.nusOpenId + '_avatar.*');
 		toDelete.forEach(function(item, index, array){
 			fs.unlink(item, function(err){
 				if (err) throw err;
@@ -75,7 +76,7 @@ router.post('/avatar', auth.ensureAuthenticated, multer({
 	].join('\n');
 
 	var params = {
-		avatarParam: req.user.nusOpenId + '_avatar' + req.file.originalname.slice(req.file.originalname.lastIndexOf('.'))
+		avatarParam: '/uploads/avatar/' + req.user.nusOpenId
 	};
 	
 	db.query(query, params, function(error ,result){
@@ -85,6 +86,14 @@ router.post('/avatar', auth.ensureAuthenticated, multer({
 			res.send(result);
 	})
 
+});
+
+
+router.get('/avatar/:nusOpenId', auth.ensureAuthenticated, function(req, res){
+	var avatar = glob.sync('./uploads/' + req.params.nusOpenId + '/' + req.params.nusOpenId + '_avatar.*');
+	res.sendFile(path.resolve(__dirname + '/../') +'/' + avatar[0]);
+
+	//res.sendFile('./uploads/'+ req.params.nusOpenId + '/' + req.params.nusOpenId + '_avatar')
 });
 
 module.exports = router;
