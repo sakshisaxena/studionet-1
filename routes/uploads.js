@@ -32,12 +32,10 @@ var avatarStorage = multer.diskStorage({
 	destination: function(req, file, cb) {
 		var dest = './public/uploads/' + req.user.nusOpenId;
 
-		console.log('before glob');
 		var toDelete = glob.sync('./public/uploads/'+ req.user.nusOpenId+ '/' + req.user.nusOpenId + '_avatar.*');
 		toDelete.forEach(function(item, index, array){
 			fs.unlink(item, function(err){
 				if (err) throw err;
-				console.log(item + ' deleted!');
 			})
 		});
 
