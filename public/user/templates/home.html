@@ -68,21 +68,17 @@
 		    <fieldset>
 		      <legend>Upload models</legend>
 		      <br>Avatar:
-		      <input type="file" ngf-select ng-model="picFile" name="avatar"    
-		             accept="image/*" ngf-max-size="2MB" required
-		             ngf-model-invalid="errorFile">
+		      <input type="file" ngf-select ng-model="modelFile" name="model"    
+		             required ngf-model-invalid="errorFile">
 		      <i ng-show="modelForm.file.$error.required">*required</i><br>
-		      <i ng-show="modelForm.file.$error.maxSize">File too large 
-		          {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
-		      <img ng-show="modelForm.file.$valid" ngf-thumbnail="picFile" class="thumb"> <button ng-click="picFile = null" ng-show="picFile">Remove</button>
 		      <br>
 		      <button ng-disabled="!modelForm.$valid" 
-		              ng-click="uploadPic(picFile)">Submit</button>
-		      <span class="progress" ng-show="picFile.progress >= 0">
-		        <div style="width:{{picFile.progress}}%" 
-		            ng-bind="picFile.progress + '%'"></div>
+		              ng-click="uploadModel(modelFile)">Submit</button>
+		      <span class="progress" ng-show="modelFile.progress >= 0">
+		        <div style="width:{{modelFile.progress}}%" 
+		            ng-bind="modelFile.progress + '%'"></div>
 		      </span>
-		      <span ng-show="picFile.result">Upload Successful</span>
+		      <span ng-show="modelFile.result">Upload Successful</span>
 		      <span class="err" ng-show="errorMsg">{{errorMsg}}</span>
 		    </fieldset>
 		    <br>

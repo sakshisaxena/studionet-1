@@ -112,12 +112,33 @@ router.post('/avatar', auth.ensureAuthenticated, multer({
 });
 
 // POST :/uploads/models
+// POST a new model for this user
 router.post('/models', auth.ensureAuthenticated, multer({
 	storage: modelStorage
 }).single('model'), function(req, res, next){
 
-	res.send('success');
+	var query = [
+		'MATCH (u:user) WHERE ID(u)=' + req.user.id,
+		'WITH u',
+		'CREATE (f:file {type: {typeParam}, date: {dateParam}, size: {sizeParam}, name: {nameParam}})',
+		'WITH u,f',
+		'CREATE (u)-[v:UPLOADED {type: {typeParam}}]->(f)',
+		'RETURN v'
+	].join('\n');
 
+	var params = {
+		typeParam: 'model',
+		dateParam: Date.now(),
+		sizeParam: req.file.size,
+		nameParam: req.file.filename
+	}
+
+	db.query(query, params, function(error, result){
+		if (error)
+			console.log(error);
+		else
+			res.send(result);
+	})
 });
 
 // GET: /uploads/:nusOpenId/avatar
@@ -127,6 +148,25 @@ router.get('/:nusOpenId/avatar', auth.ensureAuthenticated, function(req, res){
 	// sendFile does not like /../  ...
 	res.sendFile(path.resolve(__dirname + '/../') +'/' + avatar[0]);
 
+});
+
+// GET: /uploads/:nusOpenId/models
+// GET user's uploaded models info by nusOpenId param
+// consider only allowing authorised users to view?
+router.get('/:nusOpenId/models', auth.ensureAuthenticated, function(req,res){
+	var query = [
+		'MATCH (u:user) WHERE ID(u) = ' + req.user.id,
+		'WITH u',
+		'MATCH (u)-[v:UPLOADED]->(f)',
+		'RETURN f'
+	].join('\n');
+
+	db.query(query, function(error, result){
+		if (error)
+			console.log(error);
+		else
+			res.send(result);
+	});
 });
 
 module.exports = router;
