@@ -1,4 +1,4 @@
-var app = angular.module('studionet', ['ui.router', 'ngTagsInput'])
+var app = angular.module('studionet', ['ui.router', 'ngTagsInput', 'ngFileUpload'])
 									.run(['profile', function(profile){
 										/*
 										profile.getUser();
@@ -17,7 +17,11 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 			resolve: {
 				userProfile: ['profile', function(profile){
 					return profile.getUser() && profile.getModules();
+				}],
+				userModels: ['modelsFactory', 'userProfile', 'profile', function(modelsFactory, userProfile, profile){
+					return modelsFactory.getUserModels(profile.user.nusOpenId);
 				}]
+
 			}
 		})
 		.state('admin', {

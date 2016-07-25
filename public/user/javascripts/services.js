@@ -55,4 +55,18 @@ angular.module('studionet')
 	};
 	return o;
 
+}])
+
+.factory('modelsFactory', ['$http', function($http){
+	var o = {
+		userModels: []
+	};
+
+	o.getUserModels = function(nusOpenId){
+		return $http.get('/uploads/' + nusOpenId + '/models').success(function(data){
+			angular.copy(data, o.userModels);
+		});
+	}
+
+	return o;
 }]);

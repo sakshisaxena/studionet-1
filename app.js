@@ -13,6 +13,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var modules = require('./routes/modules');
 var moderators = require('./routes/moderators');
+var uploads = require('./routes/uploads');
 
 
 var app = express();
@@ -49,6 +50,8 @@ app.use('/api/profile', profile);
 app.use('/api/users', users);
 app.use('/api/modules', modules);
 app.use('/api/moderators', moderators);
+app.use('/uploads', uploads);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
