@@ -67,7 +67,7 @@
 		<form name="modelForm">
 		    <fieldset>
 		      <legend>Upload models</legend>
-		      <br>Avatar:
+		      <br>Model:
 		      <input type="file" ngf-select ng-model="modelFile" name="model"    
 		             required ngf-model-invalid="errorFile">
 		      <i ng-show="modelForm.file.$error.required">*required</i><br>
@@ -83,5 +83,17 @@
 		    </fieldset>
 		    <br>
 		  </form>
+	</div>
+</div>
+
+
+<div class="row">
+	<div class="container">
+	<fieldset>
+		<legend>Download models</legend>
+		<div ng-repeat="userModel in userModels">
+			<a href="/uploads/{{user.nusOpenId}}/models/{{userModel.id}}" download="{{userModel.name}}">Download {{userModel.name}}</a>
+		</div>
+	</fieldset>
 	</div>
 </div>

@@ -169,4 +169,19 @@ router.get('/:nusOpenId/models', auth.ensureAuthenticated, function(req,res){
 	});
 });
 
+router.get('/:nusOpenId/models/:modelId', auth.ensureAuthenticated, function(req, res){
+	var query = [
+		'MATCH (f:file) WHERE ID(f) = ' + req.params.modelId,
+		'RETURN f'
+	].join('\n');
+
+	db.query(query, function(error, result){
+		if (error)
+			console.log(error);
+		else{
+			res.sendFile(path.resolve(__dirname + '/../') + '/uploads/' + req.params.nusOpenId + '/models/' + result[0].name);
+		}
+	})
+});
+
 module.exports = router;

@@ -1,8 +1,11 @@
 angular.module('studionet')
 
-.controller('HomeCtrl', ['$scope', 'profile', 'Upload', '$timeout', function($scope, profile, Upload, $timeout){
+.controller('HomeCtrl', ['$scope', 'profile', 'Upload', '$timeout', 'modelsFactory',
+
+ function($scope, profile, Upload, $timeout, modelsFactory){
 	$scope.user = profile.user;
 	$scope.modules = profile.modules;
+  $scope.userModels = modelsFactory.userModels;
 
 	$scope.isAdmin = profile.modules.reduce(function(res, curr){
 		return res || curr.r.properties.role==='Admin';
@@ -50,6 +53,8 @@ angular.module('studionet')
       // Math.min is to fix IE which reports 200% sometimes
       model.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
     });
-  }
+  };
+
+
 
 }]);
