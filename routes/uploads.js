@@ -31,14 +31,35 @@ var storage = multer.diskStorage({
 
 var avatarStorage = multer.diskStorage({
 	destination: function(req, file, cb) {
-		var dest = './uploads/' + req.user.nusOpenId;
+		var dest = './uploads/' + req.user.nusOpenId + '/avatar/';
 
-		var toDelete = glob.sync('./uploads/'+ req.user.nusOpenId+ '/' + req.user.nusOpenId + '_avatar.*');
+		var toDelete = glob.sync(dest + 'avatar.*');
+		// remove any old avatar if the user uploads a new one
 		toDelete.forEach(function(item, index, array){
 			fs.unlink(item, function(err){
 				if (err) throw err;
 			})
 		});
+
+		// if folder does not exist, create it
+		mkdirp(dest, function(err){
+			if (err)
+				console.log(err);
+			else{
+				console.log('created', dest);
+				cb(null, dest);
+			}
+		});
+	},
+	filename: function(req, file, cb){
+		// keep the extension of the avatar
+		cb(null, 'avatar'+file.originalname.slice(file.originalname.lastIndexOf('.')));
+	}
+});
+
+var modelStorage = multer.diskStorage({
+	destination: function(req, file, cb) {
+		var dest = './uploads/' + req.user.nusOpenId + '/models/';
 
 		mkdirp(dest, function(err){
 			if (err)
@@ -50,7 +71,7 @@ var avatarStorage = multer.diskStorage({
 		});
 	},
 	filename: function(req, file, cb){
-		cb(null, req.user.nusOpenId+'_avatar'+file.originalname.slice(file.originalname.lastIndexOf('.')));
+		cb(null, file.originalname);
 	}
 });
 
@@ -63,11 +84,13 @@ router.post('/', auth.ensureAuthenticated, multer({
   res.send('success');
 });
 
+// POST: /uploads/avatar
+// Upload a new profile picture
 router.post('/avatar', auth.ensureAuthenticated, multer({
 	storage: avatarStorage
-}).single('file'), function(req, res, next){
+}).single('avatar'), function(req, res, next){
 	// update avatar for user
-	
+
 	var query = [
 		'MATCH (u:user) WHERE ID(u)=' + req.user.id,
 		'WITH u',
@@ -76,7 +99,7 @@ router.post('/avatar', auth.ensureAuthenticated, multer({
 	].join('\n');
 
 	var params = {
-		avatarParam: '/uploads/avatar/' + req.user.nusOpenId
+		avatarParam: '/uploads/' + req.user.nusOpenId + '/avatar'
 	};
 	
 	db.query(query, params, function(error ,result){
@@ -88,9 +111,19 @@ router.post('/avatar', auth.ensureAuthenticated, multer({
 
 });
 
+// POST :/uploads/models
+router.post('/models', auth.ensureAuthenticated, multer({
+	storage: modelStorage
+}).single('model'), function(req, res, next){
 
-router.get('/avatar/:nusOpenId', auth.ensureAuthenticated, function(req, res){
-	var avatar = glob.sync('./uploads/' + req.params.nusOpenId + '/' + req.params.nusOpenId + '_avatar.*');
+	res.send('success');
+
+});
+
+// GET: /uploads/:nusOpenId/avatar
+// GET user's avatar by nusOpenId param
+router.get('/:nusOpenId/avatar', auth.ensureAuthenticated, function(req, res){
+	var avatar = glob.sync('./uploads/' + req.params.nusOpenId + '/avatar/'  + 'avatar.*');
 	// sendFile does not like /../  ...
 	res.sendFile(path.resolve(__dirname + '/../') +'/' + avatar[0]);
 

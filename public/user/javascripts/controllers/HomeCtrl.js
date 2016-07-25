@@ -8,15 +8,15 @@ angular.module('studionet')
 		return res || curr.r.properties.role==='Admin';
 	}, false);
 
-	$scope.uploadPic = function(file) {
-    file.upload = Upload.upload({
+	$scope.uploadPic = function(avatar) {
+    avatar.upload = Upload.upload({
       url: '/uploads/avatar',
-      data: {username: $scope.username, file: file},
+      data: {username: $scope.username, avatar: avatar},
     });
 
-    file.upload.then(function (response) {
+    avatar.upload.then(function (response) {
       $timeout(function () {
-        file.result = response.data;
+        avatar.result = response.data;
 
          // force a reload for avatar
 	      var random = (new Date()).toString();
@@ -29,7 +29,7 @@ angular.module('studionet')
         $scope.errorMsg = response.status + ': ' + response.data;
     }, function (evt) {
       // Math.min is to fix IE which reports 200% sometimes
-      file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+      avatar.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
     });
    }
 
