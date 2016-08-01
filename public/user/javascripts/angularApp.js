@@ -39,7 +39,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 					// else already have the data, don't need to do anything
 				}],
 				adminRights: ['$q', 'profile', 'userProfile', function($q, profile, userProfile){
-					var isAdmin = profile.modules.reduce((res, curr)=> res || curr.r.properties.role==='Admin', false);
+					var isAdmin = profile.modules.reduce((res, curr)=> res || curr.role==='Admin', false);
 					if (!isAdmin)
 						return $q.reject('Not authorized!');
 					else
@@ -60,16 +60,16 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 				}],
 				adminRights: ['$q', 'profile', 'userProfile', '$stateParams', function($q, profile, userProfile, $stateParams){
 					// must be admin of THIS module
-					var isAdmin = profile.modules.find((mod) => mod.m.code===$stateParams.moduleCode && mod.r.properties.role === 'Admin');
+					var isAdmin = profile.modules.find((mod) => mod.code===$stateParams.moduleCode && mod.role === 'Admin');
 					if (!isAdmin)
 						return $q.reject('Not authorized!');
 					else
 						return $q.resolve('Welcome admin!');
 				}],
 				moduleInfo: ['userProfile', 'module', 'profile', '$stateParams', function(userProfile, module, profile, $stateParams){
-					var myMod = profile.modules.find((mod) => mod.m.code === $stateParams.moduleCode);
+					var myMod = profile.modules.find((mod) => mod.code === $stateParams.moduleCode);
 					angular.copy(myMod, module.module);
-					return module.getModuleUsers(module.module.m.id);
+					return module.getModuleUsers(module.module.id);
 				}]			
 			}
 		})
