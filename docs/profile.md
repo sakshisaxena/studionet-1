@@ -8,10 +8,13 @@
 ## `GET /api/profile`
 Retrieves the current user's profile and modules information.
 
+### Access Rights
+User
+
 ### Parameters required
-| Request Property |  Name  |           Description           |
-|------------------|--------|---------------------------------|
-|     req.user     |  User  |  Available after user logs in.  |
+| Request Property |  Name  |   Type   |           Description           |
+|------------------|--------|----------|---------------------------------|
+|     req.user     |  User  |  Object  |  Available after user logs in.  |
 
 ### Example response
 ```json
@@ -44,10 +47,13 @@ Retrieves the current user's profile and modules information.
 ## `GET /api/profile/user`
 Retrieves the current user's profile information.
 
+### Access Rights
+User
+
 ### Parameters required
-| Request Property |  Name  |           Description           |
-|------------------|--------|---------------------------------|
-|     req.user     |  User  |  Available after user logs in.  |
+| Request Property |  Name  |   Type   |           Description           |
+|------------------|--------|----------|---------------------------------|
+|     req.user     |  User  |  Object  |  Available after user logs in.  |
 
 ### Example response
 ```json
@@ -66,10 +72,13 @@ Retrieves the current user's profile information.
 ## `GET /api/profile/modules`
 Retrieves all the modules (and the role of the user in the module) the current user is in.
 
+### Access Rights
+User
+
 ### Parameters required
-| Request Property |  Name  |           Description           |
-|------------------|--------|---------------------------------|
-|     req.user     |  User  |  Available after user logs in.  |
+| Request Property |  Name  |   Type   |           Description           |
+|------------------|--------|----------|---------------------------------|
+|     req.user     |  User  |  Object  |  Available after user logs in.  |
 
 ### Example response
 ```json

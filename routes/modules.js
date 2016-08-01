@@ -16,8 +16,11 @@ router.route('/')
 	.get(auth.ensureAuthenticated, function(req, res){
 		
 		var query = [
-			'MATCH (m:module)',
-			'RETURN m'
+			'MATCH (m:module) WITH m',
+			'MATCH (m)-[r:MEMBER]->(u:user)',
+			'RETURN {' +
+								'code: m.code, name: m.name, contributionTypes: m.contributionTypes, id: id(m),' + 
+								'users: collect({id: id(u), role: r.role })}'
 		].join('\n');
 
 		db.query(query, function(error, result){
@@ -60,9 +63,12 @@ router.route('/:id')
 	.get(auth.ensureAuthenticated, function(req, res){
 		
 		var query = [
-			'MATCH (m:module)',
-			'WHERE ID(m)=' + req.params.id,
-			'RETURN m'
+			'MATCH (m:module) WHERE ID(m)=' + req.params.id,
+			'WITH m',
+			'MATCH (m)-[r:MEMBER]->(u:user)',
+			'RETURN {' +
+								'code: m.code, name: m.name, contributionTypes: m.contributionTypes, id: id(m),' + 
+								'users: collect({id: id(u), role: r.role })}'
 		].join('\n');
 
 		db.query(query, function(error, result){
@@ -84,6 +90,18 @@ router.route('/:id')
 			'SET m.name={nameParam}, m.code={codeParam}, m.contributionTypes={typesParam}',
 			'RETURN m'
 		].join('\n');
+
+		/*
+		if (req.body.name)
+			query.push('SET m.name={nameParam}');
+		if (req.body.code)
+			query.push('SET m.code={codeParam}');
+		if (req.body.contributionTypes)
+			query.push('SET m.contributionTypes={typesParam}');
+
+		query.push('RETURN m');
+		query.join('\n');
+		*/
 
 		var params = {
 			nameParam: req.body.name,
