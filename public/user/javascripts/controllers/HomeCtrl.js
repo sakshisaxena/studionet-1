@@ -8,7 +8,7 @@ angular.module('studionet')
   $scope.userModels = modelsFactory.userModels;
 
 	$scope.isAdmin = profile.modules.reduce(function(res, curr){
-		return res || curr.r.properties.role==='Admin';
+		return res || curr.role==='Admin';
 	}, false);
 
 	$scope.uploadPic = function(avatar) {
