@@ -78,12 +78,40 @@ router.route('/:id')
 
 	// update a user
 	.put(auth.ensureAuthenticated, auth.ensureSuperAdmin, function(req, res){
+		var query = [
+			'MATCH (u:user) WHERE ID(u)=' + req.params.id,
+			'SET u.name={nameParam}, u.nusOpenId={nusOpenIdParam}, u.canEdit={canEditParam}, u.year={yearParam}',
+			'RETURN u'
+		].join('\n');
 
+		var params = {
+			nameParam: req.body.name,
+			nusOpenIdParam: req.body.nusOpenId,
+			canEditParam: req.body.canEdit,
+			yearParam: req.body.year,
+		};
+
+		db.query(query, params, function(error, result){
+			if (error)
+				console.log('Error creating new user: ', error);
+			else
+				res.send(result[0]);
+		});
 	})
 
 	// delete a user
 	.delete(auth.ensureAuthenticated, auth.ensureSuperAdmin, function(req, res){
+		var query = [
+			'MATCH (u:user) WHERE ID(u)=' + req.params.id,
+			'DELETE u'
+		].join('\n');
 
+		db.query(query, function(error,result){
+			if (error)
+				console.log('Error deleting user id: ' + req.params.id);
+			else
+				res.send(result[0]);
+		})
 	});
 
 
