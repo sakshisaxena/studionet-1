@@ -54,12 +54,12 @@ Add a new module.
 Super Admin
 
 ### Parameters required
-|    Request Property     |            Name             |   Type   |                   Description                   |
-|-------------------------|-----------------------------|----------|-------------------------------------------------|
-|         req.user        |            User             |  Object  |          Available after user logs in.          |
-|         req.name        |         Module Name         |  String  |         Name of the module to be added.         |
-|         req.code        |         Module Code         |  String  |         Code of the module to be added.         |
-|  req.contributionTypes  |  Module Contribution Types  |   Array  |  Contribution Types of the module to be added.  |
+|      Request Property        |            Name             |   Type   |                   Description                   |
+|------------------------------|-----------------------------|----------|-------------------------------------------------|
+|         req.user             |            User             |  Object  |          Available after user logs in.          |
+|         req.body.name        |         Module Name         |  String  |         Name of the module to be added.         |
+|         req.body.code        |         Module Code         |  String  |         Code of the module to be added.         |
+|  req.body.contributionTypes  |  Module Contribution Types  |   Array  |  Contribution Types of the module to be added.  |
 
 ### Example response
 ```json
@@ -108,12 +108,12 @@ Update a specific module.
 Moderator
 
 ### Parameters required
-|    Request Property     |            Name             |   Type   |                       Description                        |
-|-------------------------|-----------------------------|----------|----------------------------------------------------------|
-|         req.user        |            User             |  Object  |              Available after user logs in.               |
-|         req.name        |         Module Name         |  String  |         Name of the module to be added.                  |
-|         req.code        |         Module Code         |  String  |         Code of the module to be added.                  |
-|  req.contributionTypes  |  Module Contribution Types  |   Array  |  Contribution Types of the module to be added.           |
+|       Request Property       |            Name             |   Type   |                       Description                        |
+|------------------------------|-----------------------------|----------|----------------------------------------------------------|
+|            req.user          |            User             |  Object  |              Available after user logs in.               |
+|         req.body.name        |         Module Name         |  String  |         Name of the module to be added.                  |
+|         req.body.code        |         Module Code         |  String  |         Code of the module to be added.                  |
+|  req.body.contributionTypes  |  Module Contribution Types  |   Array  |  Contribution Types of the module to be added.           |
 
 ### Example response
 ```json

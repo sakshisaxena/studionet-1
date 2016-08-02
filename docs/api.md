@@ -31,6 +31,6 @@
 |-----------------------|-------------------------------------------------------------|---------------|
 |    GET /api/users     |  Get a list of all users with basic information about each  |  Super Admin  |
 |    POST /api/users    |                        Add a new user                       |  Super Admin  |
-|  GET /api/users/:id   |                     Get a specific user                     |  Super Admin  |
+|  GET /api/users/:id   |         Get a specific user with basic information          |  Super Admin  |
 |  PUT /api/users/:id   |                    Update a specific user                   |  Super Admin  |
 | DELETE /api/users/:id |                    Delete a specific user                   |  Super Admin  |
