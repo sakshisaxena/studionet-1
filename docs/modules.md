@@ -6,7 +6,7 @@
 |    GET /api/modules/:id    |       Get a specific module with basic information about it      |      User       |
 |    PUT /api/modules/:id    |                      Update a specific module                    |    Moderator    |
 |  DELETE /api/modules/:id   |                      Delete a specific module                    |   Super Admin   |
-| GET /api/modules/:id/users |       Get a specific module with basic information about it      |      User       |
+| GET /api/modules/:id/users |         Get all users that are part of a specific module.        |      User       |
 
 ## `GET /api/modules`
 Get a list of all modules with basic information about each.
@@ -117,5 +117,62 @@ Moderator
 
 ### Example response
 ```json
+{
+  "contributionTypes": ["test"],
+  "code": "test",
+  "name": "test",
+  "id": 121
+}
+```
 
+## `DELETE /api/modules/:id`
+Delete a specific module.
+Can only delete the node if it does not contain any relationship with any other nodes.
+
+### Access Rights
+Super Admin
+
+### Parameters required
+| Request Property |  Name  |   Type   |           Description           |
+|------------------|--------|----------|---------------------------------|
+|     req.user     |  User  |  Object  |  Available after user logs in.  |
+
+### Example response
+```json
+N/A
+```
+
+## `GET /api/modules/:id/users`
+Get all users that are part of a specific module.
+
+### Access Rights
+User
+
+### Parameters required
+| Request Property |  Name  |   Type   |           Description           |
+|------------------|--------|----------|---------------------------------|
+|     req.user     |  User  |  Object  |  Available after user logs in.  |
+
+### Example response
+```json
+[{
+  "year": 2,
+  "canEdit": true,
+  "nusOpenId": "a231312",
+  "name": "Jack",
+  "lastLoggedIn": 12312312,
+  "superAdmin": false,
+  "avatar": "/uploads/a231312/avatar",
+  "id": 112
+ },
+ {
+  "year": 2,
+  "nusOpenId": "E123456",
+  "canEdit": true,
+  "name": "User",
+  "lastLoggedIn": 1470033863980,
+  "avatar": "/uploads/E123456/avatar",
+  "superAdmin":true,
+  "id":87
+}]
 ```

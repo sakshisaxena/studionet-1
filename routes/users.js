@@ -9,7 +9,7 @@ var db = require('seraph')({
 router.route('/')
 
 	// return all users
-	.get(auth.ensureAuthenticated, function(req, res){
+	.get(auth.ensureAuthenticated, auth.ensureSuperAdmin, function(req, res){
 		
 		var query = [
 			'MATCH (u:user)',
@@ -54,7 +54,7 @@ router.route('/')
 router.route('/:id')
 
 	// return a user
-	.get(auth.ensureAuthenticated, function(req, res){
+	.get(auth.ensureAuthenticated, auth.ensureSuperAdmin, function(req, res){
 		res.send('Placeholder');
 	})
 
