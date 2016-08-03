@@ -106,7 +106,7 @@ router.post('/avatar', auth.ensureAuthenticated, multer({
 		if (error)
 			console.log(error);
 		else
-			res.send(result);
+			res.send(result[0]);
 	})
 
 });
@@ -123,7 +123,7 @@ router.post('/models', auth.ensureAuthenticated, multer({
 		'CREATE (f:file {type: {typeParam}, date: {dateParam}, size: {sizeParam}, name: {nameParam}})',
 		'WITH u,f',
 		'CREATE (u)-[v:UPLOADED {type: {typeParam}}]->(f)',
-		'RETURN v'
+		'RETURN f'
 	].join('\n');
 
 	var params = {
@@ -137,7 +137,7 @@ router.post('/models', auth.ensureAuthenticated, multer({
 		if (error)
 			console.log(error);
 		else
-			res.send(result);
+			res.send(result[0]);
 	})
 });
 

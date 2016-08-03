@@ -27,6 +27,7 @@
 | GET /api/modules/:id/users |         Get all users that are part of a specific module.        |      User       |
 
 
+
 ### Users
 |       Endpoint        |                         Description                         | Access Rights |
 |-----------------------|-------------------------------------------------------------|---------------|
@@ -35,3 +36,13 @@
 |  GET /api/users/:id   |         Get a specific user with basic information          |  Super Admin  |
 |  PUT /api/users/:id   |                    Update a specific user                   |  Super Admin  |
 | DELETE /api/users/:id |                    Delete a specific user                   |  Super Admin  |
+
+
+### Uploads
+|                  Endpoint                 |                           Description                          | Access Rights |
+|-------------------------------------------|----------------------------------------------------------------|---------------|
+|            POST /uploads/avatar           |            Upload a new avatar for the current user            |      User     |
+|           POST /uploads/models            |            Upload a new model under the current user           |      User     |
+|      GET /uploads/:nusOpenId/avatar       |                  Get a specific user's avatar                  |      User     |
+|      GET /uploads/:nusOpenId/models       |  Get information about all models uploaded by a specific user  |      User     |
+|  GET /uploads/:nusOpenId/models/:modelId  |      Download a specific model uploaded by a certain user      |      User     |
