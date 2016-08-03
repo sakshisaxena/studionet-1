@@ -1,3 +1,7 @@
+var db = require('seraph')({
+  user: process.env.DB_USER,
+  pass: process.env.DB_PASS
+});
 // This module exports a bunch of auth middleware functions
 
 //   Simple route middleware to ensure user is authenticated.
@@ -16,7 +20,25 @@ module.exports.ensureAuthenticated = function(req, res, next) {
 
 module.exports.isModerator = function(req, res, next){
 
-  
+  var query = [
+    'MATCH (m:module)-[r:MEMBER]->(u:user) WHERE id(u)=' + req.user.id + ' AND id(m)=' + req.params.moduleId,
+    'RETURN sign(count(r)) as mod'
+  ].join('\n');
+
+  db.query(query, function(error, result){
+    if (error)
+      console.log('error!');
+    else
+      console.log(result);
+
+    if (result[0].mod === 1)
+      return next();
+    else{
+      console.log('Not a moderator of the module: ' + req.params.moduleId);
+      res.redirect('/denied');
+    }
+
+  })
 
 }
 

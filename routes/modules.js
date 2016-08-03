@@ -136,12 +136,41 @@ router.route('/:moduleId')
 		})
 	});
 
+router.route('/:moduleId/post')
+	// add a post linked to the moduleId
+	.post(auth.ensureAuthenticated, auth.isModerator, function(req, res){
+
+		var query = [
+			'MATCH (m:module) WHERE ID(m)=' + req.params.moduleId,
+			'CREATE (p:post {title: {titleParam}, body: {bodyParam}, postedBy: {authorParam}, lastUpdated:{lastUpdatedParam}, editted: {edittedParam}})',
+			'WITH m, p',
+			'CREATE (m)-[r:POST]->(p)',
+			'RETURN p'
+		].join('\n');
+
+		var params = {
+			titleParam: req.body.title,
+			bodyParam: req.body.body,
+			authorParam: req.user.nusOpenId,
+			lastUpdatedParam: Date.now(),
+			edittedParam: false
+		};
+
+		db.query(query, params, function(error, result){
+			if (error)
+				console.log('Error creating post for module: ' + req.params.moduleId);
+			else
+				res.send(result[0]);
+		});
+	});
 
 
+
+// route: /api/modules/:moduleId/users
 router.route('/:moduleId/users')
 	
 	// get all users for this module (all roles)
-	.get(auth.ensureAuthenticated, function(req, res){
+	.get(auth.ensureAuthenticated, auth.isModerator, function(req, res){
 		var query = [
 			'MATCH (m:module)',
 			'WHERE ID(m)=' + req.params.moduleId,
@@ -155,6 +184,26 @@ router.route('/:moduleId/users')
 				console.log('Error getting all users of module id: ' + req.params.moduleId + ',' + error);
 			else
 				res.send(result);
+		});
+	})
+
+	// link the user with this module
+	.post(auth.ensureAuthenticated, auth.isModerator, function(req, res){
+		var query = [
+			'MATCH (u:user) WHERE ID(u)=' + req.body.userId + ' WITH u',
+			'MATCH (m:module) WHERE ID(m)=' + req.params.moduleId,
+			'CREATE UNIQUE (m)-[r:MEMBER{role: {roleParam}}]->(u)'
+		].join('\n');
+
+		var params = {
+			roleParam: req.body.moduleRole
+		};
+
+		db.query(query, params, function(error, result){
+			if (error)
+				console.log('Error linking the user to the module');
+			else
+				res.send('success');
 		});
 	})
 
