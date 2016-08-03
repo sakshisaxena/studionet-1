@@ -55,12 +55,12 @@ router.route('/')
 
 	});
 
-router.route('/:id')
+router.route('/:userId')
 
 	// return a user
 	.get(auth.ensureAuthenticated, auth.ensureSuperAdmin, function(req, res){
 			var query = [
-				'MATCH (u:user) WHERE ID(u)='+req.params.id+ ' WITH u',
+				'MATCH (u:user) WHERE ID(u)='+req.params.userId+ ' WITH u',
 				'OPTIONAL MATCH (u)-[c:CREATED]->(p) WITH u, collect({id: id(p), contributionTypes: p.contributionTypes}) AS contributions',
 				'OPTIONAL MATCH (u)-[v:VIEWED]->(e) WITH u, contributions, collect({count: v.count, id: id(e)}) AS views',
 				'OPTIONAL MATCH (u)-[r:UPLOADED]->(f) WITH u, contributions, views, collect({id: id(f), type:f.type}) AS uploads',
@@ -70,7 +70,7 @@ router.route('/:id')
 
 			db.query(query, function(error,result){
 				if (error)
-					console.log('Error getting user of id ' + req.params.id + ' : ' + error);
+					console.log('Error getting user of id ' + req.params.userId + ' : ' + error);
 				else
 					res.send(result[0]);
 			});	
@@ -79,7 +79,7 @@ router.route('/:id')
 	// update a user
 	.put(auth.ensureAuthenticated, auth.ensureSuperAdmin, function(req, res){
 		var query = [
-			'MATCH (u:user) WHERE ID(u)=' + req.params.id,
+			'MATCH (u:user) WHERE ID(u)=' + req.params.userId,
 			'SET u.name={nameParam}, u.nusOpenId={nusOpenIdParam}, u.canEdit={canEditParam}, u.year={yearParam}',
 			'RETURN u'
 		].join('\n');
@@ -102,13 +102,13 @@ router.route('/:id')
 	// delete a user
 	.delete(auth.ensureAuthenticated, auth.ensureSuperAdmin, function(req, res){
 		var query = [
-			'MATCH (u:user) WHERE ID(u)=' + req.params.id,
+			'MATCH (u:user) WHERE ID(u)=' + req.params.userId,
 			'DELETE u'
 		].join('\n');
 
 		db.query(query, function(error,result){
 			if (error)
-				console.log('Error deleting user id: ' + req.params.id);
+				console.log('Error deleting user id: ' + req.params.userId);
 			else
 				res.send(result[0]);
 		})

@@ -39,6 +39,30 @@ router.get('/', auth.ensureAuthenticated, function(req, res){
   });
 });
 
+router.put('/', auth.ensureAuthenticated, function(req, res){
+
+  var query = [
+    'MATCH (u:user) WHERE ID(u)=' + req.user.id,
+    'WITH u',
+    'SET u.name={nameParam}, u.nusOpenId={nusOpenIdParam}, u.canEdit={canEditParam}, u.year={yearParam}',
+    'RETURN u'
+  ].join('\n');
+
+  var params = {
+      nameParam: req.body.name,
+      nusOpenIdParam: req.body.nusOpenId,
+      canEditParam: req.body.canEdit,
+      yearParam: req.body.year,
+    };
+
+    db.query(query, params, function(error, result){
+      if (error)
+        console.log('Error creating new user: ', error);
+      else
+        res.send(result[0]);
+    });
+});
+
 // get just the user data for this account
 router.get('/user', auth.ensureAuthenticated, function(req, res){
   // update last logged in

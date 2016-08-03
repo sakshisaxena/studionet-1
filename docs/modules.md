@@ -1,12 +1,12 @@
 # Modules
-|          Endpoint          |                            Description                           |  Access Rights  |
-|----------------------------|------------------------------------------------------------------|-----------------|
-|      GET /api/modules      |    Get a list of all modules with basic information about each   |      User       |
-|      POST /api/modules     |                          Add a new module                        |   Super Admin   |
-|    GET /api/modules/:id    |       Get a specific module with basic information about it      |      User       |
-|    PUT /api/modules/:id    |                      Update a specific module                    |    Moderator    |
-|  DELETE /api/modules/:id   |                      Delete a specific module                    |   Super Admin   |
-| GET /api/modules/:id/users |         Get all users that are part of a specific module.        |      User       |
+|             Endpoint             |                            Description                           |  Access Rights  |
+|----------------------------------|------------------------------------------------------------------|-----------------|
+|         GET /api/modules         |    Get a list of all modules with basic information about each   |      User       |
+|         POST /api/modules        |                          Add a new module                        |   Super Admin   |
+|    GET /api/modules/:moduleId    |       Get a specific module with basic information about it      |      User       |
+|    PUT /api/modules/:moduleId    |                      Update a specific module                    |    Moderator    |
+|  DELETE /api/modules/:moduleId   |                      Delete a specific module                    |   Super Admin   |
+| GET /api/modules/:moduleId/users |         Get all users that are part of a specific module.        |      User       |
 
 ## `GET /api/modules`
 Get a list of all modules with basic information about each.
@@ -71,17 +71,17 @@ Super Admin
 }
 ```
 
-## `GET /api/modules/:id`
+## `GET /api/modules/:moduleId`
 Get a specific module with basic information about it.
 
 ### Access Rights
 User
 
 ### Parameters required
-| Request Property |     Name    |   Type   |           Description           |
-|------------------|-------------|----------|---------------------------------|
-|     req.user     |     User    |  Object  |  Available after user logs in.  |
-|  req.params.id   |  Module Id  |  String  |  ID of the module in database.  |
+|    Request Property    |     Name    |   Type   |           Description           |
+|------------------------|-------------|----------|---------------------------------|
+|           req.user     |     User    |  Object  |  Available after user logs in.  |
+|  req.params.moduleId   |  Module Id  |  String  |  ID of the module in database.  |
 
 ### Example response
 ```json
@@ -101,7 +101,7 @@ User
 }
 ```
 
-## `PUT /api/modules/:id`
+## `PUT /api/modules/:moduleId`
 Update a specific module.
 
 ### Access Rights
@@ -111,6 +111,7 @@ Moderator
 |       Request Property       |            Name             |   Type   |                       Description                        |
 |------------------------------|-----------------------------|----------|----------------------------------------------------------|
 |            req.user          |            User             |  Object  |              Available after user logs in.               |
+|     req.params.moduleId      |          Module Id          |  String  |               ID of the module in database.              |
 |         req.body.name        |         Module Name         |  String  |         Name of the module to be added.                  |
 |         req.body.code        |         Module Code         |  String  |         Code of the module to be added.                  |
 |  req.body.contributionTypes  |  Module Contribution Types  |   Array  |  Contribution Types of the module to be added.           |
@@ -125,7 +126,7 @@ Moderator
 }
 ```
 
-## `DELETE /api/modules/:id`
+## `DELETE /api/modules/:moduleId`
 Delete a specific module.
 Can only delete the node if it does not contain any relationship with any other nodes.
 
@@ -133,25 +134,27 @@ Can only delete the node if it does not contain any relationship with any other 
 Super Admin
 
 ### Parameters required
-| Request Property |  Name  |   Type   |           Description           |
-|------------------|--------|----------|---------------------------------|
-|     req.user     |  User  |  Object  |  Available after user logs in.  |
+|   Request Property  |   Name   |   Type   |           Description           |
+|---------------------|----------|----------|---------------------------------|
+|       req.user      |   User   |  Object  |  Available after user logs in.  |
+| req.params.moduleId | Module Id|  String  |   ID of the modue in database.  |
 
 ### Example response
 ```json
 N/A
 ```
 
-## `GET /api/modules/:id/users`
+## `GET /api/modules/:moduleId/users`
 Get all users that are part of a specific module.
 
 ### Access Rights
 User
 
 ### Parameters required
-| Request Property |  Name  |   Type   |           Description           |
-|------------------|--------|----------|---------------------------------|
-|     req.user     |  User  |  Object  |  Available after user logs in.  |
+|   Request Property  |   Name   |   Type   |           Description           |
+|---------------------|----------|----------|---------------------------------|
+|       req.user      |   User   |  Object  |  Available after user logs in.  |
+| req.params.moduleId | Module Id|  String  |   ID of the modue in database.  |
 
 ### Example response
 ```json

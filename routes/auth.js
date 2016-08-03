@@ -12,8 +12,13 @@ module.exports.ensureAuthenticated = function(req, res, next) {
   }
   res.redirect('/denied');
   
-
 };
+
+module.exports.isModerator = function(req, res, next){
+
+  
+
+}
 
 // Super Admin authentication middleware
 module.exports.ensureSuperAdmin = function(req, res, next){

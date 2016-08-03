@@ -56,14 +56,14 @@ router.route('/')
 
 	});
 
-// route: /api/modules/:id
-router.route('/:id')
+// route: /api/modules/:moduleId
+router.route('/:moduleId')
 
 	// returns a particular module
 	.get(auth.ensureAuthenticated, function(req, res){
 		
 		var query = [
-			'MATCH (m:module) WHERE ID(m)=' + req.params.id,
+			'MATCH (m:module) WHERE ID(m)=' + req.params.moduleId,
 			'WITH m',
 			'MATCH (m)-[r:MEMBER]->(u:user)',
 			'RETURN {' +
@@ -73,7 +73,7 @@ router.route('/:id')
 
 		db.query(query, function(error, result){
 			if (error)
-				console.log('Error retreiving module of id ' + req.params.id + ' : ', error);
+				console.log('Error retreiving module of id ' + req.params.moduleId + ' : ', error);
 			else
 				// return the first item because query always returns an array but REST API expects a single object
 				res.send(result[0]);
@@ -85,7 +85,7 @@ router.route('/:id')
 	.put(auth.ensureAuthenticated, auth.ensureSuperAdmin, function(req, res){
 		var query = [
 			'MATCH (m:module)',
-			'WHERE ID(m)=' + req.params.id,
+			'WHERE ID(m)=' + req.params.moduleId,
 			'WITH m',
 			'SET m.name={nameParam}, m.code={codeParam}, m.contributionTypes={typesParam}',
 			'RETURN m'
@@ -111,7 +111,7 @@ router.route('/:id')
 
 		db.query(query, params, function(error, result){
 			if (error)
-				console.log('Error updating module of id ' + req.params.id + ' : ', error);
+				console.log('Error updating module of id ' + req.params.moduleId + ' : ', error);
 			else
 				// return the first item because query always returns an array but REST API expects a single object
  				res.send(result[0]);
@@ -123,13 +123,13 @@ router.route('/:id')
 	.delete(auth.ensureAuthenticated, auth.ensureSuperAdmin, function(req, res){
 		var query = [
 			'MATCH (m:module)',
-			'WHERE ID(m)=' + req.params.id,
+			'WHERE ID(m)=' + req.params.moduleId,
 			'DELETE m'
 		].join('\n');
 
 		db.query(query, function(error, result){
 			if (error)
-				console.log('Error deleting module of id ' + req.params.id + ' : ', error);
+				console.log('Error deleting module of id ' + req.params.moduleId + ' : ', error);
 			else
 				// return the first item because query always returns an array but REST API expects a single object
 				res.send(result[0]);
@@ -138,13 +138,13 @@ router.route('/:id')
 
 
 
-router.route('/:id/users')
+router.route('/:moduleId/users')
 	
 	// get all users for this module (all roles)
 	.get(auth.ensureAuthenticated, function(req, res){
 		var query = [
 			'MATCH (m:module)',
-			'WHERE ID(m)=' + req.params.id,
+			'WHERE ID(m)=' + req.params.moduleId,
 			'WITH m',
 			'MATCH (m)-[r:MEMBER]->(u)',
 			'RETURN u'
@@ -152,7 +152,7 @@ router.route('/:id/users')
 
 		db.query(query, function(error, result){
 			if (error)
-				console.log('Error getting all users of module id: ' + req.params.id + ',' + error);
+				console.log('Error getting all users of module id: ' + req.params.moduleId + ',' + error);
 			else
 				res.send(result);
 		});

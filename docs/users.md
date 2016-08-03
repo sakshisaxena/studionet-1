@@ -1,11 +1,12 @@
 # Users
-|       Endpoint        |                         Description                         | Access Rights |
-|-----------------------|-------------------------------------------------------------|---------------|
-|    GET /api/users     |  Get a list of all users with basic information about each  |  Super Admin  |
-|    POST /api/users    |       Add a new user not associated with any modules        |  Super Admin  |
-|  GET /api/users/:id   |         Get a specific user with basic information          |  Super Admin  |
-|  PUT /api/users/:id   |                    Update a specific user                   |  Super Admin  |
-| DELETE /api/users/:id |                    Delete a specific user                   |  Super Admin  |
+|         Endpoint          |                         Description                         | Access Rights |
+|---------------------------|-------------------------------------------------------------|---------------|
+|      GET /api/users       |  Get a list of all users with basic information about each  |  Super Admin  |
+|      POST /api/users      |       Add a new user not associated with any modules        |  Super Admin  |
+|  GET /api/users/:userId   |         Get a specific user with basic information          |  Super Admin  |
+|  PUT /api/users/:userId   |                    Update a specific user                   |  Super Admin  |
+| DELETE /api/users/:userId |                    Delete a specific user                   |  Super Admin  |
+
 
 
 ## `GET /api/users`
@@ -86,16 +87,17 @@ Super Admin
 ```
 
 
-## `GET /api/users/:id`
+## `GET /api/users/:userId`
 Get a specific user with basic information.
 
 ### Access Rights
 Super Admin
 
 ### Parameters required
-| Request Property |  Name  |   Type   |           Description           |
-|------------------|--------|----------|---------------------------------|
-|     req.user     |  User  |  Object  |  Available after user logs in.  |
+|  Request Property |  Name  |   Type   |           Description           |
+|-------------------|--------|----------|---------------------------------|
+|     req.user      |  User  |  Object  |  Available after user logs in.  |
+| req.params.userId | User ID|  String  | ID of the user in the database. |
 
 ### Example response
 ```json
@@ -135,7 +137,7 @@ Super Admin
 }
 ```
 
-## `PUT /api/users/:id`
+## `PUT /api/users/:userId`
 Update a specific user.
 
 ### Access Rights
@@ -145,6 +147,7 @@ Super Admin
 |   Request Property   |     Name     |    Type   |                                Description                                |
 |----------------------|--------------|-----------|---------------------------------------------------------------------------|
 |       req.user       |     User     |   Object  |                       Available after user logs in.                       |
+|  req.params.userId   |    User ID   |   String  |                      ID of the user in the database.                      |
 |     req.body.name    |     Name     |   String  |                         Name of user to be added.                         |
 |  req.body.nusOpenId  |  NUS OpenID  |   String  |                      OpenID of the user to be added.                      |
 |   req.body.canEdit   |  Allow Edit  |  Boolean  |                         Allow this user to edit.                          |
@@ -163,7 +166,7 @@ Super Admin
 }
 ```
 
-## `DELETE /api/users/:id`
+## `DELETE /api/users/:userId`
 Delete a specific user.
 Can only delete the user if the user no longer has any relationships with any other nodes.
 
@@ -171,10 +174,10 @@ Can only delete the user if the user no longer has any relationships with any ot
 Super Admin
 
 ### Parameters required
-|   Request Property   |     Name     |    Type   |                                Description                                |
-|----------------------|--------------|-----------|---------------------------------------------------------------------------|
-|       req.user       |     User     |   Object  |                       Available after user logs in.                       |
-
+|  Request Property |  Name  |   Type   |           Description           |
+|-------------------|--------|----------|---------------------------------|
+|     req.user      |  User  |  Object  |  Available after user logs in.  |
+| req.params.userId | User ID|  String  | ID of the user in the database. |
 
 ### Example response
 ```json
