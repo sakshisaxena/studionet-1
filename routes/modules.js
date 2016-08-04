@@ -173,9 +173,9 @@ router.route('/:moduleId/post')
 router.route('/:moduleId/users')
 	
 	// get all users for this module (all roles)
-	.get(auth.ensureAuthenticated, auth.isModerator, function(req, res){
+	.get(auth.ensureAuthenticated, auth.isStudent, function(req, res){
 
-		var query = "MATCH path=(m:module)-[:MEMBER]->(u:user) where id(m)=121\nRETURN collect(path)";
+		var query = "MATCH path=(m:module)-[:MEMBER]->(u:user) where id(m)="+ req.params.moduleId +"\nRETURN path";
 
 		apiCall(query, function(data){
 			res.send(data);
