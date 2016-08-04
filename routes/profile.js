@@ -1,11 +1,13 @@
 var express = require('express');
 var router = express.Router();
 var auth = require('./auth');
+var apiCall = require('./apiCall');
 var db = require('seraph')({
   user: process.env.DB_USER,
   pass: process.env.DB_PASS
 });
 
+// route: /api/profile
 // get information about the current user
 router.get('/', auth.ensureAuthenticated, function(req, res){
   var query = [
@@ -39,6 +41,7 @@ router.get('/', auth.ensureAuthenticated, function(req, res){
   });
 });
 
+// edit the current user's information
 router.put('/', auth.ensureAuthenticated, function(req, res){
 
   var query = [
@@ -63,6 +66,17 @@ router.put('/', auth.ensureAuthenticated, function(req, res){
     });
 });
 
+// route: /api/profile/graph
+// get the profile of the current user in graph form
+router.get('/graph', auth.ensureAuthenticated, function(req, res){
+  var query = "MATCH path=(u:user)-[*0..1]-(p) WHERE id(u)=" + req.user.id +"\nRETURN path";
+  apiCall(query, function(data){
+    res.send(data);
+  })
+
+});
+
+// route: /api/profile/user
 // get just the user data for this account
 router.get('/user', auth.ensureAuthenticated, function(req, res){
   // update last logged in
@@ -91,6 +105,7 @@ router.get('/user', auth.ensureAuthenticated, function(req, res){
 });
 
 
+// route: /api/profile/modules
 // get just the modules that this user is in
 router.get('/modules', auth.ensureAuthenticated, function(req, res){
   

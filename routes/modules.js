@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var auth = require('./auth');
+var apiCall = require('./apiCall');
 var db = require('seraph')({
 	user: process.env.DB_USER,
 	pass: process.env.DB_PASS
@@ -13,7 +14,7 @@ var db = require('seraph')({
 router.route('/')
 
 	// return all modules
-	.get(auth.ensureAuthenticated, function(req, res){
+	.get(auth.ensureAuthenticated, auth.ensureSuperAdmin, function(req, res){
 		
 		var query = [
 			'MATCH (m:module) WITH m',
@@ -61,6 +62,7 @@ router.route('/:moduleId')
 
 	// returns a particular module
 	.get(auth.ensureAuthenticated, function(req, res){
+
 		
 		var query = [
 			'MATCH (m:module) WHERE ID(m)=' + req.params.moduleId,
@@ -78,6 +80,7 @@ router.route('/:moduleId')
 				// return the first item because query always returns an array but REST API expects a single object
 				res.send(result[0]);
 		});
+		
 
 	})
 
@@ -171,6 +174,14 @@ router.route('/:moduleId/users')
 	
 	// get all users for this module (all roles)
 	.get(auth.ensureAuthenticated, auth.isModerator, function(req, res){
+
+		var query = "MATCH path=(m:module)-[:MEMBER]->(u:user) where id(m)=121\nRETURN collect(path)";
+
+		apiCall(query, function(data){
+			res.send(data);
+		});
+
+		/*
 		var query = [
 			'MATCH (m:module)',
 			'WHERE ID(m)=' + req.params.moduleId,
@@ -185,6 +196,7 @@ router.route('/:moduleId/users')
 			else
 				res.send(result);
 		});
+		*/
 	})
 
 	// link the user with this module
