@@ -23,14 +23,15 @@ router.route('/new')
 
 
 		var query = [
-			'CREATE (c:contribution{title: {contributionTitleParam}, body: {contributionBodyParam}, ref: {contributionRefParam}, lastUpdated:{lastUpdatedParam}, editted: {edittedParam}, labels: {contributionLabelParam}, contributionTypes: {contributionTypesParam}}}) WITH p',
-			'MATCH (u:user) WHERE id(u)={userIdParam} WITH u,c',
-			'CREATE (u)-[r:CREATED]->(c) WITH c'
+			'CREATE (c:contribution{title: {contributionTitleParam}, body: {contributionBodyParam}, ref: {contributionRefParam}, lastUpdated:{lastUpdatedParam}, editted: {edittedParam}, labels: {contributionLabelParam}, contributionTypes: {contributionTypesParam}}}) WITH c',
+			'MATCH (u:user) WHERE id(u)={userIdParam}',
+			'CREATE (u:user)-[r:CREATED]->(c)'
 		];
 
 		// reference type: REPLYTO, 
 		if (req.body.ref !== -1){
-			query.push('CREATE (c)-[r1:{refTypeParam}]->(c1:contribution) WHERE ID(c1)={contributionRefParam}')
+			query.push('MATCH (c1:contribution) where id(c1)={contributionRefParam}')
+			query.push('CREATE (c)-[r1:{refTypeParam}]->(c1)')
 		}
 
 		query.join('\n');
@@ -55,6 +56,8 @@ router.route('/new')
 
 	});
 
+
+// route: /api/contributions/:contributionId
 router.route('/:contributionId')
 	.get(auth.ensureAuthenticated, function(req, res){
 

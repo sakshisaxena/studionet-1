@@ -61,9 +61,16 @@ router.route('/')
 router.route('/:moduleId')
 
 	// returns a particular module
-	.get(auth.ensureAuthenticated, function(req, res){
+	.get(auth.ensureAuthenticated, auth.isStudent, function(req, res){
 
-		
+		var query = "match p=(m:module)-[*0..2]->() where id(m)=" + req.params.moduleId +" return p";
+
+		apiCall(query, function(data){
+			res.send(data);
+		});
+
+
+		/*		
 		var query = [
 			'MATCH (m:module) WHERE ID(m)=' + req.params.moduleId,
 			'WITH m',
@@ -80,7 +87,7 @@ router.route('/:moduleId')
 				// return the first item because query always returns an array but REST API expects a single object
 				res.send(result[0]);
 		});
-		
+		*/
 
 	})
 
@@ -139,7 +146,16 @@ router.route('/:moduleId')
 		})
 	});
 
-router.route('/:moduleId/post')
+router.route('/:moduleId/posts')
+	// get all posts linked to the moduleId
+	.get(auth.ensureAuthenticated, auth.isStudent, function(req, res){
+		var query = 'match p=(m:module)-[r:POST]->() where id(m)='+ req.params.moduleId+' return p';
+
+		apiCall(query, function(data){
+			res.send(data);
+		})
+	})
+
 	// add a post linked to the moduleId
 	.post(auth.ensureAuthenticated, auth.isModerator, function(req, res){
 
