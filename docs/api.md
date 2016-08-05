@@ -1,5 +1,7 @@
 # API Documentation
 
+## Outdated. Get entire graph information from /api/all
+
 ### Routes List
 |      Route      |      Resource     | 
 | --------------  | ----------------- | 
