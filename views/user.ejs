@@ -2,18 +2,57 @@
 <html>
 <head>
 	<title>StudioNet User</title>
-	<link rel='stylesheet' href='/admin/stylesheets/style.css' />
+	
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ng-tags-input/3.1.1/ng-tags-input.min.css">
+
+    <link rel='stylesheet' href='/user/stylesheets/style.css' />
     
 </head>
 <body ng-app="studionet">
-	<h1>StudioNet User Page</h1>
-	<a class="btn btn-default" href="/admin">Admin Page (only here for testing purposes)</a>
-	<a class="btn btn-default" href="/logout">Log out</a>
-	<ui-view></ui-view>
+<!-- 	<h1>StudioNet User Page</h1> -->
+<!-- 	<a class="btn btn-default" href="/admin">Admin Page (only here for testing purposes)</a>
+	<a class="btn btn-default" href="/logout">Log out</a> -->
+    <div class="container-fluid user-body">
+    
+        <div class='row visible-xs'>
+            <div class='col-xs-12'>Mobile Nav</div>
+        </div>
+    
+        <ul class="col-sm-2 hidden-xs side-nav">
+            <li class='side-nav-element'>
+                <img class='user-avatar' src={{user.avatar}}/>
+                <h3 class='side-nav-item'>{{user.name}}</h3>
+            </li>
+            <li class='side-nav-element'>
+                    <span class="glyphicon glyphicon-align-left" aria-hidden="true"/>
+                    <h3 class='side-nav-item'>Graph</h3>
+            </li>
+            <li class='side-nav-element'>       
+                    <span class="glyphicon glyphicon-align-left" aria-hidden="true"/>
+                    <h3 class='side-nav-item'>My Contributions</h3>
+            </li>
+            <li class='side-nav-element'>       
+                    <span class="glyphicon glyphicon-align-left" aria-hidden="true"/>
+                    <h3 class='side-nav-item'>Saved Graphs</h3>
+            </li>
+            <li class='side-nav-element'>       
+                <span class="glyphicon glyphicon-align-left" aria-hidden="true"/>
+                <h3 class='side-nav-item'>Settings</h3>
+            </li>
+            <li class='side-nav-element'>       
+                <h3 class='side-nav-item' ui-sref="admin">Moderator</h3>
+            </li>
+        </ul>
+        
+        <div class='col-sm-10 col-xs-12 content'>
+            <ui-view></ui-view>
+        </div>
+
+    </div>
 
 
+</body>
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
@@ -29,5 +68,11 @@
     <script type="text/javascript" src="/user/javascripts/controllers/ModuleAdminCtrl.js"></script>
 
 
-</body>
+    <!-- include javascript functionality -->
+    <script type="text/javascript" src="/user/javascripts/ui/user-ui.js"></script>
+
+    <!-- include jquery functionality -->
+    <script src="http://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" 
+    crossorigin="anonymous">
+    </script>
 </html>
