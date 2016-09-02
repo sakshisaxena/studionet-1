@@ -22,7 +22,7 @@ router.route('/')
 		*/
 
 		var query = [
-									'MATCH (u:user) WHERE ID(u)=87',
+									'MATCH (u:user) WHERE ID(u)=' + req.user.id,
 									'MATCH p=(u)-[*1..2]-()',
 									'RETURN p'
 								].join('\n');

@@ -24,6 +24,62 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 
 			}
 		})
+		.state('home.graphView', {
+			url: 'graph',
+			templateUrl: '/user/templates/home.graphView.html',
+			controller: 'HomeCtrl',
+			resolve: {
+				userProfile: ['profile', function(profile){
+					return profile.getUser() && profile.getModules();
+				}],
+				userModels: ['modelsFactory', 'userProfile', 'profile', function(modelsFactory, userProfile, profile){
+					return modelsFactory.getUserModels(profile.user.nusOpenId);
+				}]
+
+			}
+		})
+		.state('home.userDetails', {
+			url: 'me',
+			templateUrl: '/user/templates/home.userDetails.html',
+			controller: 'HomeCtrl',
+			resolve: {
+				userProfile: ['profile', function(profile){
+					return profile.getUser() && profile.getModules();
+				}],
+				userModels: ['modelsFactory', 'userProfile', 'profile', function(modelsFactory, userProfile, profile){
+					return modelsFactory.getUserModels(profile.user.nusOpenId);
+				}]
+
+			}
+		})
+		.state('home.userContributions', {
+			url: 'mycontributions',
+			templateUrl: '/user/templates/home.userContributions.html',
+			controller: 'HomeCtrl',
+			resolve: {
+				userProfile: ['profile', function(profile){
+					return profile.getUser() && profile.getModules();
+				}],
+				userModels: ['modelsFactory', 'userProfile', 'profile', function(modelsFactory, userProfile, profile){
+					return modelsFactory.getUserModels(profile.user.nusOpenId);
+				}]
+
+			}
+		})
+		.state('home.userSavedGraphs', {
+			url: 'bookmarks',
+			templateUrl: '/user/templates/home.userSavedGraphs.html',
+			controller: 'HomeCtrl',
+			resolve: {
+				userProfile: ['profile', function(profile){
+					return profile.getUser() && profile.getModules();
+				}],
+				userModels: ['modelsFactory', 'userProfile', 'profile', function(modelsFactory, userProfile, profile){
+					return modelsFactory.getUserModels(profile.user.nusOpenId);
+				}]
+
+			}
+		})
 		.state('admin', {
 			// admin front
 			url: '/admin',

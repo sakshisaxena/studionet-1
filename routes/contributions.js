@@ -28,6 +28,7 @@ router.route('/new')
 			'CREATE (u:user)-[r:CREATED]->(c)'
 		];
 
+		// if not linked to anything, put -1
 		// reference type: REPLYTO, 
 		if (req.body.ref !== -1){
 			query.push('MATCH (c1:contribution) where id(c1)={contributionRefParam}')
@@ -39,11 +40,11 @@ router.route('/new')
 		var params = {
 			contributionTitleParam: req.body.title,
 			contributionBodyParam: req.body.body,
-			contributionRefParam: req.body.ref,
+			contributionRefParam: req.body.ref, 
 			lastUpdatedParam: Date.now(),
 			refTypeParam: req.body.refType,
 			edittedParam: false,
-			contributionLabelParam: req.body.labels,
+			contributionLabelParam: req.body.labels, //tags
 			contributionTypesParam: req.body.contributionTypes
 		};
 
