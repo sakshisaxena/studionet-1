@@ -3,10 +3,7 @@ var router = express.Router();
 var auth = require('./auth');
 var apiCall = require('./apiCall');
 var db = require('seraph')({
-<<<<<<< Updated upstream
-=======
   server: process.env.SERVER_URL || 'http://localhost:7474/', // 'http://studionetdb.design-automation.net'
->>>>>>> Stashed changes
   user: process.env.DB_USER,
   pass: process.env.DB_PASS
 });
