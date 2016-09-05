@@ -6,6 +6,7 @@ var glob = require('glob');
 var path = require('path');
 var fs = require('fs');
 var db = require('seraph')({
+	server: process.env.SERVER_URL || 'http://localhost:7474/', // 'http://studionetdb.design-automation.net'
 	user: process.env.DB_USER,
 	pass: process.env.DB_PASS
 });

@@ -1,5 +1,6 @@
 var OpenIDStrategy = require('passport-openid').Strategy;
 var db = require('seraph')({
+	server: process.env.SERVER_URL || 'http://localhost:7474/', // 'http://studionetdb.design-automation.net'
 	user: process.env.DB_USER,
 	pass: process.env.DB_PASS
 });
@@ -45,8 +46,8 @@ module.exports = function(passport){
 	//   credentials (in this case, an OpenID identifier), and invoke a callback
 	//   with a user object.
 	passport.use(new OpenIDStrategy({
-	    returnURL: 'http://localhost:3000/auth/openid/return',
-	    realm: 'http://localhost:3000/'
+	    returnURL: (process.env.SITE_URL || 'http://localhost:3000') + '/auth/openid/return',
+	    realm:  (process.env.SITE_URL || 'http://localhost:3000')
 	  },
 	  function(identifier, done) {
 	    // asynchronous verification, for effect...

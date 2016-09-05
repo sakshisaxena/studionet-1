@@ -1,2 +1,9 @@
 node_modules/
 uploads/
+run/
+node/
+npm-debug.log
+output.log
+hello-world.js
+bin/start
+bin/stop
