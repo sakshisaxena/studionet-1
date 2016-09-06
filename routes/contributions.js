@@ -23,14 +23,14 @@ router.route('/new')
 
 
 		var query = [
-			'CREATE (c:contribution{title: {contributionTitleParam}, body: {contributionBodyParam}, ref: {contributionRefParam}, lastUpdated:{lastUpdatedParam}, editted: {edittedParam}, labels: {contributionLabelParam}, contributionTypes: {contributionTypesParam}}) WITH c',
+			'CREATE (c:contribution {title: {contributionTitleParam}, body: {contributionBodyParam}, ref: {contributionRefParam}, lastUpdated:{lastUpdatedParam}, editted: {edittedParam}, labels: {contributionLabelParam}, contributionTypes: {contributionTypesParam}}) WITH c',
 			'MATCH (u:user) WHERE id(u)=' + req.user.id,
 			'CREATE (u)-[r:CREATED]->(c)'
 		];
 
 		// if not linked to anything, put -1
 		// reference type: REPLYTO, 
-		if (req.body.ref !== -1){
+		if (parseInt(req.body.ref) !== -1){
 			query.push('MATCH (c1:contribution) where id(c1)={contributionRefParam}')
 			query.push('CREATE (c)-[r1:{refTypeParam}]->(c1)')
 		}
