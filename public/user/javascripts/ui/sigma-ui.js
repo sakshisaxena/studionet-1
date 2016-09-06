@@ -1,6 +1,74 @@
 // Let's first initialize sigma:
 var s = new sigma('container');
 
+s.bind('clickStage', function(e) {
+  console.log(e.type, e.data.captor);
+  addNewContribution();
+
+});
+
+contributionId=0;
+var addNewContribution = function(){
+  
+  var contribution = {
+      title: 'New Contribution ' +  ++contributionId,
+      body: 'Lorem Ipsum',
+      ref: -1, 
+      //lastUpdatedParam: Date.now(),
+      refType: '',
+      //edittedParam: false,
+      labels: 'question', //tags
+      contributionTypes: 'video'
+  };
+
+  console.log(contribution);
+
+  $.ajax({
+    type: "POST",
+    url: "/api/contributions/new",
+    data: contribution,
+    success: function(data){ console.log(data); } /*,
+    dataType: ""*/
+  });
+
+  
+
+}
+/*s = new sigma({
+  graph: g,
+  renderer: {
+    container: document.getElementById('graph-container'),
+    type: 'canvas'
+  },
+  settings: {
+    doubleClickEnabled: false,
+    minEdgeSize: 0.5,
+    maxEdgeSize: 4,
+    enableEdgeHovering: true,
+    edgeHoverColor: 'edge',
+    defaultEdgeHoverColor: '#000',
+    edgeHoverSizeRatio: 1,
+    edgeHoverExtremities: true,
+  }
+});
+// Bind the events:
+s.bind('overNode outNode clickNode doubleClickNode rightClickNode', function(e) {
+  console.log(e.type, e.data.node.label, e.data.captor);
+});
+s.bind('overEdge outEdge clickEdge doubleClickEdge rightClickEdge', function(e) {
+  console.log(e.type, e.data.edge, e.data.captor);
+});
+s.bind('clickStage', function(e) {
+  console.log(e.type, e.data.captor);
+});
+s.bind('doubleClickStage rightClickStage', function(e) {
+  console.log(e.type, e.data.captor);
+});
+
+$('.sigma-scene').click( function(){
+  alert("graph clicked");
+})*/
+
 
 var getColor = function(node){
 
@@ -83,6 +151,9 @@ jQuery.get('/api/all', function(data){
       edittedParam: false,
       contributionLabelParam: req.body.labels, //tags
       contributionTypesParam: req.body.contributionTypes*/
+
+
+
 
 var newContribution = function(){
   $.post( "ajax/test.html", function( data ) {

@@ -46,8 +46,8 @@ module.exports = function(passport){
 	//   credentials (in this case, an OpenID identifier), and invoke a callback
 	//   with a user object.
 	passport.use(new OpenIDStrategy({
-	    returnURL: (process.env.SITE_URL || 'http://localhost:3000') + '/auth/openid/return',
-	    realm:  (process.env.SITE_URL || 'http://localhost:3000')
+	    returnURL: (process.env.SITE_URL || 'http://localhost:3000/') + 'auth/openid/return',
+	    realm:  (process.env.SITE_URL || 'http://localhost:3000/')
 	  },
 	  function(identifier, done) {
 	    // asynchronous verification, for effect...

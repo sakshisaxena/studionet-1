@@ -8,5 +8,9 @@ $( document ).ready(function() {
 
     })
 
+    $('.sigma-scene').click( function(){
+    	alert("graph clicked");
+    })
+
 });
 
