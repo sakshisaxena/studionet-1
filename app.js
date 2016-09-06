@@ -14,7 +14,7 @@ var users = require('./routes/users');
 var modules = require('./routes/modules');
 var moderators = require('./routes/moderators');
 var uploads = require('./routes/uploads');
-var all = require('./routes/all');
+var graph_all = require('./routes/graph_all');
 var contributions = require('./routes/contributions');
 
 
@@ -48,7 +48,7 @@ var initPassport = require('./config/passport');
 initPassport(passport);
 
 app.use('/', routes);
-app.use('/graph/all', all);
+app.use('/graph/all', graph_all);
 app.use('/api/profile', profile);
 app.use('/api/users', users);
 app.use('/api/modules', modules);
