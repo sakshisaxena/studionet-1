@@ -92,7 +92,7 @@ var getSize = function(node){
 
 }
 
-jQuery.get('/api/all', function(data){
+jQuery.get('/graph/all', function(data){
 
   if (!data) console.log('error getting json graph data', error);
 
@@ -140,19 +140,6 @@ jQuery.get('/api/all', function(data){
   s.refresh();
 
 });
-
-
-// api/new
-/*      contributionTitleParam: req.body.title,
-      contributionBodyParam: req.body.body,
-      contributionRefParam: req.body.ref, 
-      lastUpdatedParam: Date.now(),
-      refTypeParam: req.body.refType,
-      edittedParam: false,
-      contributionLabelParam: req.body.labels, //tags
-      contributionTypesParam: req.body.contributionTypes*/
-
-
 
 
 var newContribution = function(){
