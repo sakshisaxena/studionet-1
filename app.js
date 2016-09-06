@@ -48,7 +48,7 @@ var initPassport = require('./config/passport');
 initPassport(passport);
 
 app.use('/', routes);
-app.use('/api/all', all);
+app.use('/graph/all', all);
 app.use('/api/profile', profile);
 app.use('/api/users', users);
 app.use('/api/modules', modules);

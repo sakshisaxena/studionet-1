@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var auth = require('./auth');
-var apiCall = require('./apiCall');
+var apiCall = require('./apicall');
 var db = require('seraph')({
 	server: process.env.SERVER_URL || 'http://localhost:7474/', // 'http://studionetdb.design-automation.net'
 	user: process.env.DB_USER,
@@ -23,9 +23,9 @@ router.route('/new')
 
 
 		var query = [
-			'CREATE (c:contribution{title: {contributionTitleParam}, body: {contributionBodyParam}, ref: {contributionRefParam}, lastUpdated:{lastUpdatedParam}, editted: {edittedParam}, labels: {contributionLabelParam}, contributionTypes: {contributionTypesParam}}}) WITH c',
-			'MATCH (u:user) WHERE id(u)={userIdParam}',
-			'CREATE (u:user)-[r:CREATED]->(c)'
+			'CREATE (c:contribution{title: {contributionTitleParam}, body: {contributionBodyParam}, ref: {contributionRefParam}, lastUpdated:{lastUpdatedParam}, editted: {edittedParam}, labels: {contributionLabelParam}, contributionTypes: {contributionTypesParam}}) WITH c',
+			'MATCH (u:user) WHERE id(u)=' + req.user.id,
+			'CREATE (u)-[r:CREATED]->(c)'
 		];
 
 		// if not linked to anything, put -1
@@ -35,7 +35,7 @@ router.route('/new')
 			query.push('CREATE (c)-[r1:{refTypeParam}]->(c1)')
 		}
 
-		query.join('\n');
+		query = query.join('\n');
 
 		var params = {
 			contributionTitleParam: req.body.title,

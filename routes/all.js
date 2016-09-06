@@ -1,18 +1,54 @@
 var express = require('express');
 var router = express.Router();
 var auth = require('./auth');
-var apiCall = require('./apiCall');
+var apiCall = require('./apicall');
 var db = require('seraph')({
 	server: process.env.SERVER_URL || 'http://localhost:7474/', // 'http://studionetdb.design-automation.net'
 	user: process.env.DB_USER,
 	pass: process.env.DB_PASS
 });
 
-// route: /api/all
+// route: /graph/all
 router.route('/')
 
 	// return whole graph
-	.get(auth.ensureAuthenticated, auth.ensureSuperAdmin, function(req, res){
+	.get(auth.ensureAuthenticated, function(req, res){
+
+		var query = [
+									'MATCH p=()-[]-() RETURN p'
+								].join('\n');
+
+		apiCall(query, function(data){
+			var nodes = [], links = [];
+			
+			data.forEach(function(row){
+				// for each graph
+
+				row.graph.nodes.forEach(function(n) {
+	        if (idIndex(nodes, n.id) == null)
+	            nodes.push({
+	                id: n.id
+	            });
+    		});
+		    links = links.concat(row.graph.relationships.map(function(r) {
+		        return {
+		            source: idIndex(nodes, r.startNode),
+		            target: idIndex(nodes, r.endNode),
+		        };
+		    }));
+			});
+
+			res.send({nodes: nodes, links: links})
+
+		});
+
+  });
+
+// route: /graph/all/me
+router.route('/me')
+
+	// return only my network
+	.get(auth.ensureAuthenticated, function(req, res){
 		
 		/*
 		var query = [
@@ -41,17 +77,14 @@ router.route('/')
 	            nodes.push({
 	                id: n.id,
 	                label: n.labels[0],
-	                title: setTitle(n),
-	                reflexive: false
+	                name: setName(n),
 	            });
     		});
 		    links = links.concat(row.graph.relationships.map(function(r) {
 		        return {
 		            source: idIndex(nodes, r.startNode),
 		            target: idIndex(nodes, r.endNode),
-		            left: false,
-		            right: true,
-		            type: r.type
+		            name: r.type
 		        };
 		    }));
 			});
@@ -97,7 +130,7 @@ function idIndex(a, id){
 	return null;
 };
 
-function setTitle(n) {
+function setName(n) {
     if (n.labels[0] === "contribution" || n.labels[0]==='post') {
         return n.properties.title;
     } else {
