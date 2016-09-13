@@ -1,9 +1,18 @@
+<header>
+	<div class='logo-container'>
+		<a ui-sref='home.graphView'><div class='logo'><p>S</p>tudioNET</div></a>
+	</div>
+	<div class='user-avatar-container'>
+		<a ui-sref='home.userDetails'><img class='user-avatar' src='./img/boy.svg'/></a>
+		<img class='recent-activity-notifications' src='./img/worldwide.svg'/>
+	</div>
+</header>
+
 <div class="row">
 	<div class="container">
 		<div class="col-xs-12">
 			<h2>Home</h2>
-			<button class="btn btn-default pull-right" ui-sref="admin">Admin Panel</button>
-			<button class="btn btn-default pull-right" ui-sref="home.graphView">User Panel</button>
+			<button class="btn btn-default pull-right" ui-sref="home.userDetails">User Panel</button>
 		</div>
 	</div>
 </div>

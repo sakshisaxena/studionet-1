@@ -1,7 +1,8 @@
 <div class='user-profile'>
 	<div class='row'>		
 		<div class="col-xs-12">
-			<button class="btn btn-default pull-left" ui-sref="admin" ng-if="isAdmin">Admin Panel</button>
+			<button class="btn btn-default pull-left"><a href='/admin'>SuperAdmin Panel</a></button>
+			<button class="btn btn-default pull-left" ui-sref="admin" ng-if="isAdmin">Moderator Panel</button>
 			<button class="btn btn-default pull-right" ui-sref="home.graphView">Back to graph</button>
 		</div>
 	</div>
