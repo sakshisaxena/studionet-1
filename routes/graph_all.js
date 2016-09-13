@@ -27,13 +27,14 @@ router.route('/')
 				row.graph.nodes.forEach(function(n) {
 	        if (idIndex(nodes, n.id) == null)
 	            nodes.push({
-	                id: n.id
+	                id: n.id,
+	                type: n.labels[0]
 	            });
     		});
 		    links = links.concat(row.graph.relationships.map(function(r) {
 		        return {
-		            source: idIndex(nodes, r.startNode),
-		            target: idIndex(nodes, r.endNode),
+		            source: idIndex(nodes, r.startNode).id,	// should not be a case where start or end is null.
+		            target: idIndex(nodes, r.endNode).id
 		        };
 		    }));
 			});
@@ -82,8 +83,8 @@ router.route('/me')
     		});
 		    links = links.concat(row.graph.relationships.map(function(r) {
 		        return {
-		            source: idIndex(nodes, r.startNode),
-		            target: idIndex(nodes, r.endNode),
+		            source: idIndex(nodes, r.startNode).id, 	// should not be a case where start or end is null.
+		            target: idIndex(nodes, r.endNode).id,
 		            name: r.type
 		        };
 		    }));

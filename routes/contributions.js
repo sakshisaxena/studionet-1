@@ -13,7 +13,7 @@ router.route('/')
 	// get all contributions
 	.get(function(req, res){
 		res.send('placeholder response');
-	});
+	})
 
 	// create a new contribution linked to the current user
 	.post(auth.ensureAuthenticated, function(req, res){
