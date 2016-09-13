@@ -7,7 +7,6 @@ $( document ).ready(function() {
 
     $('.user-avatar').click( function(){
         alert("Shows basic user information on hover. User can navigate to full-user page from there.");
-        window.location = "./home.userDetails.html"
     })
 
     $('.add-contribution').click( function(){
