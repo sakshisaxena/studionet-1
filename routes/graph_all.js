@@ -39,7 +39,7 @@ router.route('/')
 		    }));
 			});
 
-			res.send({nodes: nodes, links: links})
+			res.send({nodes: nodes, links: links});
 
 		});
 
@@ -90,8 +90,7 @@ router.route('/me')
 		    }));
 			});
 
-			res.send({nodes: nodes, links: links})
-
+			res.send({nodes: nodes, links: links});
 
 		});
 		
