@@ -15,9 +15,6 @@ router.route('/')
 		res.send('placeholder response');
 	});
 
-
-// route: /api/contributions/new
-router.route('/new')
 	// create a new contribution linked to the current user
 	.post(auth.ensureAuthenticated, function(req, res){
 
@@ -75,6 +72,11 @@ router.route('/:contributionId')
 		});
 
 	});
+
+
+router.route('/:contributionId/connections');
+
+router.route('/:contributionId/connections/:connectionId');
 
 
 
