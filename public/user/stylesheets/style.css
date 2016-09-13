@@ -112,8 +112,6 @@ header{
 	
 	width: 45px;
 	height: 45px;
-
-	z-index: 2;
 	
 }
 
@@ -127,7 +125,6 @@ header{
 	width: 45px;
 	top: 45px; 
 	right: -50px;
-	z-index: 2;
 }
 
 
@@ -223,8 +220,6 @@ header{
 
 	position: relative;
 	padding: 20px 15px 30px 15px;
-
-	z-index: 2;
 }
 
 .bread-crumbs{
@@ -241,6 +236,8 @@ header{
 
 	margin-top: 0px; 
 	padding: 0px 0 0px 0;
+
+	z-index: 3;
 }
 
 .graph-nav-control{
@@ -272,6 +269,8 @@ header{
 	background: #4A95EF;
 
 	box-shadow: 2px 2px 2px grey;
+
+	z-index: 4;
 }
 
 .add-contribution:hover{

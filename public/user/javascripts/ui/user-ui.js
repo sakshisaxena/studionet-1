@@ -9,9 +9,9 @@ $( document ).ready(function() {
         alert("Shows basic user information on hover. User can navigate to full-user page from there.");
     })
 
-    $('.add-contribution').click( function(){
+/*    $('.add-contribution').click( function(){
     	$('.add-contribution-dialog').show();
-    })
+    })*/
 
     $('#cancel').click( function(){
     	$('.add-contribution-dialog').hide();

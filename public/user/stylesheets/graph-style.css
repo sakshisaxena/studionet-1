@@ -1,0 +1,73 @@
+#d3-container{
+
+    height: 100%;
+    width: 100%; 
+    position: relative;
+}
+
+#d3-container svg{
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    height: 100%; 
+    width: 100%;
+
+
+}
+
+p{ 
+     text-align: center; 
+     overflow: overlay;
+     position: relative;
+}
+
+
+.conceptG text{
+    pointer-events: none;
+}
+
+marker{
+    fill: #333;
+}
+
+g.conceptG circle{
+    fill: #F6FBFF;
+    stroke: #333;
+    stroke-width: 2px;
+}
+
+g.conceptG:hover circle{
+    fill: rgb(200, 238, 241);
+}
+
+g.selected circle{
+    fill: rgb(250, 232, 255);
+}
+g.selected:hover circle{
+    fill: rgb(250, 232, 255);
+}
+
+path.link {
+    fill: none;
+    stroke: #333;
+    stroke-width: 6px;
+    cursor: default;
+}
+
+path.link:hover{
+    stroke: rgb(94, 196, 204);
+}
+
+g.connect-node circle{
+    fill: #BEFFFF;
+}
+
+path.link.hidden{
+    stroke-width: 0;
+}
+
+path.link.selected {
+    stroke: rgb(229, 172, 247);
+}
