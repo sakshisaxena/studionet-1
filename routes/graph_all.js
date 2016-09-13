@@ -77,8 +77,8 @@ router.route('/me')
 	        if (idIndex(nodes, n.id) == null)
 	            nodes.push({
 	                id: n.id,
-	                label: n.labels[0],
-	                name: setName(n),
+	                type: n.labels[0],
+	                name: setName(n)
 	            });
     		});
 		    links = links.concat(row.graph.relationships.map(function(r) {
