@@ -3,7 +3,8 @@ var s = new sigma('container');
 
 s.bind('clickStage', function(e) {
   console.log(e.type, e.data.captor);
-  addNewContribution();
+  alert("hello world");
+  //addNewContribution();
 
 });
 

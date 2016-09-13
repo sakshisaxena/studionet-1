@@ -1,5 +1,6 @@
 node_modules/
 uploads/
+public/user/img
 run/
 node/
 npm-debug.log
