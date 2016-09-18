@@ -1,5 +1,5 @@
 <link rel='stylesheet' href='./stylesheets/graph-style.css' />
-
+ 
 <div class='graph-container'>
 
 	<div class='bread-crumbs'>
@@ -23,7 +23,8 @@
 		</div>
 	</div>
 
-	<div id='d3-container'></div>
+	<div id='activeUser'></div>	
+  <div id="cy"></div>
 
 </div>
 
@@ -36,8 +37,6 @@
 </div>
 
 
-
-
 <!-- include javascript functionality -->
 <script type="text/javascript" src="/user/javascripts/ui/user-ui.js"></script> 
 
@@ -46,7 +45,9 @@
 <!-- d3 specific graph files -->
 <!---Example source: https://bl.ocks.org/cjrd/6863459 -->
 <!-- d3 included in main template file -->
+<!-- 
+  <script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script> -->
+
 <script src="./javascripts/ui/graph-creator.js"></script>
-
-
-
+ 

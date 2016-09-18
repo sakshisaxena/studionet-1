@@ -1,568 +1,226 @@
-document.onload = (function(d3, saveAs, Blob, undefined){
-  "use strict";
 
-  // define graphcreator object
-  var GraphCreator = function(svg, nodes, edges){
-    var thisGraph = this;
-        thisGraph.idct = 0;
-    
-    thisGraph.nodes = nodes || [];
-    thisGraph.edges = edges || [];
-    
-    thisGraph.state = {
-      selectedNode: null,
-      selectedEdge: null,
-      mouseDownNode: null,
-      mouseDownLink: null,
-      justDragged: false,
-      justScaleTransGraph: false,
-      lastKeyDown: -1,
-      shiftNodeDrag: false,
-      selectedText: null
-    };
+function makeGraph(dNodes, dEdges){
 
-    // define arrow markers for graph links
-    var defs = svg.append('svg:defs');
-    defs.append('svg:marker')
-      .attr('id', 'end-arrow')
-      .attr('viewBox', '0 -5 10 10')
-      .attr('refX', "32")
-      .attr('markerWidth', 3.5)
-      .attr('markerHeight', 3.5)
-      .attr('orient', 'auto')
-      .append('svg:path')
-      .attr('d', 'M0,-5L10,0L0,5');
 
-    // define arrow markers for leading arrow
-    defs.append('svg:marker')
-      .attr('id', 'mark-end-arrow')
-      .attr('viewBox', '0 -5 10 10')
-      .attr('refX', 7)
-      .attr('markerWidth', 3.5)
-      .attr('markerHeight', 3.5)
-      .attr('orient', 'auto')
-      .append('svg:path')
-      .attr('d', 'M0,-5L10,0L0,5');
-
-    thisGraph.svg = svg;
-    thisGraph.svgG = svg.append("g")
-          .classed(thisGraph.consts.graphClass, true);
-    var svgG = thisGraph.svgG;
-
-    // displayed when dragging between nodes
-    thisGraph.dragLine = svgG.append('svg:path')
-          .attr('class', 'link dragline hidden')
-          .attr('d', 'M0,0L0,0')
-          .style('marker-end', 'url(#mark-end-arrow)');
-
-    // svg nodes and edges 
-    thisGraph.paths = svgG.append("g").selectAll("g");
-    thisGraph.circles = svgG.append("g").selectAll("g");
-
-    thisGraph.drag = d3.behavior.drag()
-          .origin(function(d){
-            return {x: d.x, y: d.y};
-          })
-          .on("drag", function(args){
-            thisGraph.state.justDragged = true;
-            thisGraph.dragmove.call(thisGraph, args);
-          })
-          .on("dragend", function() {
-            // todo check if edge-mode is selected
-          });
-
-    // listen for key events
-    d3.select(window).on("keydown", function(){
-      thisGraph.svgKeyDown.call(thisGraph);
+    //gray out
+    dNodes = dNodes.map(function(e){
+      e.data.faveColor =  "green"//'#d9d9d9'
+      return e;
     })
-    .on("keyup", function(){
-      thisGraph.svgKeyUp.call(thisGraph);
-    });
-    svg.on("mousedown", function(d){thisGraph.svgMouseDown.call(thisGraph, d);});
-    svg.on("mouseup", function(d){thisGraph.svgMouseUp.call(thisGraph, d);});
 
-    // listen for dragging
-    var dragSvg = d3.behavior.zoom()
-          .on("zoom", function(){
-            if (d3.event.sourceEvent.shiftKey){
-              // TODO  the internal d3 state is still changing
-              return false;
-            } else{
-              thisGraph.zoomed.call(thisGraph);
-            }
-            return true;
+
+    dEdges = dEdges.map(function(e){
+      e.data.faveColor = '#d9d9d9';
+      return e;
+    })
+
+
+    var cy = cytoscape({
+      container: document.getElementById('cy'),
+      layout: {
+        name: 'cose',
+        padding: 10,
+        randomize: true
+      },
+      hideLabelsOnViewport: false,
+      style: cytoscape.stylesheet()
+        .selector('node')
+          .css({
+            'shape': 'data(faveShape)',
+            'width': 'mapData(weight, 0.1, 3, 1, 7)', 
+            'height': 'mapData(weight, 0.1, 3, 1, 7)',   // mapData(property, a, b, c, d)  => specified range a, b; actual values c, d
+            //'content': 'data(name)',
+            'text-valign': 'center',
+            'font-size':'5%',
+            'text-outline-width': 0.5,
+            'text-outline-color': 'data(faveColor)',
+            'background-color': 'data(faveColor)',
+            'color': '#fff'
           })
-          .on("zoomstart", function(){
-            var ael = d3.select("#" + thisGraph.consts.activeEditId).node();
-            if (ael){
-              ael.blur();
-            }
-            if (!d3.event.sourceEvent.shiftKey) d3.select('body').style("cursor", "move");
-          })
-          .on("zoomend", function(){
-            d3.select('body').style("cursor", "auto");
-          });
-    
-    svg.call(dragSvg).on("dblclick.zoom", null);
-
-    // listen for resize
-    window.onresize = function(){thisGraph.updateWindow(svg);};
-
-    // handle delete graph
-    d3.select("#delete-graph").on("click", function(){
-      thisGraph.deleteGraph(false);
-    });
-  };
-
-  GraphCreator.prototype.setIdCt = function(idct){
-    this.idct = idct;
-  };
-
-  GraphCreator.prototype.consts =  {
-    selectedClass: "selected",
-    connectClass: "connect-node",
-    circleGClass: "conceptG",
-    graphClass: "graph",
-    activeEditId: "active-editing",
-    BACKSPACE_KEY: 8,
-    DELETE_KEY: 46,
-    ENTER_KEY: 13,
-    nodeRadius: 45
-  };
-
-  /* PROTOTYPE FUNCTIONS */
-
-  GraphCreator.prototype.dragmove = function(d) {
-    var thisGraph = this;
-    if (thisGraph.state.shiftNodeDrag){
-      thisGraph.dragLine.attr('d', 'M' + d.x + ',' + d.y + 'L' + d3.mouse(thisGraph.svgG.node())[0] + ',' + d3.mouse(this.svgG.node())[1]);
-    } else{
-      d.x += d3.event.dx;
-      d.y +=  d3.event.dy;
-      thisGraph.updateGraph();
-    }
-  };
-
-  GraphCreator.prototype.deleteGraph = function(skipPrompt){
-    var thisGraph = this,
-        doDelete = true;
-    if (!skipPrompt){
-      doDelete = window.confirm("Press OK to delete this graph");
-    }
-    if(doDelete){
-      thisGraph.nodes = [];
-      thisGraph.edges = [];
-      thisGraph.updateGraph();
-    }
-  };
-
-  /* select all text in element: taken from http://stackoverflow.com/questions/6139107/programatically-select-text-in-a-contenteditable-html-element */
-  GraphCreator.prototype.selectElementContents = function(el) {
-    var range = document.createRange();
-    range.selectNodeContents(el);
-    var sel = window.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(range);
-  };
-
-
-  /* insert svg line breaks: taken from http://stackoverflow.com/questions/13241475/how-do-i-include-newlines-in-labels-in-d3-charts */
-  GraphCreator.prototype.insertTitleLinebreaks = function (gEl, title) {
-    var words = title.split(/\s+/g),
-        nwords = words.length;
-    var el = gEl.append("text")
-          .attr("text-anchor","middle")
-          .attr("dy", "-" + (nwords-1)*7.5);
-
-    for (var i = 0; i < words.length; i++) {
-      var tspan = el.append('tspan').text(words[i]);
-      if (i > 0)
-        tspan.attr('x', 0).attr('dy', '15');
-    }
-  };
-
-  
-  // remove edges associated with a node
-  GraphCreator.prototype.spliceLinksForNode = function(node) {
-    var thisGraph = this,
-        toSplice = thisGraph.edges.filter(function(l) {
-      return (l.source === node || l.target === node);
-    });
-    toSplice.map(function(l) {
-      thisGraph.edges.splice(thisGraph.edges.indexOf(l), 1);
-    });
-  };
-
-  GraphCreator.prototype.replaceSelectEdge = function(d3Path, edgeData){
-    var thisGraph = this;
-    d3Path.classed(thisGraph.consts.selectedClass, true);
-    if (thisGraph.state.selectedEdge){
-      thisGraph.removeSelectFromEdge();
-    }
-    thisGraph.state.selectedEdge = edgeData;
-  };
-
-  GraphCreator.prototype.replaceSelectNode = function(d3Node, nodeData){
-    var thisGraph = this;
-    d3Node.classed(this.consts.selectedClass, true);
-    if (thisGraph.state.selectedNode){
-      thisGraph.removeSelectFromNode();
-    }
-    thisGraph.state.selectedNode = nodeData;
-  };
-  
-  GraphCreator.prototype.removeSelectFromNode = function(){
-    var thisGraph = this;
-    thisGraph.circles.filter(function(cd){
-      return cd.id === thisGraph.state.selectedNode.id;
-    }).classed(thisGraph.consts.selectedClass, false);
-    thisGraph.state.selectedNode = null;
-  };
-
-  GraphCreator.prototype.removeSelectFromEdge = function(){
-    var thisGraph = this;
-    thisGraph.paths.filter(function(cd){
-      return cd === thisGraph.state.selectedEdge;
-    }).classed(thisGraph.consts.selectedClass, false);
-    thisGraph.state.selectedEdge = null;
-  };
-
-  GraphCreator.prototype.pathMouseDown = function(d3path, d){
-    var thisGraph = this,
-        state = thisGraph.state;
-    d3.event.stopPropagation();
-    state.mouseDownLink = d;
-
-    if (state.selectedNode){
-      thisGraph.removeSelectFromNode();
-    }
-    
-    var prevEdge = state.selectedEdge;  
-    if (!prevEdge || prevEdge !== d){
-      thisGraph.replaceSelectEdge(d3path, d);
-    } else{
-      thisGraph.removeSelectFromEdge();
-    }
-  };
-
-  // mousedown on node
-  GraphCreator.prototype.circleMouseDown = function(d3node, d){
-    var thisGraph = this,
-        state = thisGraph.state;
-    d3.event.stopPropagation();
-    state.mouseDownNode = d;
-    if (d3.event.shiftKey){
-      state.shiftNodeDrag = d3.event.shiftKey;
-      // reposition dragged directed edge
-      thisGraph.dragLine.classed('hidden', false)
-        .attr('d', 'M' + d.x + ',' + d.y + 'L' + d.x + ',' + d.y);
-      return;
-    }
-  };
-
-  /* place editable text on node in place of svg text */
-  GraphCreator.prototype.changeTextOfNode = function(d3node, d){
-    var thisGraph= this,
-        consts = thisGraph.consts,
-        htmlEl = d3node.node();
-    d3node.selectAll("text").remove();
-    var nodeBCR = htmlEl.getBoundingClientRect(),
-        curScale = nodeBCR.width/consts.nodeRadius,
-        placePad  =  5*curScale,
-        useHW = curScale > 1 ? nodeBCR.width*0.71 : consts.nodeRadius*1.42;
-    // replace with editableconent text
-    var d3txt = thisGraph.svg.selectAll("foreignObject")
-          .data([d])
-          .enter()
-          .append("foreignObject")
-          .attr("x", nodeBCR.left + placePad )
-          .attr("y", nodeBCR.top + placePad)
-          .attr("height", 2*useHW)
-          .attr("width", useHW)
-          .append("xhtml:p")
-          .attr("id", consts.activeEditId)
-          .attr("contentEditable", "true")
-          .text(d.title)
-          .on("mousedown", function(d){
-            d3.event.stopPropagation();
-          })
-          .on("keydown", function(d){
-            d3.event.stopPropagation();
-            if (d3.event.keyCode == consts.ENTER_KEY && !d3.event.shiftKey){
-              this.blur();
-            }
-          })
-          .on("blur", function(d){
-            d.title = this.textContent;
-            thisGraph.insertTitleLinebreaks(d3node, d.title);
-            d3.select(this.parentElement).remove();
-          });
-    return d3txt;
-  };
-
-  // mouseup on nodes
-  GraphCreator.prototype.circleMouseUp = function(d3node, d){
-    var thisGraph = this,
-        state = thisGraph.state,
-        consts = thisGraph.consts;
-    // reset the states
-    state.shiftNodeDrag = false;    
-    d3node.classed(consts.connectClass, false);
-    
-    var mouseDownNode = state.mouseDownNode;
-    
-    if (!mouseDownNode) return;
-
-    thisGraph.dragLine.classed("hidden", true);
-
-    if (mouseDownNode !== d){
-      // we're in a different node: create new edge for mousedown edge and add to graph
-      var newEdge = {source: mouseDownNode, target: d};
-      var filtRes = thisGraph.paths.filter(function(d){
-        if (d.source === newEdge.target && d.target === newEdge.source){
-          thisGraph.edges.splice(thisGraph.edges.indexOf(d), 1);
-        }
-        return d.source === newEdge.source && d.target === newEdge.target;
-      });
-      if (!filtRes[0].length){
-        thisGraph.edges.push(newEdge);
-        thisGraph.updateGraph();
-      }
-    } else{
-      // we're in the same node
-      if (state.justDragged) {
-        // dragged, not clicked
-        state.justDragged = false;
-      } else{
-        // clicked, not dragged
-        if (d3.event.shiftKey){
-          // shift-clicked node: edit text content
-          var d3txt = thisGraph.changeTextOfNode(d3node, d);
-          var txtNode = d3txt.node();
-          thisGraph.selectElementContents(txtNode);
-          txtNode.focus();
-        } else{
-          if (state.selectedEdge){
-            thisGraph.removeSelectFromEdge();
-          }
-          var prevNode = state.selectedNode;            
           
-          if (!prevNode || prevNode.id !== d.id){
-            thisGraph.replaceSelectNode(d3node, d);
-          } else{
-            thisGraph.removeSelectFromNode();
-          }
-        }
+        .selector(':selected')
+          .css({
+            'border-width': 0.5,
+            
+            'border-color': '#333'
+          })
+        .selector('edge')
+          .css({
+            'curve-style': 'bezier',
+            //'opacity': 0.666,
+            //'width': 'mapData(strength, 70, 100, 2, 5)',
+            'width': 'mapData(weight, 0.1, 3, 1, 7)', 
+            'target-arrow-shape': 'triangle',
+            //'source-arrow-shape': 'circle',
+            'line-color': 'data(faveColor)',
+            'source-arrow-color': 'data(faveColor)',
+            'content' : 'data(label)',
+            'font-size':'5%',
+            'color': '#d8d8d8',
+            'edge-text-rotation': 'autorotate',
+            'target-arrow-color': 'data(faveColor)'
+          })
+          
+        /*.selector('edge.questionable')
+          .css({
+            'line-style': 'dotted',
+            'target-arrow-shape': 'diamond'
+          }) */
+        .selector('.faded')
+          .css({
+            'opacity': 0.75,
+            'text-opacity': 0.25
+          })
+          .selector('.highlighted')
+          .css({
+            'background-color': 'green',
+            'line-color': 'green',
+            'target-arrow-color':'green'
+          }),
+      
+      elements: {
+        nodes: dNodes/*[
+          { data: { id: 'm', name: 'AR2521', weight: 3, faveColor: '#112200', faveShape: 'rectangle', type:'module' } },
+          { data: { id: 'mod', name: 'Moderator', weight: 3, faveColor: 'red', faveShape: 'ellipse', type:'moderator' } },
+          { data: { id: 'ass1', name: 'Assignment1', weight: 3, faveColor: 'green', faveShape: 'triangle', type:'material' } },
+          { data: { id: 'res', name: 'study1', weight: 3, faveColor: 'lightblue', faveShape: 'triangle', type:'material' } },
+          { data: { id: 'e', name: 'Elaine', weight: 3, faveColor: 'lightblue', faveShape: 'ellipse', type:'student' } },
+          { data: { id: 'k', name: 'Kramer', weight: 2, faveColor: 'lightblue', faveShape: 'ellipse', type:'student' } },
+          { data: { id: 'g', name: 'George', weight: 3, faveColor: 'lightblue', faveShape: 'ellipse', type:'student' } },
+          { data: { id: 's', name: 'Sakshi', weight: 3, faveColor: 'lightblue', faveShape: 'ellipse', type:'student' } },
+          { data: { id: 'cE1', name: 'Rendering Techniques', weight: 3, faveColor: 'green', faveShape: 'triangle', type:'contribution' } },
+          { data: { id: 'qK1', name: 'Green Houseing examples', weight: 3, faveColor: 'green', faveShape: 'triangle', type:'contribution' } },
+          { data: { id: 'cS1', name: 'Deadline?', weight: 3, faveColor: 'green', faveShape: 'triangle', type:'contribution' } },
+          { data: { id: 's1', name: 'sol1', weight: 3, faveColor: 'green', faveShape: 'ellipse', type:'submission' } },
+          { data: { id: 's1', name: 'sol2', weight: 3, faveColor: 'green', faveShape: 'ellipse', type:'submission' } }
+          
+        ]*/,
+        edges: dEdges/*[
+          { data: { source: 'm', target: 'res', faveColor: 'lightblue', strength: 3, label: 'resource' } },
+          { data: { source: 'm', target: 'mod', faveColor: 'lightblue', strength: 3, label: 'moderated_by' } },
+          { data: { source: 'm', target: 'ass1', faveColor: 'lightblue', strength: 3, label:'assignment' } },
+          { data: { source: 'ass1', target: 'mod', faveColor: 'lightblue', strength: 1, label:'created_by' } },
+          { data: { source: 'cE1', target: 'e', faveColor: 'lightblue', strength: 1, label:'created_by' } },
+          { data: { source: 'e', target: 'g', faveColor: 'lightblue', strength: 3,  label: 'follows' } },
+         
+          { data: { source: 'e', target: 'm', faveColor: 'lightblue', strength: 3, label: 'student_of' } },
+          
+          { data: { source: 's', target: 'm', faveColor: 'lightblue', strength: 3, label: 'student_of' } },  
+          
+          { data: { source: 'k', target: 'm', faveColor: 'lightblue', strength: 3, label: 'student_of' } },
+               
+          { data: { source: 'g', target: 'm', faveColor: 'lightblue', strength: 3, label: 'student_of' } },
+          { data: { source: 's1', target: 'e', faveColor: 'lightblue', strength: 3, label: 'submitted_by' } },
+          { data: { source: 's1', target: 'ass1', faveColor: 'lightblue', strength: 3, label: 'submitted_for' } },
+          { data: { source: 'qK1', target: 'k', faveColor: 'lightblue', strength: 3, label: 'question_by' } },
+          { data: { source: 'qK1', target: 'cE1', faveColor: 'lightblue', strength: 3, label: 'answered_with' } },
+          { data: { source: 'cS1', target: 's', faveColor: 'lightblue', strength: 3, label: 'comment_by' } },
+
+          { data: { source: 'cE1', target: 'cS1', faveColor: 'lightblue', strength: 3, label: 'comment_for' } }
+        ]*/
+      },
+      
+
+      ready: function(){
+        window.cy = this;
+        
+        // giddy up
       }
-    }
-    state.mouseDownNode = null;
-    return;
-    
-  }; // end of circles mouseup
-
-  // mousedown on main svg
-  GraphCreator.prototype.svgMouseDown = function(){
-    this.state.graphMouseDown = true;
-  };
-
-  // mouseup on main svg
-  GraphCreator.prototype.svgMouseUp = function(){
-    var thisGraph = this,
-        state = thisGraph.state;
-    if (state.justScaleTransGraph) {
-      // dragged not clicked
-      state.justScaleTransGraph = false;
-    } else if (state.graphMouseDown && d3.event.shiftKey){
-      // clicked not dragged from svg
-      var xycoords = d3.mouse(thisGraph.svgG.node()),
-          d = {id: thisGraph.idct++, title: "new concept", x: xycoords[0], y: xycoords[1]};
-      thisGraph.nodes.push(d);
-      thisGraph.updateGraph();
-      // make title of text immediently editable
-      var d3txt = thisGraph.changeTextOfNode(thisGraph.circles.filter(function(dval){
-        return dval.id === d.id;
-      }), d),
-          txtNode = d3txt.node();
-      thisGraph.selectElementContents(txtNode);
-      txtNode.focus();
-    } else if (state.shiftNodeDrag){
-      // dragged from node
-      state.shiftNodeDrag = false;
-      thisGraph.dragLine.classed("hidden", true);
-    }
-    state.graphMouseDown = false;
-  };
-
-  // keydown on main svg
-  GraphCreator.prototype.svgKeyDown = function() {
-    var thisGraph = this,
-        state = thisGraph.state,
-        consts = thisGraph.consts;
-    // make sure repeated key presses don't register for each keydown
-    if(state.lastKeyDown !== -1) return;
-
-    state.lastKeyDown = d3.event.keyCode;
-    var selectedNode = state.selectedNode,
-        selectedEdge = state.selectedEdge;
-
-    switch(d3.event.keyCode) {
-    case consts.BACKSPACE_KEY:
-    case consts.DELETE_KEY:
-      d3.event.preventDefault();
-      if (selectedNode){
-        thisGraph.nodes.splice(thisGraph.nodes.indexOf(selectedNode), 1);
-        thisGraph.spliceLinksForNode(selectedNode);
-        state.selectedNode = null;
-        thisGraph.updateGraph();
-      } else if (selectedEdge){
-        thisGraph.edges.splice(thisGraph.edges.indexOf(selectedEdge), 1);
-        state.selectedEdge = null;
-        thisGraph.updateGraph();
-      }
-      break;
-    }
-  };
-
-  GraphCreator.prototype.svgKeyUp = function() {
-    this.state.lastKeyDown = -1;
-  };
-
-  // call to propagate changes to graph
-  GraphCreator.prototype.updateGraph = function(){
-    
-    var thisGraph = this,
-        consts = thisGraph.consts,
-        state = thisGraph.state;
-    
-    thisGraph.paths = thisGraph.paths.data(thisGraph.edges, function(d){
-      return String(d.source.id) + "+" + String(d.target.id);
-    });
-    var paths = thisGraph.paths;
-    // update existing paths
-    paths.style('marker-end', 'url(#end-arrow)')
-      .classed(consts.selectedClass, function(d){
-        return d === state.selectedEdge;
-      })
-      .attr("d", function(d){
-        return "M" + d.source.x + "," + d.source.y + "L" + d.target.x + "," + d.target.y;
-      });
-
-    // add new paths
-    paths.enter()
-      .append("path")
-      .style('marker-end','url(#end-arrow)')
-      .classed("link", true)
-      .attr("d", function(d){
-        return "M" + d.source.x + "," + d.source.y + "L" + d.target.x + "," + d.target.y;
-      })
-      .on("mousedown", function(d){
-        thisGraph.pathMouseDown.call(thisGraph, d3.select(this), d);
-        }
-      )
-      .on("mouseup", function(d){
-        state.mouseDownLink = null;
-      });
-
-    // remove old links
-    paths.exit().remove();
-    
-    // update existing nodes
-    thisGraph.circles = thisGraph.circles.data(thisGraph.nodes, function(d){ return d.id;});
-    thisGraph.circles.attr("transform", function(d){return "translate(" + d.x + "," + d.y + ")";});
-
-    // add new nodes
-    var newGs= thisGraph.circles.enter()
-          .append("g");
-
-    newGs.classed(consts.circleGClass, true)
-      .attr("transform", function(d){return "translate(" + d.x + "," + d.y + ")";})
-      .on("mouseover", function(d){        
-        if (state.shiftNodeDrag){
-          d3.select(this).classed(consts.connectClass, true);
-        }
-      })
-      .on("mouseout", function(d){
-        d3.select(this).classed(consts.connectClass, false);
-      })
-      .on("mousedown", function(d){
-        thisGraph.circleMouseDown.call(thisGraph, d3.select(this), d);
-      })
-      .on("mouseup", function(d){
-        thisGraph.circleMouseUp.call(thisGraph, d3.select(this), d);
-      })
-      .call(thisGraph.drag);
-
-    newGs.append("circle")
-      .attr("r", String(consts.nodeRadius));
-
-    newGs.each(function(d){
-      thisGraph.insertTitleLinebreaks(d3.select(this), d.title);
     });
 
-    // remove old nodes
-    thisGraph.circles.exit().remove();
-  };
-
-  GraphCreator.prototype.zoomed = function(){
-    this.state.justScaleTransGraph = true;
-    d3.select("." + this.consts.graphClass)
-      .attr("transform", "translate(" + d3.event.translate + ") scale(" + d3.event.scale + ")"); 
-  };
-
-  GraphCreator.prototype.updateWindow = function(svg){
-    var docEl = document.documentElement,
-        bodyEl = document.getElementsByTagName('body')[0];
-    var x = window.innerWidth || docEl.clientWidth || bodyEl.clientWidth;
-    var y = window.innerHeight|| docEl.clientHeight|| bodyEl.clientHeight;
-    svg.attr("width", x).attr("height", y);
-  };
+    
+}
 
 
-  
-  /**** MAIN ****/
 
-  // warn the user when leaving
-/*  window.onbeforeunload = function(){
-    return "Make sure to save your graph locally before leaving :-)";
-  };      
-*/
-  var docEl = document.documentElement,
-      d3container = document.getElementById("d3-container");
-  
-  var width = /*window.innerWidth || docEl.clientWidth || */d3container.clientWidth,
-      height =  /*window.innerHeight|| docEl.clientHeight|| */d3container.clientHeight;
+$(document).ready(function(){
 
-  console.log(width, height);
 
-  var xLoc = width/2 - 25,
-      yLoc = 100;
 
-  // initial node data
-  var nodes = [{title: "new concept", id: 0, x: xLoc, y: yLoc},
-               {title: "new concept", id: 1, x: xLoc, y: yLoc + 200}];
-  var edges = [{source: nodes[1], target: nodes[0]}];
+		var dNodes = [];
+		var dEdges = [];
 
-  /** MAIN SVG **/
-  var svg = d3.select("#d3-container").append("svg")
-        .attr("width", width)
-        .attr("height", height);
-  var graph = new GraphCreator(svg, nodes, edges);
-      graph.setIdCt(2);
+		  $.get( "/graph/all", function( data ) {
+		      //console.log(data);
+		      data.nodes.map( function(node){
+		          var id = node.id;
+		          var type = node.type;
+		          var faveShape;
+		          if(type=="module"){
+		            faveShape = "rectangle";
+		          }
+		          if(type=="user")
+		          { faveShape = "ellipse";
+		          }
+		          if(type=="contribution"){
+		            faveShape = "triangle";
+		          }
+		          dNodes.push({ 
+		              data: {
+		              id: id, name: 'S', weight: 2, faveShape: faveShape, type: type
+		            }
+		          });
 
-  $.get( "/graph/all", function( data ) {
-      //console.log(data);
+		      })
 
-      data.nodes.map( function(node){
-        node.x = xLoc + 700*Math.random();
-        node.y = yLoc + 700*Math.random();
-        node.title = node.type;
-        nodes.push(node);
+		      
+		      data.links.map(function(edge){
 
-      })
+		          var src = edge.source;
+		          var des = edge.target;
 
-      edges = edges.concat(data.links);
+		          dEdges.push({
+		          data: { 
+		            source: src, target: des, strength: 3, label: 'student_of' 
+		            }
 
-      graph.updateGraph();
-  })
+		          });
+		      })
 
-})(window.d3, window.saveAs, window.Blob);
+		      makeGraph(dNodes, dEdges);
+		     
+  		})
+
+
+
+		 $(window).load(function() {
+		   cy.on('mouseover','node', function(evt){
+	      var name = evt.cyTarget.data('name');
+	      var data = evt.cyTarget.data();
+	      console.log( 'tap '+name   );
+
+	      $('#activeUser').html("Type: " + data.type +"<br>Name:"+ data.name + "<br>ID:" + data.id);
+	      
+	      evt.cyTarget.css({ content: name});
+   		 });
+
+	    cy.on('mouseout','node', function(evt){
+	      var name = evt.cyTarget.data('name');
+
+	      $('#activeUser').html("");
+	      
+	      evt.cyTarget.css({ content: ''});
+	    });
+
+	    cy.on('tap','node', function(evt){
+	     // var name = evt.cyTarget.data('name');
+
+	     // $('#activeUser').html(name);
+	      
+	      //evt.cyTarget.css({ content: name});
+		    	cy.elements().removeClass('highlighted');
+		     evt.cyTarget.addClass('highlighted');
+		     evt.cyTarget.css({ 'width': 10});
+
+			    var node = evt.cyTarget;
+			    var directlyConnected = node.neighborhood();
+
+			    directlyConnected.nodes().addClass('highlighted');
+
+			    node.connectedEdges().addClass('highlighted');
+	    });
+		 });
+
+}); // on dom ready  
+
+
