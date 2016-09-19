@@ -1,6 +1,11 @@
 var request = require('request');
 var inspect = require('eyespect').inspector();
 
+var db_loc = 'http://'+ process.env.DB_USER +':'+ process.env.DB_PASS +'@localhost:7474/db/data/transaction/commit'; 
+if(process.env.SERVER_URL != undefined)
+    db_loc = 'http://'+ process.env.DB_USER +':'+ process.env.DB_PASS +'@' + process.env.SERVER_URL.slice(7) + '/db/data/transaction/commit'; 
+
+
 function apiCall(query, callback){
   var postData = {
                     "statements": [
@@ -18,7 +23,7 @@ function apiCall(query, callback){
         method: 'post',
         body: postData,
         json: true,
-        url: 'http://'+ process.env.DB_USER +':'+ process.env.DB_PASS +'@localhost:7474/db/data/transaction/commit'
+        url: db_loc
       };
 
       request(options, function (err, result, body) {
