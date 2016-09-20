@@ -128,6 +128,42 @@ function makeGraph(dNodes, dEdges){
       }
     });
 
+
+   cy.on('mouseover','node', function(evt){
+      var name = evt.cyTarget.data('name');
+      var data = evt.cyTarget.data();
+
+      $('#activeUser').html("Type: " + data.type +"<br>Name:"+ data.name + "<br>ID:" + data.id);
+      
+      evt.cyTarget.css({ content: name});
+     });
+
+   cy.on('mouseout','node', function(evt){
+      var name = evt.cyTarget.data('name');
+
+      $('#activeUser').html("");
+      
+      evt.cyTarget.css({ content: ''});
+    });
+
+   cy.on('tap','node', function(evt){
+     var name = evt.cyTarget.data('name');
+
+     $('#activeUser').html(name);
+      
+      //evt.cyTarget.css({ content: name});
+        cy.elements().removeClass('highlighted');
+       evt.cyTarget.addClass('highlighted');
+       evt.cyTarget.css({ 'width': 10});
+
+        var node = evt.cyTarget;
+        var directlyConnected = node.neighborhood();
+
+        directlyConnected.nodes().addClass('highlighted');
+
+        node.connectedEdges().addClass('highlighted');
+    });
+
     
 }
 
@@ -171,7 +207,7 @@ $(document).ready(function(){
 
 		          dEdges.push({
 		          data: { 
-		            source: src, target: des, strength: 3, label: 'student_of' 
+		            source: src, target: des, strength: 3//, label: 'student_of' 
 		            }
 
 		          });
@@ -183,44 +219,6 @@ $(document).ready(function(){
 
 
 
-		 $(window).load(function() {
-		   cy.on('mouseover','node', function(evt){
-	      var name = evt.cyTarget.data('name');
-	      var data = evt.cyTarget.data();
-	      console.log( 'tap '+name   );
-
-	      $('#activeUser').html("Type: " + data.type +"<br>Name:"+ data.name + "<br>ID:" + data.id);
-	      
-	      evt.cyTarget.css({ content: name});
-   		 });
-
-	    cy.on('mouseout','node', function(evt){
-	      var name = evt.cyTarget.data('name');
-
-	      $('#activeUser').html("");
-	      
-	      evt.cyTarget.css({ content: ''});
-	    });
-
-	    cy.on('tap','node', function(evt){
-	     // var name = evt.cyTarget.data('name');
-
-	     // $('#activeUser').html(name);
-	      
-	      //evt.cyTarget.css({ content: name});
-		    	cy.elements().removeClass('highlighted');
-		     evt.cyTarget.addClass('highlighted');
-		     evt.cyTarget.css({ 'width': 10});
-
-			    var node = evt.cyTarget;
-			    var directlyConnected = node.neighborhood();
-
-			    directlyConnected.nodes().addClass('highlighted');
-
-			    node.connectedEdges().addClass('highlighted');
-	    });
-		 });
-
-}); // on dom ready  
+});
 
 

@@ -50,21 +50,6 @@ a:focus{
 	margin: 0px;
 }
 
-
-
-/*------Cytoscape Styles ----*/
-
-#cy {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-}
-
-/*-------------------*/
-
-
 /*
  *	home.html
  */

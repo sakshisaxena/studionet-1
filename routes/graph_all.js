@@ -28,6 +28,7 @@ router.route('/')
 	        if (idIndex(nodes, n.id) == null)
 	            nodes.push({
 	                id: n.id,
+	                name: setName(n),  // edit: AKM
 	                type: n.labels[0]
 	            });
     		});
