@@ -181,6 +181,7 @@ $(document).ready(function(){
 		      data.nodes.map( function(node){
 		          var id = node.id;
 		          var type = node.type;
+              var name = node.name;
 		          var faveShape;
 		          if(type=="module"){
 		            faveShape = "rectangle";
@@ -193,7 +194,7 @@ $(document).ready(function(){
 		          }
 		          dNodes.push({ 
 		              data: {
-		              id: id, name: 'S', weight: 2, faveShape: faveShape, type: type
+		              id: id, name: name, weight: 2, faveShape: faveShape, type: type
 		            }
 		          });
 
