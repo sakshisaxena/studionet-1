@@ -1,12 +1,11 @@
-
 function makeGraph(dNodes, dEdges){
 
 
     //gray out
-    dNodes = dNodes.map(function(e){
-      e.data.faveColor =  "green"//'#d9d9d9'
+/*    dNodes = dNodes.map(function(e){
+      e.data.faveColor =  #d9d9d9//"green"//''
       return e;
-    })
+    })*/
 
 
     dEdges = dEdges.map(function(e){
@@ -27,8 +26,8 @@ function makeGraph(dNodes, dEdges){
         .selector('node')
           .css({
             'shape': 'data(faveShape)',
-            'width': 'mapData(weight, 0.1, 3, 1, 7)', 
-            'height': 'mapData(weight, 0.1, 3, 1, 7)',   // mapData(property, a, b, c, d)  => specified range a, b; actual values c, d
+            'width': 'data(width)', 
+            'height': 'data(height)',   // mapData(property, a, b, c, d)  => specified range a, b; actual values c, d
             //'content': 'data(name)',
             'text-valign': 'center',
             'font-size':'5%',
@@ -40,9 +39,11 @@ function makeGraph(dNodes, dEdges){
           
         .selector(':selected')
           .css({
-            'border-width': 0.5,
-            
-            'border-color': '#333'
+            'border-width': 5,
+            'border-color': '#333',
+            'width': 25, 
+            'height': 25,
+            'font-size': '14px'
           })
         .selector('edge')
           .css({
@@ -55,7 +56,7 @@ function makeGraph(dNodes, dEdges){
             'line-color': 'data(faveColor)',
             'source-arrow-color': 'data(faveColor)',
             'content' : 'data(label)',
-            'font-size':'5%',
+            'font-size':'15%',
             'color': '#d8d8d8',
             'edge-text-rotation': 'autorotate',
             'target-arrow-color': 'data(faveColor)'
@@ -154,7 +155,6 @@ function makeGraph(dNodes, dEdges){
       //evt.cyTarget.css({ content: name});
         cy.elements().removeClass('highlighted');
        evt.cyTarget.addClass('highlighted');
-       evt.cyTarget.css({ 'width': 10});
 
         var node = evt.cyTarget;
         var directlyConnected = node.neighborhood();
@@ -182,19 +182,34 @@ $(document).ready(function(){
 		          var id = node.id;
 		          var type = node.type;
               var name = node.name;
-		          var faveShape;
+		          var faveShape,
+                  faveColor,
+                  width, 
+                  height;
+
 		          if(type=="module"){
 		            faveShape = "rectangle";
+                faveColor = "yellow";
+                width = 40;
+                height = 40;
 		          }
 		          if(type=="user")
-		          { faveShape = "ellipse";
+		          { 
+                faveShape = "ellipse";
+                faveColor = "blue";
+                width = 15;
+                height = 15;
 		          }
 		          if(type=="contribution"){
-		            faveShape = "triangle";
+		            faveShape = "rectangle";
+                faveColor = "green";
+                width = 25;
+                height = 40;
 		          }
+              console.log(faveColor, faveShape);
 		          dNodes.push({ 
-		              data: {
-		              id: id, name: name, weight: 2, faveShape: faveShape, type: type
+		            data: {
+		              id: id, name: name, width: width, height: height, faveShape: faveShape, type: type, faveColor: faveColor
 		            }
 		          });
 
