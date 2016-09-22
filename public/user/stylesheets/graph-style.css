@@ -10,16 +10,31 @@
 }
 
 #activeUser{
-    //border: 1px solid black; 
 
-    height: 100px;
-    width: 300px;
+    display: none;
+    
+    border: 1px solid black; 
+
+    height: 60%;
+    width: 260px;
 
     position: absolute;
-    bottom: 0px; 
+    top: 150px; 
+    left: -10%;
 
     color: black;
 
     font-size: 14px;
 
+    background-color: rgba(0, 0, 0, 0.5);
+
+    z-index: 10;
+
+    padding: 20px;
+
+}
+
+#activeUser h1{
+  border-bottom: 1px solid black;
+  text-decoration: uppercase;
 }

@@ -74,7 +74,7 @@ function makeGraph(dNodes, dEdges){
           })
           .selector('.highlighted')
           .css({
-            'background-color': 'green',
+            //'background-color': 'green',
             'line-color': 'green',
             'target-arrow-color':'green'
           }),
@@ -134,7 +134,10 @@ function makeGraph(dNodes, dEdges){
       var name = evt.cyTarget.data('name');
       var data = evt.cyTarget.data();
 
-      $('#activeUser').html("Type: " + data.type +"<br>Name:"+ data.name + "<br>ID:" + data.id);
+      var directlyConnected = evt.cyTarget.neighborhood();
+      
+      $('#activeUser').show();
+      $('#activeUser').html(getHTML(data.name, data.type, directlyConnected.nodes().length));
       
       evt.cyTarget.css({ content: name});
      });
@@ -142,22 +145,24 @@ function makeGraph(dNodes, dEdges){
    cy.on('mouseout','node', function(evt){
       var name = evt.cyTarget.data('name');
 
-      $('#activeUser').html("");
+      $('#activeUser').hide();
       
       evt.cyTarget.css({ content: ''});
     });
 
    cy.on('tap','node', function(evt){
-     var name = evt.cyTarget.data('name');
-
-     $('#activeUser').html(name);
       
+      var data = evt.cyTarget.data();
+
       //evt.cyTarget.css({ content: name});
         cy.elements().removeClass('highlighted');
-       evt.cyTarget.addClass('highlighted');
+        evt.cyTarget.addClass('highlighted');
 
         var node = evt.cyTarget;
         var directlyConnected = node.neighborhood();
+
+        $('#activeUser').show();
+        $('#activeUser').html(getHTML(data.name, data.type, directlyConnected.nodes().length));
 
         directlyConnected.nodes().addClass('highlighted');
 
@@ -167,6 +172,9 @@ function makeGraph(dNodes, dEdges){
     
 }
 
+function getHTML(name, type, neighbours){
+  return "<h1>" + name + "</h1>" + "<h5>" + type + "</h5>" + "<p>This node has " + neighbours + " connections.</p>";
+}
 
 
 $(document).ready(function(){
