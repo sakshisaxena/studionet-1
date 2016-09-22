@@ -15,7 +15,7 @@ router.route('/')
 	.get(auth.ensureAuthenticated, function(req, res){
 
 		var query = [
-									'MATCH p=()-[]-() RETURN p'
+									'MATCH p=()-[]->() RETURN p'
 								].join('\n');
 
 		apiCall(query, function(data){

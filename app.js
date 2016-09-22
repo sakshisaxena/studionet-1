@@ -36,7 +36,9 @@ app.use(session({
   secret: 'keyboard cat',   // some temp. secret
   cookie: {
     maxAge: 30*60*60*1000   // temp: expire in 30 hours
-  }
+  },
+  resave: true,
+  saveUninitialized: true
 }));
 // Initialize Passport!  Also use passport.session() middleware, to support
 // persistent login sessions (recommended).
