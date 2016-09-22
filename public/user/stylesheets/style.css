@@ -234,7 +234,7 @@ header{
 	margin-top: 0px; 
 	padding: 0px 0 0px 0;
 
-	z-index: 3;
+	z-index: 7;
 }
 
 .graph-nav-control{
@@ -323,3 +323,15 @@ header{
 	background-color: #F1F1F1;
 }
 
+
+
+/*
+ * Layouts - Experimental
+ */
+.layouts{
+	position: absolute;
+	top: 60px; 
+	left: 10%;
+
+	z-index: 10;
+}

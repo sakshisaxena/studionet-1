@@ -1,5 +1,5 @@
 $( document ).ready(function() {
-    console.log( "ready!" );
+    //console.log( "ready!" );
 
     $('.recent-activity-notifications').click( function(){
         alert("Shows recent activity list similar to Facebook");
@@ -7,6 +7,11 @@ $( document ).ready(function() {
 
     $('.user-avatar').click( function(){
         alert("Shows basic user information on hover. User can navigate to full-user page from there.");
+    })
+
+    $('.zoom-extents').click( function(){
+       //console.log("xoom");
+       cy.reset();
     })
 
 /*    $('.add-contribution').click( function(){
@@ -32,6 +37,11 @@ $( document ).ready(function() {
 
     $('.sigma-scene').click( function(){
     	alert("graph clicked");
+    })
+
+    $("input[name='layout-radio']").on('change', function(){
+        //alert("change layout!");
+        refreshGraph();
     })
 
 });

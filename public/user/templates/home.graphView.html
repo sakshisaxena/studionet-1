@@ -1,17 +1,32 @@
 <link rel='stylesheet' href='./stylesheets/graph-style.css' />
+
+<div class="layouts input-group">
+
+	<label class="radio-inline"><input type="radio" name="layout-radio" value='CIRCLE_GRAPH_LAYOUT' >Circle</label>
+<!-- 	<label class="radio-inline"><input type="radio" name="layout-radio" value='SPREAD_GRAPH_LAYOUT' >Spread</label> -->
+	<label class="radio-inline"><input type="radio" name="layout-radio" value='GRID_GRAPH_LAYOUT' >Grid</label>
+	<label class="radio-inline"><input type="radio" name="layout-radio" value='CONCENTRIC_GRAPH_LAYOUT' checked>Concentric</label>
+	<label class="radio-inline"><input type="radio" name="layout-radio" value='COSE_GRAPH_LAYOUT' >Cose</label>
+<!-- 	<label class="radio-inline"><input type="radio" name="layout-radio" value='COSE_BILKENT_GRAPH_LAYOUT' >Cose-Bilkent </label>
+	<label class="radio-inline"><input type="radio" name="layout-radio" value='COSE_BILKENT_COMPOUND_GRAPH_LAYOUT' >Cose-Bilkent Compound</label>
+	<label class="radio-inline"><input type="radio" name="layout-radio" value='DAGRE_GRAPH_LAYOUT' >Dagre (Heirarchial)</label> -->
+	
+</div>
+
  
 <div class='graph-container'>
 
-	<div class='bread-crumbs'>
+<!-- 	<div class='bread-crumbs'>
 		<a>Graph</a> > <a> User 178 </a> > <a> Contribution 232 </a> 
-	</div>
+	</div> -->
+
 	
 	<div class='graph-controls'>
-		<img class='graph-nav-control' src='./img/zoom-in.svg'/>
-		<img class='graph-nav-control' src='./img/zoom-out.svg'/>
-		<img class='graph-nav-control' src='./img/expand.svg'/>
+<!-- 		<img class='graph-nav-control' src='./img/zoom-in.svg'/>
+		<img class='graph-nav-control' src='./img/zoom-out.svg'/> -->
+		<img class='graph-nav-control zoom-extents' src='./img/expand.svg'/>
 		
-		<div class='add-contribution'>+</div>
+<!-- 		<div class='add-contribution'>+</div> -->
 	</div>
 
 	<div class='add-contribution-dialog'>
@@ -23,7 +38,7 @@
 		</div>
 	</div>
 
-	<div id='activeUser'></div>	
+	<div id='info-block'></div>	
     <div id='cy'></div>
 
 </div>
@@ -37,17 +52,13 @@
 </div>
 
 
-<!-- include javascript functionality -->
-<script type="text/javascript" src="/user/javascripts/ui/user-ui.js"></script> 
 
-
-
-<!-- d3 specific graph files -->
-<!---Example source: https://bl.ocks.org/cjrd/6863459 -->
-<!-- d3 included in main template file -->
-<!-- 
-  <script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script> -->
-
-<script src="./javascripts/ui/graph-creator.js"></script>
+<!-- Layout files for Cytoscape -->
+<script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-cose-bilkent/1.0.5/cytoscape-cose-bilkent.js"></script>
+<script src="https://cdn.rawgit.com/cpettitt/dagre/v0.7.4/dist/dagre.min.js"></script>
+<script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-dagre/1.1.2/cytoscape-dagre.js"></script>
  
+<!-- include javascript functionality -->
+<script src="./javascripts/ui/graph-styles.js"></script>
+<script type="text/javascript" src="/user/javascripts/ui/user-ui.js"></script> 
+<script src="./javascripts/ui/graph-creator.js"></script>

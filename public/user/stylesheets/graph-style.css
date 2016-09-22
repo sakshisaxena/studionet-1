@@ -9,7 +9,7 @@
   z-index: 5;
 }
 
-#activeUser{
+#info-block{
 
     display: none;
     
@@ -34,7 +34,7 @@
 
 }
 
-#activeUser h1{
+#info-block h1{
   border-bottom: 1px solid black;
   text-decoration: uppercase;
 }
