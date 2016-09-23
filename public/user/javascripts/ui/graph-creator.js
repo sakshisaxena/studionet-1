@@ -241,13 +241,25 @@ var makeGraph = function(dNodes, dEdges){
 
               $('#action-block').show();
 
+/*              if(extra_content.title = 'Question')
+                $('#answer').show();*/
+
+
+              if(extra_data.description == undefined)
+                extra_data.description = "This post doesn't have a short description"
+              if(extra_data.content == undefined)
+                extra_data.content = "This post has no content!"
+
+
               extra_content = "<hr/>" + extra_data.description;
               if(extra_data.content.length > 200){                
+                
                 $('#read_more').show();
                 $('#central-block').html(
                   "<h3>"+node.data.name+"</h3><hr/><p>"+ extra_data.content +"</p>"
                   +"<button id='content-close'>Close</button>");
-                $('#content-close').click(function(){ $(this).hide(); })
+
+
                 //extra_content = extra_content + "<hr/><br><a>Read full...</a>"
               }
               else{
@@ -305,7 +317,48 @@ $(document).ready(function(){
     })
 
     $('#comment').click(function(){
+
+
+        var form_string = "Title:<br><input id='post_title' type=\"text\"><br>";
+       
+
+        $('#central-block').html(form_string
+          + "<br>"
+          + "<button id='submit_comment'>Submit</button>"
+          + "<button id='content-close'>Cancel</button>");
+
         $('#central-block').show();
+    
+        $('#content-close').click(function(){ 
+            $('#central-block').hide(); 
+            $('#action-block').hide(); 
+            $('#content-block').hide(); 
+
+        })
+
+        $('#submit_comment').click(function(){ 
+
+            var body = {};
+            body.title = $('#post_title').val();
+            body.body = "Lorem ipsum Esse Duis velit commodo aliqua qui cupidatat cillum qui dolore anim non amet.";
+            body.ref = '-1'; 
+            body.refType = 'text';
+            body.labels = 'comment'; //tags
+            body.contributionTypes = "";
+ 
+            console.log("submitting", body);
+
+            $.post('/api/contributions', 
+                    body,
+                    function(data){
+                        alert("Done!");
+                        refreshGraph();
+                    });
+
+        })
+
+
+
     })
 
 

@@ -96,3 +96,16 @@ a{
   overflow-y: auto;
 }
 
+
+#answer{
+  display: none;
+}
+
+
+button{
+  color: black;
+}
+
+input{
+  color: black;
+}

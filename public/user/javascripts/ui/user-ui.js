@@ -22,6 +22,10 @@ $( document ).ready(function() {
     	$('.add-contribution-dialog').hide();
     })
 
+    $('#cancel').click( function(){
+        $('.add-contribution-dialog').hide();
+    })
+
 
     $('#submit').click( function(){
     	$('.add-contribution-dialog').hide();
@@ -43,6 +47,7 @@ $( document ).ready(function() {
         //alert("change layout!");
         refreshGraph();
     })
+
 
 });
 
