@@ -9,32 +9,90 @@
   z-index: 5;
 }
 
-#info-block{
+a{
+  color: black;
+}
 
-    display: none;
-    
-    border: 1px solid black; 
-
-    height: 60%;
-    width: 260px;
+.side-blocks-container{
 
     position: absolute;
-    top: 150px; 
-    left: -10%;
+    top: 5%; 
+    left: 0px;
 
-    color: black;
+    height: 20%;
+
+    position: relative;
+
+    color: #D9CCCC;
+
+}
+
+.side-block{
+
+    border: 1px solid black; 
 
     font-size: 14px;
 
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.7);
 
     z-index: 10;
 
-    padding: 20px;
+    padding: 20px;  
+
+    width: 260px;
+
 
 }
 
-#info-block h1{
-  border-bottom: 1px solid black;
-  text-decoration: uppercase;
+.side-block h2{
+
+    border-bottom: 1px solid black;
+    text-decoration: uppercase;
+
 }
+
+#info-block{
+  
+    display: none;
+    height: 30px;
+
+}
+
+
+#content-block{
+    
+    display: none;
+    position: absolute;
+    top: 60px;
+
+/*    position: absolute;
+    top: 25%
+    left: -10%;
+
+    height: 60%;*/
+}
+
+#action-block{
+  display: none; 
+
+  position: absolute;
+  top: 10px;
+
+  height: 45px;
+  padding: 0px;
+
+  text-align: center;
+  color: black;
+}
+
+#central-block{
+  display: none;
+  position: absolute;
+  top: 10px;
+  left: 300px;
+  width: 600px;
+  height: 600px;
+
+  overflow-y: auto;
+}
+
