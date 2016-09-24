@@ -217,13 +217,13 @@ router.route('/:moduleId/users')
 	})
 
 	// link the user with this module
-	.post(auth.ensureAuthenticated, auth.isModerator, function(req, res){
+	/*.post(auth.ensureAuthenticated, auth.isModerator, function(req, res){
 		var query = [
 			'MATCH (u:user) WHERE ID(u)=' + req.body.userId + ' WITH u',
-			'MATCH (m:module) WHERE ID(m)=' + req.params.moduleId,
+			'MATCH (m:module) WHERE ID(m)=' + req.body.moduleId,
 			'CREATE UNIQUE (m)-[r:MEMBER{role: {roleParam}}]->(u)'
 		].join('\n');
-
+		console.log("i am here query"+query);
 		var params = {
 			roleParam: req.body.moduleRole
 		};
@@ -233,6 +233,26 @@ router.route('/:moduleId/users')
 				console.log('Error linking the user to the module');
 			else
 				res.send('success');
+		});
+	})
+*/
+	.post(auth.ensureAuthenticated, auth.isModerator, function(req, res){
+		var query = [
+			'MATCH (u:user) WHERE ID(u)=' + req.body.userId + ' WITH u',
+			'MATCH (m:module) WHERE ID(m)=' + req.body.moduleId,
+			'CREATE UNIQUE (m)-[r:MEMBER{role: {roleParam}}]->(u)'
+		].join('\n');
+		console.log("i am here query"+query);
+		var params = {
+			roleParam: req.body.moduleRole
+		};
+
+		db.query(query, params, function(error, result){
+			if (error)
+				console.log('Error linking the user to the module');
+			else
+				res.send('success');
+				
 		});
 	})
 
