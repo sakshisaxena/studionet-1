@@ -19,6 +19,7 @@ var EDGE_DEFAULT_STRENGTH = 3;
 var EDGE_DEFAULT_WEIGHT = 3;
 
 var GRID_GRAPH_LAYOUT = { name : 'grid' };
+var DAGRE_GRAPH_LAYOUT = { name : 'dagre' };
 var CIRCLE_GRAPH_LAYOUT = { name : 'circle' };
 var COSE_GRAPH_LAYOUT = { name: 'cose',
                           padding: 10,
