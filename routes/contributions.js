@@ -18,7 +18,6 @@ router.route('/')
 	// create a new contribution linked to the current user
 	.post(auth.ensureAuthenticated, function(req, res){
 
-
 		var query = [
 			'CREATE (c:contribution {title: {contributionTitleParam}, body: {contributionBodyParam}, ref: {contributionRefParam}, lastUpdated:{lastUpdatedParam}, editted: {edittedParam}, labels: {contributionLabelParam}, contributionTypes: {contributionTypesParam}}) WITH c',
 			'MATCH (u:user) WHERE id(u)=' + req.user.id,

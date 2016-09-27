@@ -13,6 +13,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var modules = require('./routes/modules');
 var moderators = require('./routes/moderators');
+var relationships = require('./routes/relationships');
 var uploads = require('./routes/uploads');
 var graph_all = require('./routes/graph_all');
 var graph_med = require('./routes/graph_med');
@@ -57,8 +58,9 @@ app.use('/api/profile', profile);
 app.use('/api/users', users);
 app.use('/api/modules', modules);
 app.use('/api/moderators', moderators);
-app.use('/uploads', uploads);
+app.use('/api/relationships', relationships);
 app.use('/api/contributions', contributions);
+app.use('/uploads', uploads);
 
 
 // catch 404 and forward to error handler

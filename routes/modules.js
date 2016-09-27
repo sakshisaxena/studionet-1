@@ -234,6 +234,31 @@ router.route('/:moduleId/users')
 			else
 				res.send('success');
 		});
+	});
+
+
+// route: /api/modules/:moduleId/users/:userId
+router.route('/:moduleId/users/:userId')
+	// edit the user's role in this module
+	.put(auth.ensureAuthenticated, auth.isModerator, function(req, res){
+		var query = [
+			'MATCH (m:module)-[r:MEMBER]->(u:user)',
+			'WHERE ID(m)=' + req.params.moduleId + ' AND ID(u)=' + req.params.userId,
+			'SET r.role = {roleParam}'
+		].join('\n');
+
+		var params = {
+			roleParam = req.body.moduleRole;
+		};
+
+		db.query(query, params, function(error, result){
+			if (error)
+				console.log('Error editting role of user for this module');
+			else
+				res.send('success');
+		});
 	})
+
+
 
 module.exports = router;
