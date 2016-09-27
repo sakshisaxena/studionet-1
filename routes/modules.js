@@ -244,7 +244,7 @@ router.route('/:moduleId/users/:userId')
 		var query = [
 			'MATCH (m:module)-[r:MEMBER]->(u:user)',
 			'WHERE ID(m)=' + req.params.moduleId + ' AND ID(u)=' + req.params.userId,
-			'SET r.role = {{roleParam}}'
+			'SET r.role = {roleParam}'
 		].join('\n');
 
 		var params = {
