@@ -151,6 +151,13 @@ var createGraphNode = function(node){
           node.height = CONTRIBUTION_HEIGHT;
           node.icon = 'url(http://placehold.it/20x30)' //'url(../../img/zoom-in.svg/)';
     }
+    else {
+          node.faveShape = CONTRIBUTION_SHAPE;
+          node.faveColor = CONTRIBUTION_COLOR;
+          node.width = CONTRIBUTION_WIDTH;
+          node.height = CONTRIBUTION_HEIGHT;
+          node.icon = 'url(http://placehold.it/20x30)' //'url(../../img/zoom-in.svg/)';
+    }
 
     return  { data: node };
 }
