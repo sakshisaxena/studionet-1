@@ -43,14 +43,14 @@ router.route('/')
 		var query = [
 			'MATCH (u:user) WHERE ID(u)=' + req.body.source,
 			'MATCH (c:contribution) WHERE ID(c)=' + req.body.target,
-			'MERGE (u)-[r:{relationshipParam}]->(c)'
+			'MERGE (u)-[r:{relationshipParam}]->(c)',
 			'ON CREATE SET r.count = 1',
 			'ON MATCH SET r.count = coalesce(r.count, 0) + 1,',
 			'r.lastUpdated = ' + Date.now()
 		].join('\n');
 
 		var params = {
-			relationshipParam = req.body.relationshipName;
+			relationshipParam : req.body.relationshipName
 		}
 
 		db.query(query, params, function(error, result){

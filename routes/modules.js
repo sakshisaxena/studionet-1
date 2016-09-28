@@ -268,7 +268,7 @@ router.route('/:moduleId/users/:userId')
 		].join('\n');
 
 		var params = {
-			roleParam = req.body.moduleRole;
+			roleParam: req.body.moduleRole
 		};
 
 		db.query(query, params, function(error, result){

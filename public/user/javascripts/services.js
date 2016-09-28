@@ -44,6 +44,7 @@ angular.module('studionet')
 	o.updateContribution = function(moduleDetails){
 		return $http.put('/api/modules/'+moduleDetails.moduleId, moduleDetails).success(function(){
 			$("#successMsg").show();
+			
 		});
 	};
 
