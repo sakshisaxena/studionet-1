@@ -1,15 +1,17 @@
 <link rel='stylesheet' href='./stylesheets/graph-style.css' />
+<script src="https://cdn.rawgit.com/cpettitt/dagre/v0.7.4/dist/dagre.min.js"></script>
+<script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-dagre/1.1.2/cytoscape-dagre.js"></script>
 
 <div class="layouts input-group">
 
 	<label class="radio-inline"><input type="radio" name="layout-radio" value='CIRCLE_GRAPH_LAYOUT' >Circle</label>
 <!-- 	<label class="radio-inline"><input type="radio" name="layout-radio" value='SPREAD_GRAPH_LAYOUT' >Spread</label> -->
-	<label class="radio-inline"><input type="radio" name="layout-radio" value='GRID_GRAPH_LAYOUT' >Grid</label>
-	<label class="radio-inline"><input type="radio" name="layout-radio" value='CONCENTRIC_GRAPH_LAYOUT' checked>Concentric</label>
+	<label class="radio-inline"><input type="radio" name="layout-radio" value='GRID_GRAPH_LAYOUT' checked>Grid</label>
+	<label class="radio-inline"><input type="radio" name="layout-radio" value='CONCENTRIC_GRAPH_LAYOUT'>Concentric</label>
 	<label class="radio-inline"><input type="radio" name="layout-radio" value='COSE_GRAPH_LAYOUT' >Cose</label>
 <!-- 	<label class="radio-inline"><input type="radio" name="layout-radio" value='COSE_BILKENT_GRAPH_LAYOUT' >Cose-Bilkent </label>
-	<label class="radio-inline"><input type="radio" name="layout-radio" value='COSE_BILKENT_COMPOUND_GRAPH_LAYOUT' >Cose-Bilkent Compound</label>
-	<label class="radio-inline"><input type="radio" name="layout-radio" value='DAGRE_GRAPH_LAYOUT' >Dagre (Heirarchial)</label> -->
+	<label class="radio-inline"><input type="radio" name="layout-radio" value='COSE_BILKENT_COMPOUND_GRAPH_LAYOUT' >Cose-Bilkent Compound</label> -->
+	<label class="radio-inline"><input type="radio" name="layout-radio" value='DAGRE_GRAPH_LAYOUT' >Dagre</label>
 	
 </div>
 
@@ -38,7 +40,21 @@
 		</div>
 	</div>
 
-	<div id='info-block'></div>	
+	<div class='side-blocks-container'>	
+		<div class='side-block' id='info-block'><button>Reply</button></div>	
+    	<div class='side-block' id='content-block'>
+    	</div>	
+    	<div class='side-block' id='action-block'>
+    		<button id='read_more'> Read More </button>
+	    	<button id='comment'> Comment </button>
+ <!--	    	<button id='answer'> Answer </button>
+	    	<button> Q </button>
+	    	<button> R </button>
+	    	<button> L </button>
+	    	<button> S </button> -->
+    	</div>	
+    	<div class='side-block' id='central-block'></div>
+    </div>    
     <div id='cy'></div>
 
 </div>
@@ -55,8 +71,6 @@
 
 <!-- Layout files for Cytoscape -->
 <script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-cose-bilkent/1.0.5/cytoscape-cose-bilkent.js"></script>
-<script src="https://cdn.rawgit.com/cpettitt/dagre/v0.7.4/dist/dagre.min.js"></script>
-<script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-dagre/1.1.2/cytoscape-dagre.js"></script>
  
 <!-- include javascript functionality -->
 <script src="./javascripts/ui/graph-styles.js"></script>

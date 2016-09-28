@@ -19,6 +19,7 @@ var EDGE_DEFAULT_STRENGTH = 3;
 var EDGE_DEFAULT_WEIGHT = 3;
 
 var GRID_GRAPH_LAYOUT = { name : 'grid' };
+var DAGRE_GRAPH_LAYOUT = { name : 'dagre' };
 var CIRCLE_GRAPH_LAYOUT = { name : 'circle' };
 var COSE_GRAPH_LAYOUT = { name: 'cose',
                           padding: 10,
@@ -58,22 +59,24 @@ var graph_style = {
               'width': 'data(width)', 
               'height': 'data(height)',   // mapData(property, a, b, c, d)  => specified range a, b; actual values c, d
               'text-valign': 'center',
-              'font-size':'5%',
-              'text-outline-width': 0.5,
-              'text-outline-color': 'data(faveColor)',
+              'font-size':'15%',
+              'background-image': 'data(icon)',
+              'background-size': 'cover'
+              //'text-outline-width': 0.5,
+              //'text-outline-color': 'data(faveColor)',
               //'border': '1px solid black'
-              'background-color': 'data(faveColor)',
+              //'background-color': 'data(faveColor)',
               //'color': '#fff'
               //'content': 'data(name)',
             })
             
           .selector(':selected')
             .css({
-              'border-width': 5,
+              'border-width': 2,
               'border-color': '#333',
               'width': 'data(width) + 10', 
               'height': 'data(height) + 10',
-              'font-size': '14px'
+              'font-size': '15%'
             })
           
           .selector('edge')
@@ -111,13 +114,14 @@ var graph_style = {
               'target-arrow-color':'green',
               'background-color': 'data(faveColor)'
             })
+
 }
 
 /*
  *  Returns HTML Content for the side-info-bar
  */
 var getHTML = function(name, type, neighbours){
-  return "<h1>" + name + "</h1>" + "<h5>" + type + "</h5>" + "<p>This node has " + neighbours + " connections.</p>";
+  return "<h3>" + name + "</h3>" + "<h5>" + type + "</h5>" + "<p>This node has " + neighbours + " connections, -- views, --saves and -- likes.</p>";
 }
 
 /*
@@ -132,18 +136,21 @@ var createGraphNode = function(node){
           node.faveColor = MODULE_COLOR;
           node.width = MODULE_WIDTH;
           node.height = MODULE_HEIGHT;
+          node.icon = 'url(http://placehold.it/20x30)'//'url(../../img/worldwide.svg)';
     }
     else if(node.type=="user"){ 
           node.faveShape = USER_SHAPE;
           node.faveColor = USER_COLOR;
           node.width = USER_WIDTH;
           node.height = USER_HEIGHT;
+          node.icon = 'url(./img/user-icon.jpg)';
     }
     else if(node.type=="contribution"){
           node.faveShape = CONTRIBUTION_SHAPE;
           node.faveColor = CONTRIBUTION_COLOR;
           node.width = CONTRIBUTION_WIDTH;
           node.height = CONTRIBUTION_HEIGHT;
+          node.icon = 'url(http://placehold.it/20x30)' //'url(../../img/zoom-in.svg/)';
     }
 
     return  { data: node };
@@ -184,37 +191,102 @@ var makeGraph = function(dNodes, dEdges){
 
           var data = evt.cyTarget.data();
           var directlyConnected = evt.cyTarget.neighborhood();
+
+          //$('#info-block').show();
+          //$('#info-block').html(getHTML(data.name, data.type, directlyConnected.nodes().length));
           
-          $('#info-block').show();
-          $('#info-block').html(getHTML(data.name, data.type, directlyConnected.nodes().length));
-          
-          evt.cyTarget.css({ content: name});
-     });
+          evt.cyTarget.css({ content: data.name + ' | ' + data.type + ' | ' + directlyConnected.nodes().length + 'connections'
+                  //getHTML(data.name, data.type, directlyConnected.nodes().length) 
+                          });
+    
+    });
 
 
     cy.on('mouseout','node', function(evt){
 
-        $('#info-block').hide();
+      cy.elements().css({ content: " " });
+
+      if(cy.$('node:selected')){
+        $('#info-block').html("");
+        $('#info-block').hide();      
+      }
+
 
     });
 
+    cy.on('tap', 'node', function(evt){
 
-    cy.on('tap','node', function(evt){
-      
-        cy.elements().removeClass('highlighted');
-        evt.cyTarget.addClass('highlighted');
+      cy.elements().removeClass('highlighted');
+      var node = evt.cyTarget;
+      var data = node.data();
+      var directlyConnected = node.neighborhood();
+      node.addClass('highlighted');
+      directlyConnected.nodes().addClass('highlighted');
+      node.connectedEdges().addClass('highlighted');
 
-        var node = evt.cyTarget;
-        var data = node.data();
-        var directlyConnected = node.neighborhood();
+      var route = "/api/" + data.type + "s/" + data.id;
 
-        $('#info-block').show();
-        $('#info-block').html(getHTML(data.name, data.type, directlyConnected.nodes().length));
+      $('#action-block').hide();
+      $('#central-block').hide();
 
-        directlyConnected.nodes().addClass('highlighted');
-        node.connectedEdges().addClass('highlighted');
-  
+      $.get( route , function( extra_data ) {
+
+            var extra_content;
+            if(data.type == "module"){
+              extra_content = "";
+            }
+            else if(data.type == "user"){
+              extra_content = ""//JSON.stringify(extra_data);
+            }
+            else if(data.type == "contribution"){
+
+              $('#action-block').show();
+
+/*              if(extra_content.title = 'Question')
+                $('#answer').show();*/
+
+
+              if(extra_data.description == undefined)
+                extra_data.description = "This post doesn't have a short description"
+              if(extra_data.content == undefined)
+                extra_data.content = "This post has no content!"
+
+
+              extra_content = "<hr/>" + extra_data.description;
+              if(extra_data.content.length > 200){                
+                
+                $('#read_more').show();
+                $('#central-block').html(
+                  "<h3>"+node.data.name+"</h3><hr/><p>"+ extra_data.content +"</p>"
+                  +"<button id='content-close'>Close</button>");
+
+
+                //extra_content = extra_content + "<hr/><br><a>Read full...</a>"
+              }
+              else{
+                $('#read_more').hide();
+                extra_content = extra_content + "<hr/><br>" + extra_data.content;
+              }
+
+            }
+
+            $('#content-block').show();
+            $('#content-block').html(
+              getHTML(data.name, data.type, directlyConnected.nodes().length)
+              + "<p>" +  extra_content + "</p>" );
+
+      });
+
     });
+
+    cy.on('click', function(){
+        var node = cy.$('node:selected');  
+        if(node == undefined){
+          $('#action-block').hide();
+          $('#content-block').hide();
+          $('#central-block').hide();
+        }
+    })
     
 }
 
@@ -240,6 +312,56 @@ var refreshGraph = function(){
 $(document).ready(function(){
 
     refreshGraph(); 
+
+    $('#read_more').click(function(){
+        $('#central-block').show();
+    })
+
+    $('#comment').click(function(){
+
+
+        var form_string = "Title:<br><input id='post_title' type=\"text\"><br>";
+       
+
+        $('#central-block').html(form_string
+          + "<br>"
+          + "<button id='submit_comment'>Submit</button>"
+          + "<button id='content-close'>Cancel</button>");
+
+        $('#central-block').show();
+    
+        $('#content-close').click(function(){ 
+            $('#central-block').hide(); 
+            $('#action-block').hide(); 
+            $('#content-block').hide(); 
+
+        })
+
+        $('#submit_comment').click(function(){ 
+
+            var body = {};
+            body.title = $('#post_title').val();
+            body.body = "Lorem ipsum Esse Duis velit commodo aliqua qui cupidatat cillum qui dolore anim non amet.";
+            body.ref = '-1'; 
+            body.refType = 'text';
+            body.labels = 'comment'; //tags
+            body.contributionTypes = "";
+ 
+            console.log("submitting", body);
+
+            $.post('/api/contributions', 
+                    body,
+                    function(data){
+                        alert("Done!");
+                        refreshGraph();
+                    });
+
+        })
+
+
+
+    })
+
 
 });
 

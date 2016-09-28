@@ -42,7 +42,9 @@ router.route('/')
 			refTypeParam: req.body.refType,
 			edittedParam: false,
 			contributionLabelParam: req.body.labels, //tags
-			contributionTypesParam: req.body.contributionTypes
+			contributionTypesParam: req.body.contributionTypes,
+			contributionDescriptionParam: 'This is a short description of the post', 
+			contributionContentParam: 'Lorem ipsum Eiusmod velit amet irure voluptate elit nulla qui aliquip voluptate occaecat minim culpa eiusmod.'
 		};
 
 		db.query(query, params, function(error, result){
