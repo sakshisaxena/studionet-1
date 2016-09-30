@@ -3,13 +3,13 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" ng-click="close()" data-dismiss="modal" aria-hidden="true">&times;</button>
-        
+        {{data.name}}
       </div>
       <div class="modal-body">
-        <p>Here's a more complex modal, it contains a form, data is passed to the controller 
-         and data is returned from the modal.</p>
+        <p>{{data.type}}</p> <hr>
+        <p>{{data.content}}</p> <hr>
 
-		<form class="form-horizontal" role="form">
+<!-- 		<form class="form-horizontal" role="form">
 		  <div class="form-group">
 		    <label for="name" class="col-sm-2 control-label">Name</label>
 		    <div class="col-sm-10">
@@ -22,12 +22,12 @@
 		      <input type="text" class="form-control" id="inputPassword3" placeholder="Age" ng-model="age">
 		    </div>
 		  </div>
-		</form>
+		</form> -->
 
       </div>
       <div class="modal-footer">
-        <button type="button" ng-click="close()" class="btn btn-primary" data-dismiss="modal">OK</button>
-        <button type="button" ng-click="cancel()" class="btn">Cancel</button>
+        <button type="button" ng-click="close()" class="btn btn-primary" data-dismiss="modal">Finished Reading</button>
+<!--         <button type="button" ng-click="cancel()" class="btn">Cancel</button> -->
       </div>
     </div>
   </div>

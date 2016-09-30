@@ -3,7 +3,13 @@ angular.module('studionet')
 .controller('DetailsModalCtrl', ['$scope', 'profile',  function($scope, profile){
 	$scope.name = null;
   $scope.age = null;
- console.log('I am here Sakshi');
+  
+  $scope.data = {};
+
+
+  $scope.setData = function(data){
+      $scope.data = data;
+  }
   
   //  This close function doesn't need to use jQuery or bootstrap, because
   //  the button has the 'data-dismiss' attribute.

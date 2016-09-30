@@ -238,9 +238,9 @@ var makeGraph = function(dNodes, dEdges){
               if(extra_data.content.length > 200){                
                 
                 $('#read_more').show();
-                $('#central-block').html(
+/*                $('#central-block').html(
                   "<h3>"+node.data.name+"</h3><hr/><p>"+ extra_data.content +"</p>"
-                  +"<button id='content-close'>Close</button>");
+                  +"<button id='content-close'>Close</button>");*/
 
 
                 //extra_content = extra_content + "<hr/><br><a>Read full...</a>"
@@ -343,18 +343,19 @@ var makeGraph = function(dNodes, dEdges){
 
             }
 
-             $('#side-blocks-container').css('position','absolute');
+/*             $('#side-blocks-container').css('position','absolute');
              $('#side-blocks-container').css('top',y);
              $('#side-blocks-container').css('left',x);
 
             $('#content-block').show();
             $('#content-block').html(
               getHTML(data.name, data.type, directlyConnected.nodes().length)
-              + "<p>" +  extra_content + "</p>" );
+              + "<p>" +  extra_content + "</p>" );*/
+
+            angular.element($('.graph-container')).scope().showDetailsModal(extra_data);
 
       });
 
-      angular.element($('.graph-container')).scope().showDetailsModal();
 
     });
 
