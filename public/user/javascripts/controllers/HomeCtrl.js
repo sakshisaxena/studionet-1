@@ -1,8 +1,8 @@
 angular.module('studionet')
 
-.controller('HomeCtrl', ['$scope', 'profile', 'Upload', '$timeout', 'modelsFactory',
+.controller('HomeCtrl', ['$scope', 'profile', 'Upload', '$timeout', 'modelsFactory', 'ModalService',
 
- function($scope, profile, Upload, $timeout, modelsFactory){
+ function($scope, profile, Upload, $timeout, modelsFactory, ModalService){
 	$scope.user = profile.user;
 	$scope.modules = profile.modules;
   $scope.userModels = modelsFactory.userModels;
@@ -54,7 +54,22 @@ angular.module('studionet')
       model.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
     });
   };
+  
+  $scope.showDetailsModal = function() {
 
+      ModalService.showModal({
+        templateUrl: "/user/templates/home.graphView.modal.html",
+        controller: "DetailsModalCtrl",
+        inputs: {
+          title: "A More Complex Example"
+        }
+      }).then(function(modal) {
+        modal.element.modal();
+        modal.close.then(function(result) {
+          $scope.complexResult  = "Name: " + result.name + ", age: " + result.age;
+        });
+      });
 
+    };
 
 }]);

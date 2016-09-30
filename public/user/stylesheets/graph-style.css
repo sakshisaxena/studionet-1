@@ -64,13 +64,27 @@ a{
     display: none;
     position: absolute;
     top: 60px;
-
+    color: #D9CCCC;
 /*    position: absolute;
     top: 25%
     left: -10%;
 
     height: 60%;*/
 }
+
+#content-block-hover{
+    
+    display: none;
+    position: absolute;
+    top: 60px;
+    color: #D9CCCC;
+/*    position: absolute;
+    top: 25%
+    left: -10%;
+
+    height: 60%;*/
+}
+
 
 #action-block{
   display: none; 

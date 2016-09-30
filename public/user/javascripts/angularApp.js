@@ -1,4 +1,4 @@
-var app = angular.module('studionet', ['ui.router', 'ngTagsInput', 'ngFileUpload'])
+var app = angular.module('studionet', ['ui.router', 'ngTagsInput', 'ngFileUpload', 'angularModalService'])
 									.run(['profile', function(profile){
 										/*
 										profile.getUser();
@@ -52,6 +52,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 
 			}
 		})
+	
 		.state('admin', {
 			// admin front
 			url: '/admin',
@@ -111,6 +112,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 				}]
 			}
 		})
+		
 		.state('moduleAdmin.restrictUser', {
 			url: '/restrict', 
 			templateUrl: '/user/templates/moduleAdmin.restrictUser.html'
