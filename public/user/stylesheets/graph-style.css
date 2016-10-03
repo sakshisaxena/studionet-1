@@ -78,13 +78,42 @@ a{
     position: absolute;
     top: 60px;
     color: #D9CCCC;
-/*    position: absolute;
-    top: 25%
-    left: -10%;
 
-    height: 60%;*/
+    border-radius: 5px;
+    font-size: 12px;
+    padding: 10px;
 }
 
+#content-block-hover hr{
+
+  margin: 5px 0px 5px 0px;
+  padding: 0px;
+
+}
+
+#content-block-hover h3{
+
+   font-size: 14px;
+   font-weight: bold;
+   line-height: 20px;
+   text-align: center;
+   text-transform: uppercase;
+   margin: 0px;
+   padding: 0px;
+}
+
+#content-block-hover h3 span{
+
+   font-size: 12px;
+   font-style: italic;
+   line-height: 20px;
+   text-transform: none;
+}
+
+#content-block-hover p.stats{
+  border: 1px solid black;
+  text-align: center;
+}
 
 #action-block{
   display: none; 
@@ -122,4 +151,23 @@ button{
 
 input{
   color: black;
+}
+
+.modal h3{
+
+   font-size: 14px;
+   font-weight: bold;
+   line-height: 20px;
+   text-align: center;
+   text-transform: uppercase;
+   margin: 0px;
+   padding: 0px;
+}
+
+.modal h3 span{
+
+   font-size: 12px;
+   font-style: italic;
+   line-height: 20px;
+   text-transform: none;
 }

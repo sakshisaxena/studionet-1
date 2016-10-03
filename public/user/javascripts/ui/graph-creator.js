@@ -118,13 +118,6 @@ var graph_style = {
 }
 
 /*
- *  Returns HTML Content for the side-info-bar
- */
-var getHTML = function(name, type, neighbours){
-  return "<h3>" + name + "</h3>" + "<h5>" + type + "</h5>" + "<p>This node has " + neighbours + " connections, -- views, --saves and -- likes.</p>";
-}
-
-/*
  * Converts normal node from backend into cytoscape-specific format
  */
 var createGraphNode = function(node){
@@ -196,22 +189,11 @@ var makeGraph = function(dNodes, dEdges){
 
     cy.on('mouseover','node', function(evt){
 
-          var data = evt.cyTarget.data();
-          var directlyConnected = evt.cyTarget.neighborhood();
-          var x = evt.cyPosition.x;
-          var y = evt.cyPosition.y;
+      var data = evt.cyTarget.data();
+      var directlyConnected = evt.cyTarget.neighborhood();
+      var x = evt.cyPosition.x;
+      var y = evt.cyPosition.y;
 
-          console.log("X:"+x);
-          console.log("Y:"+y);
-          
-
-          //$('#info-block').show();
-          //$('#info-block').html(getHTML(data.name, data.type, directlyConnected.nodes().length));
-          
-         /* evt.cyTarget.css({ content: data.name + ' | ' + data.type + ' | ' + directlyConnected.nodes().length + 'connections'
-                  //getHTML(data.name, data.type, directlyConnected.nodes().length) 
-                          });
-    */
       var route = "/api/" + data.type + "s/" + data.id;
 
      
@@ -221,46 +203,37 @@ var makeGraph = function(dNodes, dEdges){
 
             var extra_content;
             if(data.type == "module"){
-              extra_content = "";
+              extra_content = ":: module-description ::";
             }
             else if(data.type == "user"){
-              extra_content = ""//JSON.stringify(extra_data);
+              extra_content = ":: user-tagline ::";
             }
             else if(data.type == "contribution"){
 
-              if(extra_data.description == undefined)
-                extra_data.description = "This post doesn't have a short description"
               if(extra_data.content == undefined)
-                extra_data.content = "This post has no content!"
-
-
-              extra_content = "<hr/>" + extra_data.description;
-              if(extra_data.content.length > 200){                
-                
-                $('#read_more').show();
-/*                $('#central-block').html(
-                  "<h3>"+node.data.name+"</h3><hr/><p>"+ extra_data.content +"</p>"
-                  +"<button id='content-close'>Close</button>");*/
-
-
-                //extra_content = extra_content + "<hr/><br><a>Read full...</a>"
-              }
+                extra_content = ":: empty ::"
               else{
-                $('#read_more').hide();
-                extra_content = extra_content + "<hr/><br>" + extra_data.content;
+                if(extra_data.content.length > 200){                
+                    extra_content = "Read more...";
+                }
+                else{
+                  extra_content = "<br>" + extra_data.content;
+                }
               }
 
             }
-             $('#content-block-hover').css('position','absolute');
-             $('#content-block-hover').css('top',y);
-             $('#content-block-hover').css('left',x);
-
-
+            
+            $('#content-block-hover').css('position','absolute');
+            $('#content-block-hover').css('top',y);
+            $('#content-block-hover').css('left',x);
 
             $('#content-block-hover').show();
+
+
             $('#content-block-hover').html(
-              getHTML(data.name, data.type, directlyConnected.nodes().length)
-              + "<p>" +  extra_content + "</p>" );
+              "<h3>" + data.name + "<br>( <span>" + data.type + " )</span>" 
+              + "</h3><p class=\'stats\'>:: statistics ::</p>"
+              + "<p>" +  (extra_content) + "</p>" );
 
       });
 
@@ -272,8 +245,7 @@ var makeGraph = function(dNodes, dEdges){
       cy.elements().css({ content: " " });
 
       if(cy.$('node:selected')){
-        $('#info-block').html("");
-        $('#info-block').hide();  
+        $('#content-block-hover').html("");
         $('#content-block-hover').hide();    
       }
 
@@ -304,7 +276,7 @@ var makeGraph = function(dNodes, dEdges){
 
       $.get( route , function( extra_data ) {
 
-            var extra_content;
+/*            var extra_content;
             if(data.type == "module"){
               extra_content = "";
             }
@@ -312,17 +284,6 @@ var makeGraph = function(dNodes, dEdges){
               extra_content = ""//JSON.stringify(extra_data);
             }
             else if(data.type == "contribution"){
-
-              $('#action-block').show();
-
-/*              if(extra_content.title = 'Question')
-                $('#answer').show();*/
-
-
-              if(extra_data.description == undefined)
-                extra_data.description = "This post doesn't have a short description"
-              if(extra_data.content == undefined)
-                extra_data.content = "This post has no content!"
 
 
               extra_content = "<hr/>" + extra_data.description;
@@ -341,18 +302,9 @@ var makeGraph = function(dNodes, dEdges){
                 extra_content = extra_content + "<hr/><br>" + extra_data.content;
               }
 
-            }
-
-/*             $('#side-blocks-container').css('position','absolute');
-             $('#side-blocks-container').css('top',y);
-             $('#side-blocks-container').css('left',x);
-
-            $('#content-block').show();
-            $('#content-block').html(
-              getHTML(data.name, data.type, directlyConnected.nodes().length)
-              + "<p>" +  extra_content + "</p>" );*/
-
-            angular.element($('.graph-container')).scope().showDetailsModal(extra_data);
+            }*/
+            data.extra = extra_data;
+            angular.element($('.graph-container')).scope().showDetailsModal(data);
 
       });
 

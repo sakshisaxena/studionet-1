@@ -70,7 +70,8 @@ angular.module('studionet')
         modal.scope.setData(data);
 
         modal.close.then(function(result) {
-          $scope.complexResult  = "Name: " + result.name + ", age: " + result.age;
+          console.log("here")
+          //$scope.complexResult  = "Name: " + result.name + ", age: " + result.age;
         });
       });
 

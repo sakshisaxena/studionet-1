@@ -1,34 +1,68 @@
+<style>
+  .modal h3{
+
+     font-size: 14px;
+     font-weight: bold;
+     line-height: 20px;
+     text-transform: uppercase;
+     
+     margin: 0px;
+     padding: 0px;
+
+     display: inline-block;
+  }
+
+  .modal span{
+
+     font-size: 12px;
+     font-style: italic;
+     line-height: 20px;
+     text-transform: none;
+  }
+
+  .modal-header{
+    text-align: center;
+  }
+
+</style>
+
+
+
+
 <div class="modal fade" display='block'>
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" ng-click="close()" data-dismiss="modal" aria-hidden="true">&times;</button>
-        {{data.name}}
-      </div>
-      <div class="modal-body">
-        <p>{{data.type}}</p> <hr>
-        <p>{{data.content}}</p> <hr>
+            <div class="modal-header">
+              <button type="button" class="close" ng-click="close()" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h3 class='content-modal'>{{data.name}}</h3> --
+              <span class='content-modal'>{{data.type}}</span>
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#">Content</a></li>
+                  <li><a href="#">Statistics</a></li>
+                  <li><a href="#">Graph</a></li>
+                </ul>
+            </div>
+            <div class="modal-body">
+              
+                 <div class='row'>
+                  <div class='col-sm-8'>
+                  {{data.extra.body}}
+                  </div>
+                  <div class='col-sm-4'>
+                    <div class="modal-footer">
+                      <img src = 'http://placehold.it/200x200'/>
+                      <hr>
+                      <button type="button" ng-click="close()" class="btn btn-primary btn-block" data-dismiss="modal">Answer</button><br>
+                      <button type="button" ng-click="close()" class="btn btn-primary btn-block" data-dismiss="modal">Question</button><br>
+                      <button type="button" ng-click="close()" class="btn btn-primary btn-block" data-dismiss="modal">Comment</button><br>
+                      <button type="button" ng-click="close()" class="btn btn-primary btn-block" data-dismiss="modal">Refer</button><br>
+                      <hr>
+                      <button type="button" ng-click="close()" class="btn btn-primary btn-block" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
 
-<!-- 		<form class="form-horizontal" role="form">
-		  <div class="form-group">
-		    <label for="name" class="col-sm-2 control-label">Name</label>
-		    <div class="col-sm-10">
-		      <input type="text" class="form-control" id="name" placeholder="Your Name" ng-model="name">
-		    </div>
-		  </div>
-		  <div class="form-group">
-		    <label for="age" class="col-sm-2 control-label">Age</label>
-		    <div class="col-sm-10">
-		      <input type="text" class="form-control" id="inputPassword3" placeholder="Age" ng-model="age">
-		    </div>
-		  </div>
-		</form> -->
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" ng-click="close()" class="btn btn-primary" data-dismiss="modal">Finished Reading</button>
-<!--         <button type="button" ng-click="cancel()" class="btn">Cancel</button> -->
-      </div>
     </div>
   </div>
 </div>
