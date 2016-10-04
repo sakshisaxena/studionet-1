@@ -66,7 +66,8 @@ input {
     width: 100%;
     text-align: center; }
     #content-block-hover .contribution .stats-container .stats {
-      width: 25%;
+      width: 20%;
+      float: left;
       margin: 10px;
       border: 1px solid black; }
   #content-block-hover hr {

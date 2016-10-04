@@ -163,7 +163,7 @@ var createHoverBox = function( node, extra ){
     
     var html_content = $('<div></div>').addClass(node.type);
     
-    var heading = $('<div></div>').addClass('heading').html(node.id + (node.name));
+    var heading = $('<div></div>').addClass('heading').html(node.id + " " + (node.name || extra.name));
     html_content.append(heading);
 
     var statsContainer = $('<div></div>').addClass('stats-container');
