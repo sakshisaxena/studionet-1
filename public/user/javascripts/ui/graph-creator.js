@@ -5,9 +5,9 @@ var MODULE_SHAPE = "rectangle";
 var USER_SHAPE = "ellipse"
 var CONTRIBUTION_SHAPE = "rectangle"
 
-var MODULE_WIDTH = 40, MODULE_HEIGHT = 40;
-var USER_WIDTH = 15, USER_HEIGHT = 15; 
-var CONTRIBUTION_WIDTH = 25, CONTRIBUTION_HEIGHT = 30;
+var MODULE_WIDTH = 15, MODULE_HEIGHT = 15;
+var USER_WIDTH = 20, USER_HEIGHT = 20; 
+var CONTRIBUTION_WIDTH = 15, CONTRIBUTION_HEIGHT = 15;
 
 var MODULE_COLOR = "yellow";
 var USER_COLOR = "blue";
@@ -61,18 +61,13 @@ var graph_style = {
               'text-valign': 'center',
               'font-size':'15%',
               'background-image': 'data(icon)',
-              'background-size': 'cover'
-              //'text-outline-width': 0.5,
-              //'text-outline-color': 'data(faveColor)',
-              //'border': '1px solid black'
-              //'background-color': 'data(faveColor)',
-              //'color': '#fff'
-              //'content': 'data(name)',
+              'background-width': 'data(width)',
+              'background-height': 'data(height)'
             })
            
           .selector(':selected')
             .css({
-              'border-width': 2,
+              'border-width': 0.5,
               'border-color': '#333',
               'width': 'data(width) + 10', 
               'height': 'data(height) + 10',
@@ -129,7 +124,7 @@ var createGraphNode = function(node){
           node.faveColor = MODULE_COLOR;
           node.width = MODULE_WIDTH;
           node.height = MODULE_HEIGHT;
-          node.icon = 'url(http://placehold.it/20x30)'//'url(../../img/worldwide.svg)';
+          node.icon = 'url(./img/module.svg)'//'url(../../img/worldwide.svg)';
     }
     else if(node.type=="user"){ 
           node.faveShape = USER_SHAPE;
@@ -143,7 +138,7 @@ var createGraphNode = function(node){
           node.faveColor = CONTRIBUTION_COLOR;
           node.width = CONTRIBUTION_WIDTH;
           node.height = CONTRIBUTION_HEIGHT;
-          node.icon = 'url(http://placehold.it/20x30)' //'url(../../img/zoom-in.svg/)';
+          node.icon = 'url(./img/contribution.png)' //'url(../../img/zoom-in.svg/)';
     }
     else {
           node.faveShape = CONTRIBUTION_SHAPE;
@@ -269,45 +264,25 @@ var makeGraph = function(dNodes, dEdges){
       console.log("X:"+x);
       console.log("Y:"+y);
 
-     var route = "/api/" + data.type + "s/" + data.id;
+      // display modal only if node is a contribution
+      if(data.type == 'contribution'){
 
-      $('#action-block').hide();
-      $('#central-block').hide();
+           var route = "/api/" + data.type + "s/" + data.id;
 
-      $.get( route , function( extra_data ) {
+            $('#action-block').hide();
+            $('#central-block').hide();
 
-/*            var extra_content;
-            if(data.type == "module"){
-              extra_content = "";
-            }
-            else if(data.type == "user"){
-              extra_content = ""//JSON.stringify(extra_data);
-            }
-            else if(data.type == "contribution"){
+            $.get( route , function( extra_data ) {
 
 
-              extra_content = "<hr/>" + extra_data.description;
-              if(extra_data.content.length > 200){                
-                
-                $('#read_more').show();
-                $('#central-block').html(
-                  "<h3>"+node.data.name+"</h3><hr/><p>"+ extra_data.content +"</p>"
-                  +"<button id='content-close'>Close</button>");
+                 data.extra = extra_data;
+                  angular.element($('.graph-container')).scope().showDetailsModal(data);
+
+            });
 
 
-                //extra_content = extra_content + "<hr/><br><a>Read full...</a>"
-              }
-              else{
-                $('#read_more').hide();
-                extra_content = extra_content + "<hr/><br>" + extra_data.content;
-              }
-
-            }*/
-            data.extra = extra_data;
-            angular.element($('.graph-container')).scope().showDetailsModal(data);
-
-      });
-
+        
+      }
 
     });
 

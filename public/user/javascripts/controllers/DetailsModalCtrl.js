@@ -16,7 +16,7 @@ angular.module('studionet')
   //  the button has the 'data-dismiss' attribute.
   $scope.close = function() {
  	  
-    close({
+    parent.close({
       name: $scope.user,
       age: $scope.modules
     }, 500); // close, but give 500ms for bootstrap to animate
@@ -32,10 +32,11 @@ angular.module('studionet')
     //$element.modal('hide');
     
     //  Now call close, returning control to the caller.
-    close({
+    parent.close({
       name: $scope.user,
       age: $scope.modules
     }, 500); // close, but give 500ms for bootstrap to animate
+  
   };
 
 

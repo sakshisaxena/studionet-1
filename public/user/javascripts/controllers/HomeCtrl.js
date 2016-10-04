@@ -69,10 +69,10 @@ angular.module('studionet')
         /// set data
         modal.scope.setData(data);
 
-        modal.close.then(function(result) {
-          console.log("here")
+/*        modal.close.then(function(result) {
           //$scope.complexResult  = "Name: " + result.name + ", age: " + result.age;
-        });
+        });*/
+        
       });
 
     };
