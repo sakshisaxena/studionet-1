@@ -146,33 +146,25 @@ router.route('/:contributionId')
 		}
 
 		query = [
-			'MATCH (c:contribution) WHERE ID(c)={contributionIdParam}'
-		];
-
-		// Look for editted fields
-		if (req.body.title)
-			query.push('SET c.title = {contributionIdParam}');
-		if (req.body.body)
-			query.push('SET c.body = {contributionBodyParam}');
-		if (req.body.ref)
-			query.push('SET c.ref = {contributionRefParam');
-		// Update last editted param
-		query.push('SET c.lastUpdated = {lastUpdatedParam}');
-		query.push('SET c.editted = true');
-		if (req.body.labels)
-			query.push('SET c.labels = {contributionLabelParam}');
-		if (req.body.contributionTypes)
-			query.push('SET c.contributionTypes = {contributionTypesParam}');
-
-		query = query.join('\n');
+			'MATCH (c:contribution) WHERE ID(c)={contributionIdParam}',
+			'SET c.title = {contributionTitleParam}',
+			'SET c.body = {contributionBodyParam}',
+			'SET c.ref = {contributionRefParam',
+			'SET c.lastUpdated = {lastUpdatedParam}',
+			'SET c.editted = {edittedParam}',
+			'SET c.labels = {contributionLabelParam}',
+			'SET c.contributionTypes = {contributionTypesParam}'
+		].join('\n');
 
 		var params = {
+			contributionIdParam: req.params.contributionId,
 			contributionTitleParam: req.body.title,
 			contributionBodyParam: req.body.body,
 			lastUpdatedParam: Date.now(),
+			edittedParam: true,
 			contributionRefParam: req.body.ref, 
 			contributionLabelParam: req.body.labels, //tags
-			contributionTypesParam: req.body.contributionTypes,
+			contributionTypesParam: req.body.contributionTypes
 		};
 
 		db.query(query, params, function(req, res){
