@@ -156,6 +156,45 @@ var createGraphEdge = function(edge){
 
 }
 
+/*
+ * Composes the hover-box according to node type
+ */
+var createHoverBox = function( node, extra ){
+    
+    var html_content = $('<div></div>').addClass(node.type);
+    
+    var heading = $('<div></div>').addClass('heading').html(node.id + (node.name));
+    html_content.append(heading);
+
+    var statsContainer = $('<div></div>').addClass('stats-container');
+
+    
+
+    if(node.type == "module"){
+      var stat1 = $('<div></div>').addClass('stats').html('Users <br> 243');
+      statsContainer.append(stat1);
+      var stat2 = $('<div></div>').addClass('stats').html('Contributions <br> 10');
+      statsContainer.append(stat2);
+    }
+    else if(node.type == "user"){
+      var stat1 = $('<div></div>').addClass('stats').html('Last Active <br> 24-1-2017');
+      statsContainer.append(stat1);
+      var stat2 = $('<div></div>').addClass('stats').html('Contributions <br> 10');
+      statsContainer.append(stat2);
+    }
+    else if(node.type == "contribution"){
+      var stat1 = $('<div></div>').addClass('stats').html('Views <br> 243');
+      statsContainer.append(stat1);
+      var stat2 = $('<div></div>').addClass('stats').html('Likes <br> 10');
+      statsContainer.append(stat2);
+      var stat3 = $('<div></div>').addClass('stats').html('Links <br> 45');
+      statsContainer.append(stat3);
+    }
+
+    html_content.append(statsContainer);
+    return html_content;
+
+}
 
 /*
  * Makes the actual graph and defines functionality on the nodes and edges
@@ -164,9 +203,14 @@ var makeGraph = function(dNodes, dEdges){
 
     console.log("Making Graph");
 
+    // if cytoscape canvas is defined, assign that
+    if(arguments[2] != undefined)
+      graph_style.container = document.getElementById(arguments[2]);
+    console.log(arguments);
+
     graph_style.elements = {
-        nodes: dNodes, 
-        edges: dEdges
+        nodes: dNodes.map( function(node){ return createGraphNode(node) } ), 
+        edges: dEdges.map( function(edge){ return createGraphEdge(edge) } )
     }
 
     graph_style.layout = eval($("input[name='layout-radio']:checked").val());
@@ -187,40 +231,15 @@ var makeGraph = function(dNodes, dEdges){
       $('#content-block-hover').hide();
 
       $.get( route , function( extra_data ) {
-
-            var extra_content;
-            if(data.type == "module"){
-              extra_content = ":: module-description ::";
-            }
-            else if(data.type == "user"){
-              extra_content = ":: user-tagline ::";
-            }
-            else if(data.type == "contribution"){
-
-              if(extra_data.content == undefined)
-                extra_content = ":: empty ::"
-              else{
-                if(extra_data.content.length > 200){                
-                    extra_content = "Read more...";
-                }
-                else{
-                  extra_content = "<br>" + extra_data.content;
-                }
-              }
-
-            }
             
             $('#content-block-hover').css('position','absolute');
             $('#content-block-hover').css('top',y);
             $('#content-block-hover').css('left',x);
 
+
+            $('#content-block-hover').html( createHoverBox(data, extra_data) );
+
             $('#content-block-hover').show();
-
-
-            $('#content-block-hover').html(
-              "<h3>" + data.name + "<br>( <span>" + data.type + " )</span>" 
-              + "</h3><p class=\'stats\'>:: statistics ::</p>"
-              + "<p>" +  (extra_content) + "</p>" );
 
       });
 
@@ -261,14 +280,11 @@ var makeGraph = function(dNodes, dEdges){
 
            var route = "/api/" + data.type + "s/" + data.id;
 
-            $('#action-block').hide();
-            $('#central-block').hide();
-
             $.get( route , function( extra_data ) {
 
 
                  data.extra = extra_data;
-                  angular.element($('.graph-container')).scope().showDetailsModal(data);
+                 angular.element($('.graph-container')).scope().showDetailsModal(data);
 
             });
 
@@ -282,9 +298,7 @@ var makeGraph = function(dNodes, dEdges){
         var node = cy.$('node:selected');  
 
         if(node == undefined){
-          $('#action-block').hide();
-          $('#content-block').hide();
-          $('#central-block').hide();
+
         }
     })
     
@@ -299,8 +313,8 @@ var refreshGraph = function(){
     $.get( "/graph/all", function( data ) {
 
         makeGraph( 
-            data.nodes.map( function(node){ return createGraphNode(node) } ), 
-            data.links.map( function(edge){ return createGraphEdge(edge) } )            
+            data.nodes/*.map( function(node){ return createGraphNode(node) } )*/, 
+            data.links/*.map( function(edge){ return createGraphEdge(edge) } ) */           
         );
        
     })
@@ -313,54 +327,12 @@ $(document).ready(function(){
 
     refreshGraph(); 
 
-    $('#read_more').click(function(){
-        $('#central-block').show();
-    })
-
-    $('#comment').click(function(){
-
-
-        var form_string = "Title:<br><input id='post_title' type=\"text\"><br>";
-       
-
-        $('#central-block').html(form_string
-          + "<br>"
-          + "<button id='submit_comment'>Submit</button>"
-          + "<button id='content-close'>Cancel</button>");
-
-        $('#central-block').show();
-    
-        $('#content-close').click(function(){ 
-            $('#central-block').hide(); 
-            $('#action-block').hide(); 
-            $('#content-block').hide(); 
-
-        })
-
+        /*
         $('#submit_comment').click(function(){ 
 
-            var body = {};
-            body.title = $('#post_title').val();
-            body.body = "Lorem ipsum Esse Duis velit commodo aliqua qui cupidatat cillum qui dolore anim non amet.";
-            body.ref = '-1'; 
-            body.refType = 'text';
-            body.labels = 'comment'; //tags
-            body.contributionTypes = "";
- 
-            console.log("submitting", body);
-
-            $.post('/api/contributions', 
-                    body,
-                    function(data){
-                        alert("Done!");
-                        refreshGraph();
-                    });
-
-        })
 
 
-
-    })
+        })*/
 
 
 });

@@ -10,13 +10,15 @@ angular.module('studionet')
   $scope.setData = function(data){
       $scope.data = data;
       console.log(data);
+
+      
   }
   
   //  This close function doesn't need to use jQuery or bootstrap, because
   //  the button has the 'data-dismiss' attribute.
   $scope.close = function() {
  	  
-    parent.close({
+    close({
       name: $scope.user,
       age: $scope.modules
     }, 500); // close, but give 500ms for bootstrap to animate
@@ -32,7 +34,7 @@ angular.module('studionet')
     //$element.modal('hide');
     
     //  Now call close, returning control to the caller.
-    parent.close({
+    close({
       name: $scope.user,
       age: $scope.modules
     }, 500); // close, but give 500ms for bootstrap to animate

@@ -10,3 +10,4 @@ bin/stop
 env.txt
 studionet.sublime-workspace
 studionet.sublime-project
+.sass-cache
