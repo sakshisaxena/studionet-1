@@ -86,16 +86,8 @@ var graph_style = {
               'color': '#d8d8d8',
               'edge-text-rotation': 'autorotate',
               'target-arrow-color': 'data(faveColor)'
-              //'source-arrow-shape': 'circle',
-              //'opacity': 0.666,
-              //'width': 'mapData(strength, 70, 100, 2, 5)',
             })
             
-          /*.selector('edge.questionable')
-            .css({
-              'line-style': 'dotted',
-              'target-arrow-shape': 'diamond'
-            }) */
           
           .selector('.faded')
             .css({

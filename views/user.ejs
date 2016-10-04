@@ -10,21 +10,34 @@
     
 </head>
 <body ng-app="studionet">
-<!-- 	<h1>StudioNet User Page</h1> -->
-<!-- 	<a class="btn btn-default" href="/admin">Admin Page (only here for testing purposes)</a>
-	<a class="btn btn-default" href="/logout">Log out</a> -->
+
+    <!-- Contains home, graph, user and module views -->
+    <!-- home.html & home.*.html
+         admin.html (goes to moduleAdmin.html view - doesn't contain it)
+         moduleAdmin.html > moduleAdmin.*.html (if user is admin) -->
     <ui-view></ui-view>
     
 </body>
+    <!--JQuery -->
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+    <!-- Bootstrap -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+    <!-- Cytoscape -->
     <script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js"></script>
+
+    <!-- Angular & Angular Modules -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-resource.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.1/angular-ui-router.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ng-tags-input/3.1.1/ng-tags-input.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/danialfarid-angular-file-upload/12.0.4/ng-file-upload-all.min.js"></script>
+
+    <!-- Angular Modal Service -->
     <script type="text/javascript" src="/user/javascripts/angular-modal-service.js"></script>
+
+    <!-- Angular App -->
     <script type="text/javascript" src="/user/javascripts/angularApp.js"></script>
     
     <!-- include controllers, services -->
