@@ -22,7 +22,7 @@ router.route('/')
 			case "LIKED":
 			case "VIEWED":
 				if(!checkUserAndSourceNode(req.body.source, req.user.id)){
-					res.send("you are not the user source node");
+					console.log("you are not the user source node");
 					return;
 				}
 				break;
@@ -30,7 +30,7 @@ router.route('/')
 			case "REPLYTO":
 			case "INSPIREDBY":
 				if (!checkSourceNode(req.body.source)){
-					res.send("you do not own the contribution source node");
+					console.log("you do not own the contribution source node");
 					return;
 				}
 				break;
@@ -55,7 +55,7 @@ router.route('/')
 
 		db.query(query, params, function(error, result){
 			if (error)
-				res.send("error creating new relationships");
+				console.log("error creating new relationships");
 			else
 				res.send("success creating the new relationship");
 		})
@@ -76,7 +76,7 @@ function checkSourceNode(source){
 
 	db.query(query, function(error, result){
 		if (error)
-			res.send('error checking contribution ownership');
+			console.log('error checking contribution ownership');
 		else{
 			if (result.find(source))
 				return true;

@@ -82,6 +82,8 @@ router.route('/:contributionId')
 
 	.put(auth.ensureAuthenticated, function(req, res){
 
+		// TODO:
+		// check contribution ref and also if this contribution even belongs to current user.
 		var query = [
 			'MATCH (c:contribution) WHERE ID(c)=' + req.params.contributionId,
 			'RETURN c'
@@ -173,11 +175,12 @@ router.route('/:contributionId')
 			else
 				res.send('success');
 		});
-
-
-
 	}) 
+
 	.delete(auth.ensureAuthenticated, function(req, res){
+
+		// TODO:
+		// check if i own the contribution before deleting it
 
 		var query = [
 			'MATCH (c:contribution) WHERE ID(c)= {contributionIdParam}',
@@ -199,6 +202,8 @@ router.route('/:contributionId')
 				res.send('success');
 		});
 	});
+
+
 
 
 router.route('/:contributionId/connections');
