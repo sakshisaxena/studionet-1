@@ -19,7 +19,10 @@ router.route('/')
 	.post(auth.ensureAuthenticated, function(req, res){
 
 		var query = [
-			'CREATE (c:contribution {title: {contributionTitleParam}, body: {contributionBodyParam}, ref: {contributionRefParam}, lastUpdated:{lastUpdatedParam}, editted: {edittedParam}, labels: {contributionLabelParam}, contributionTypes: {contributionTypesParam}}) WITH c',
+			'CREATE (c:contribution {title: {contributionTitleParam}, body: {contributionBodyParam},' +
+			                         'ref: {contributionRefParam}, lastUpdated:{lastUpdatedParam},' +
+			                         'dateCreated: {dateCreatedParam}, editted: {edittedParam},' +
+			                         'labels: {contributionLabelParam}, contributionTypes: {contributionTypesParam}}) WITH c',
 			'MATCH (u:user) WHERE id(u)=' + req.user.id,
 			'CREATE (u)-[r:CREATED]->(c)'
 		];
@@ -33,11 +36,14 @@ router.route('/')
 
 		query = query.join('\n');
 
+		var date = Date.now();
+
 		var params = {
 			contributionTitleParam: req.body.title,
 			contributionBodyParam: req.body.body,
 			contributionRefParam: req.body.ref, 
-			lastUpdatedParam: Date.now(),
+			lastUpdatedParam: date,
+			dateCreatedParam: date,
 			refTypeParam: req.body.refType,
 			edittedParam: false,
 			contributionLabelParam: req.body.labels, //tags
@@ -72,7 +78,132 @@ router.route('/:contributionId')
 				res.send(result[0]);
 		});
 
+	})
+
+	.put(auth.ensureAuthenticated, function(req, res){
+
+		// TODO:
+		// check contribution ref and also if this contribution even belongs to current user.
+		var query = [
+			'MATCH (c:contribution) WHERE ID(c)=' + req.params.contributionId,
+			'RETURN c'
+		].join('\n');
+
+		var params;
+
+		var oldRef; // previous ref of the contribution
+
+		// Check the current contribution ref
+		db.query(query, function(error, result){
+			oldRef = result[0].ref;
+		});
+
+		if (oldRef !== req.body.ref){
+			// If edit reference
+			// Pass to relationship routes
+			// Case 1: From -1 to something (create the relationship)
+			if(oldRef == -1){
+				query = [
+					'MATCH (c:contribution) WHERE ID(c)={contributionIdParam}',
+					'MATCH (c1:contribution) WHERE ID(c1)={contributionRefParam}',
+					'CREATE (c)-[r:{refTypeParam}]->(c1)'
+				].join('\n');
+
+				params = {
+					contributionIdParam: req.params.contributionId,
+					contributionRefParam: req.body.ref,
+					refTypeParam: req.body.refType
+				}
+
+				db.query(query, params, function(error,result){
+					if (error)
+						res.send('error creating relationship when editting contribution');
+				});
+
+			}
+			
+			// Case 2: From something to -1 (delete the relationship)
+			else {
+				query = [
+					'MATCH (c:contribution) WHERE ID(c)={contributionIdParam}',
+					'MATCH (c1:contribution) WHERE ID(c1)={contributionRefParam}',
+					'MATCH (c)-[r:{refTypeParam}]->(c1)',
+					'DELETE r'
+				].join('\n');
+
+				params = {
+					contributionIdParam: req.params.contributionId,
+					contributionRefParam: req.body.ref,
+					refTypeParam: req.body.refType
+				}
+
+				db.query(query, params, function(error,result){
+					if (error)
+						res.send('error creating relationship when editting contribution');
+				});
+
+
+			}
+
+		}
+
+		query = [
+			'MATCH (c:contribution) WHERE ID(c)={contributionIdParam}',
+			'SET c.title = {contributionTitleParam}',
+			'SET c.body = {contributionBodyParam}',
+			'SET c.ref = {contributionRefParam',
+			'SET c.lastUpdated = {lastUpdatedParam}',
+			'SET c.editted = {edittedParam}',
+			'SET c.labels = {contributionLabelParam}',
+			'SET c.contributionTypes = {contributionTypesParam}'
+		].join('\n');
+
+		var params = {
+			contributionIdParam: req.params.contributionId,
+			contributionTitleParam: req.body.title,
+			contributionBodyParam: req.body.body,
+			lastUpdatedParam: Date.now(),
+			edittedParam: true,
+			contributionRefParam: req.body.ref, 
+			contributionLabelParam: req.body.labels, //tags
+			contributionTypesParam: req.body.contributionTypes
+		};
+
+		db.query(query, params, function(req, res){
+			if (error)
+				res.send('error editting the contribution');
+			else
+				res.send('success');
+		});
+	}) 
+
+	.delete(auth.ensureAuthenticated, function(req, res){
+
+		// TODO:
+		// check if i own the contribution before deleting it
+
+		var query = [
+			'MATCH (c:contribution) WHERE ID(c)= {contributionIdParam}',
+			'MATCH (u:user) WHERE ID(u)={userIdParam}',
+			'MATCH (u)-[r:CREATED]->(c)',
+			'DELETE r',
+			'DELETE c'
+		].join('\n');
+
+		var params = {
+			contributionIdParam: req.params.contributionId,
+			userIdParam: req.user.id
+		};
+
+		db.query(query, params, function(error, result){
+			if (error)
+				console.log('Error deleting contribution id for this user. Check if this contribution is created by this user.');
+			else
+				res.send('success');
+		});
 	});
+
+
 
 
 router.route('/:contributionId/connections');
