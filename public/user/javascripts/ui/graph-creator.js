@@ -110,20 +110,29 @@ var graph_style = {
 var createGraphNode = function(node){
 
     var data = node;
-
+    
+    var id = angular.element($('.graph-container')).scope().user.id;
+    //console.log( id);
     if(node.type=="module"){
           node.faveShape = MODULE_SHAPE;
           node.faveColor = MODULE_COLOR;
           node.width = MODULE_WIDTH;
           node.height = MODULE_HEIGHT;
-          node.icon = 'url(./img/module.svg)'//'url(../../img/worldwide.svg)';
+          node.icon = 'url(./img/module1.png)'//'url(../../img/worldwide.svg)';
     }
     else if(node.type=="user"){ 
           node.faveShape = USER_SHAPE;
           node.faveColor = USER_COLOR;
           node.width = USER_WIDTH;
           node.height = USER_HEIGHT;
-          node.icon = 'url(./img/user-icon.jpg)';
+          
+          if(node.id == id){
+            node.icon = 'url(https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQiILryEowDWzJ29q0LwIZ6jwddVyfT0Tn1Dp0lIRI4Vuwhy4u3kg)'
+          }
+          else{
+             // logged in user image - sakshi
+            node.icon = 'url(./img/user-icon.jpg)';
+          }
     }
     else if(node.type=="contribution"){
           node.faveShape = CONTRIBUTION_SHAPE;
@@ -137,8 +146,9 @@ var createGraphNode = function(node){
           node.faveColor = CONTRIBUTION_COLOR;
           node.width = CONTRIBUTION_WIDTH;
           node.height = CONTRIBUTION_HEIGHT;
-          node.icon = 'url(http://placehold.it/20x30)' //'url(../../img/zoom-in.svg/)';
+          node.icon = 'url()' //'url(../../img/zoom-in.svg/)';
     }
+   
 
     return  { data: node };
 }
@@ -218,13 +228,43 @@ var makeGraph = function(dNodes, dEdges){
 
     cy = cytoscape( graph_style );
 
+    // To fix user node at center - sakshi
+    var id = angular.element($('.graph-container')).scope().user.id;
+    
+    var winWidth = window.innerWidth/2;
+    var winHeight = window.innerHeight/2;
+    console.log("here:" +winWidth+" "+winHeight);
+    cy.$("#"+id).renderedPosition({x:winWidth, y:winHeight});
+    if($("input[name='layout-radio']:checked").val()=="COSE_GRAPH_LAYOUT"){
+      cy.$("#"+id).lock();
+      cy.$("#"+id).renderedPosition({x:560, y:300});
+      
+    }
+
+    var jAni = cy.$('#'+id).animation({
+      renderedPosition:{x:winWidth, y:winHeight},
+      duration: 1000
+    });
+
+jAni.play().promise().then(function(){
+  console.log('animation done');
+});
+
     cy.on('mouseover','node', function(evt){
 
       var data = evt.cyTarget.data();
       var directlyConnected = evt.cyTarget.neighborhood();
       var x = evt.cyPosition.x;
       var y = evt.cyPosition.y;
+      var x2, y2;
+    $(document).mousemove(function(event) {
+        x2 = event.pageX;
+        y2= event.pageY;
+        
+    });
+    console.log("pos:"+x+" "+y);
 
+    
       var route = "/api/" + data.type + "s/" + data.id;
 
      
@@ -233,8 +273,8 @@ var makeGraph = function(dNodes, dEdges){
       $.get( route , function( extra_data ) {
             
             $('#content-block-hover').css('position','absolute');
-            $('#content-block-hover').css('top',y);
-            $('#content-block-hover').css('left',x);
+            $('#content-block-hover').css('top',y2);
+            $('#content-block-hover').css('left',x2);
 
 
             $('#content-block-hover').html( createHoverBox(data, extra_data) );
@@ -272,8 +312,6 @@ var makeGraph = function(dNodes, dEdges){
       var x = evt.cyPosition.x;
       var y = evt.cyPosition.y;
 
-      console.log("X:"+x);
-      console.log("Y:"+y);
 
       // display modal only if node is a contribution
       if(data.type == 'contribution'){
@@ -298,8 +336,13 @@ var makeGraph = function(dNodes, dEdges){
         var node = cy.$('node:selected');  
 
         if(node == undefined){
+         
+        }
+        else{
+        
 
         }
+
     })
     
 }
@@ -324,7 +367,12 @@ var refreshGraph = function(){
 
 // On document ready
 $(document).ready(function(){
+    /*var nusOpenId;
+     $.get( "/graph/all", function( data ) {
 
+     });
+     console.log(nusOpenId);*/
+     
     refreshGraph(); 
 
         /*

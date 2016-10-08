@@ -6,7 +6,7 @@ angular.module('studionet')
 	$scope.user = profile.user;
 	$scope.modules = profile.modules;
   $scope.userModels = modelsFactory.userModels;
-
+  
 	$scope.isAdmin = profile.modules.reduce(function(res, curr){
 		return res || curr.role==='Admin';
 	}, false);

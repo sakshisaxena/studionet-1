@@ -46,6 +46,7 @@ $( document ).ready(function() {
     $("input[name='layout-radio']").on('change', function(){
         //alert("change layout!");
         refreshGraph();
+        cy.reset();
     })
 
 
