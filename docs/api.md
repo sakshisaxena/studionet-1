@@ -8,10 +8,13 @@
 |    [/graph/all](../docs/graph_all.md)   | Graph for initial view |
 | [/graph/med](../docs/graph_med.md) | Graph for medium detail view |
 |   [/api/profile](../docs/profile.md) |    User Profile   |
-|   /api/modules  |      Modules      | 
-|    /api/users   |       Users       |
-|     /uploads    |      Uploads      |
+|   [/api/modules](../docs/modules.md)  |      Modules      | 
+| /api/contributions | Contributions |
+| [/api/relationships](../docs/relationships.md) | Relationships |
+|    [/api/users](../docs/users.md)   |       Users       |
 | /api/moderators |     Moderators    |
+|     [/uploads](../docs/uploads.md)    |      Uploads      |
+
 
 ### Graph for initial view
 | Endpoint | Description | Access Rights |
@@ -44,7 +47,12 @@
 |  DELETE /api/modules/:moduleId   |                      Delete a specific module                    |   Super Admin   |
 | GET /api/modules/:moduleId/users |         Get all users that are part of a specific module.        |      User       |
 
+### Contributions
 
+### Relationships
+| Endpoint | Description | Access Rights |
+|---|---|---|
+| POST /api/relationships | Create a relationship between two nodes of the specified type | User |
 
 ### Users
 |         Endpoint          |                         Description                         | Access Rights |
@@ -55,6 +63,7 @@
 |  PUT /api/users/:userId   |                    Update a specific user                   |  Super Admin  |
 | DELETE /api/users/:userId |                    Delete a specific user                   |  Super Admin  |
 
+### Moderators
 
 ### Uploads
 |                  Endpoint                 |                           Description                          | Access Rights |
