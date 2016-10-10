@@ -1,15 +1,30 @@
 # API Documentation
 
-## Outdated. Get entire graph information from /api/all
+##### Last updated: 10 Oct 2016
 
 ### Routes List
 |      Route      |      Resource     | 
 | --------------  | ----------------- | 
+|    [/graph/all](docs/graph_all.md)   | Graph for initial view |
+| [/graph/med](docs/graph_med.md) | Graph for medium detail view |
 |   /api/profile  |    User Profile   |
 |   /api/modules  |      Modules      | 
 |    /api/users   |       Users       |
 |     /uploads    |      Uploads      |
 | /api/moderators |     Moderators    |
+
+### Graph for initial view
+| Endpoint | Description | Access Rights |
+|---|---|---|
+| GET /graph/all | Retrieves the entire set of nodes and links for the whole network | User |
+| GET /graph/all/me | Retrieves the network of nodes and links closely related to the current user (nodes between 1 to 2 hops away, inclusive) | User |
+
+
+### Graph for medium detail view
+| Endpoint | Description | Access Rights |
+|---|---|---|
+| GET /graph/med | Retrieves the network of nodes and links related to the current user, at least 1 hop away. Maximum distance is specified by query parameter (distance). Default maximum is 2 hops. | User |
+
 
 ### User Profile
 |          Endpoint          |                             Description                            |  Access Rights  |
