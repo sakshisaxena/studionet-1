@@ -5,8 +5,8 @@
 ### Routes List
 |      Route      |      Resource     | 
 | --------------  | ----------------- | 
-|    [/graph/all](/graph_all.md)   | Graph for initial view |
-| [/graph/med](docs/graph_med.md) | Graph for medium detail view |
+|    [/graph/all](../docs/graph_all.md)   | Graph for initial view |
+| [/graph/med](../docs/graph_med.md) | Graph for medium detail view |
 |   /api/profile  |    User Profile   |
 |   /api/modules  |      Modules      | 
 |    /api/users   |       Users       |
