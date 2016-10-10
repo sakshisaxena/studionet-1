@@ -7,7 +7,7 @@
 | --------------  | ----------------- | 
 |    [/graph/all](../docs/graph_all.md)   | Graph for initial view |
 | [/graph/med](../docs/graph_med.md) | Graph for medium detail view |
-|   /api/profile  |    User Profile   |
+|   [/api/profile](../docs/profile.md) |    User Profile   |
 |   /api/modules  |      Modules      | 
 |    /api/users   |       Users       |
 |     /uploads    |      Uploads      |
@@ -30,7 +30,7 @@
 |          Endpoint          |                             Description                            |  Access Rights  |
 |----------------------------|--------------------------------------------------------------------|-----------------|
 |       GET /api/profile     |    Retrieves the current user's profile and modules information    |      User       |
-|      PUT /api/profile      |              Update information about the current user             |      User       |
+|      _PUT /api/profile_      |              _Update information about the current user_             |      _User_      |
 |    GET /api/profile/user   |          Retrieves the current user's profile information          |      User       |
 |  GET /api/profile/modules  |            Retrieves all modules the current user is in            |      User       |
 
