@@ -1,3 +1,17 @@
+/*
+ * Layouts - Experimental
+ */
+/* .layouts{
+	position: absolute;
+	top: 200px; 
+	left: 10%;
+
+	z-index: 10;
+} */
+.layouts {
+  border: 1px solid black;
+  width: 50%; }
+
 button {
   color: #000000; }
 
@@ -5,13 +19,13 @@ input {
   color: #000000; }
 
 #cy {
-  height: 110%;
-  width: 140%;
+  border: 1px solid black;
   position: absolute;
-  left: -20%;
-  top: -60px;
-  right: -20%;
-  z-index: 5; }
+  height: 100%;
+  width: 100%;
+  z-index: 5;
+  width: 90%;
+  left: 5%; }
 
 #content-block-hover {
   display: none;
@@ -66,8 +80,7 @@ input {
     width: 100%;
     text-align: center; }
     #content-block-hover .contribution .stats-container .stats {
-      width: 20%;
-      float: left;
+      width: 25%;
       margin: 10px;
       border: 1px solid black; }
   #content-block-hover hr {
@@ -79,5 +92,12 @@ input {
 #second-cy {
   border: 1px solid black;
   height: 500px; }
+
+.footer-copyright {
+  width: 40%;
+  position: absolute;
+  left: 50%;
+  margin-left: -20%;
+  bottom: 0px; }
 
 /*# sourceMappingURL=graph-style.css.map */

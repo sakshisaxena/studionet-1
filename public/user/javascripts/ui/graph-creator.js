@@ -273,8 +273,8 @@ jAni.play().promise().then(function(){
       $.get( route , function( extra_data ) {
             
             $('#content-block-hover').css('position','absolute');
-            $('#content-block-hover').css('top',y2);
-            $('#content-block-hover').css('left',x2);
+            $('#content-block-hover').css('top',y2 + 10 );
+            $('#content-block-hover').css('left',x2 + 10);
 
 
             $('#content-block-hover').html( createHoverBox(data, extra_data) );

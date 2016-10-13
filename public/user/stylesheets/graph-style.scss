@@ -1,3 +1,20 @@
+
+/*
+ * Layouts - Experimental
+ */
+/* .layouts{
+	position: absolute;
+	top: 200px; 
+	left: 10%;
+
+	z-index: 10;
+} */
+
+.layouts{
+	border: 1px solid black;
+	width: 50%;
+}
+
 button{
 	color: #000000;
 }
@@ -7,14 +24,13 @@ input{
 }
 
 #cy{
-	
-	height: 110% ;
-	width: 140% ;
-	position: absolute ;
-	left: -20% ;
-	top: -60px ;
-	right: -20% ;
+	border: 1px solid black;
+	position: absolute;
+	height: 100% ;
+	width: 100% ;
 	z-index: 5 ;
+	width: 90%;
+	left: 5%;
 }
 
 
@@ -139,4 +155,13 @@ input{
 	border: 1px solid black;
 	height: 500px; 
 	
+}
+
+.footer-copyright{
+
+	width: 40%; 
+	position: absolute; 
+	left: 50%;
+	margin-left: -20%;
+	bottom: 0px;
 }
