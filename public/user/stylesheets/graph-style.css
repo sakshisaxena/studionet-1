@@ -1,17 +1,57 @@
+/*
+ * Layouts - Experimental
+ */
+* {
+  margin: 0px;
+  padding: 0px; }
+
+.layouts {
+  border: 1px solid black;
+  width: 90%;
+  height: 40px;
+  padding: 0px 2%;
+  margin-left: 5%;
+  line-height: 40px;
+  background-color: rbga(0, 0, 0, 0.6);
+  z-index: 2; }
+
+/* 
+#filter:hover + .layouts{
+	display: block;
+	animation-name: dropdown;
+	animation-duration: 1s;
+} */
+@keyframes dropdown {
+  0% {
+    margin-top: -30px; }
+  25% {
+    margin-top: -20px; }
+  50% {
+    margin-top: -10px; }
+  100% {
+    margin-top: 0px; } }
+/* .layouts:hover{
+	-webkit-transform: translate(0,40px);
+	   -moz-transform: translate(0,40px);
+	    -ms-transform: translate(0,40px);
+	     -o-transform: translate(0,40px);
+	        transform: translate(0,40px);
+	display: block;
+} */
 button {
   color: #000000; }
 
 input {
-  color: #000000; }
+  color: #000000;
+  margin: 0px; }
 
 #cy {
-  height: 110%;
-  width: 140%;
   position: absolute;
-  left: -20%;
-  top: -60px;
-  right: -20%;
-  z-index: 5; }
+  height: 100%;
+  width: 100%;
+  z-index: 5;
+  width: 90%;
+  left: 5%; }
 
 #content-block-hover {
   display: none;
@@ -66,8 +106,7 @@ input {
     width: 100%;
     text-align: center; }
     #content-block-hover .contribution .stats-container .stats {
-      width: 20%;
-      float: left;
+      width: 25%;
       margin: 10px;
       border: 1px solid black; }
   #content-block-hover hr {

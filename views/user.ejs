@@ -1,53 +1,156 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>StudioNet User</title>
-	
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ng-tags-input/3.1.1/ng-tags-input.min.css">
+  <title>StudioNET - A Graph Based Sharing Network</title>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel='stylesheet' href='/user/stylesheets/style.css' />
-    
+  <link rel="stylesheet" type="text/css" href="../template/html/assets/css/vendor.css">
+  <link rel="stylesheet" type="text/css" href="../template/html/assets/css/flat-admin.css">
+
+  <!-- Theme -->
+  <link rel="stylesheet" type="text/css" href="../template/html/assets/css/theme/blue-sky.css">
+  <link rel="stylesheet" type="text/css" href="../template/html/assets/css/theme/blue.css">
+  <link rel="stylesheet" type="text/css" href="../template/html/assets/css/theme/red.css">
+  <link rel="stylesheet" type="text/css" href="../template/html/assets/css/theme/yellow.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ng-tags-input/3.1.1/ng-tags-input.min.css">
+
+  <link rel='stylesheet' href='/user/stylesheets/style.css' />
+
 </head>
 <body ng-app="studionet">
 
-    <!-- Contains home, graph, user and module views -->
-    <!-- home.html & home.*.html
-         admin.html (goes to moduleAdmin.html view - doesn't contain it)
-         moduleAdmin.html > moduleAdmin.*.html (if user is admin) -->
-    <ui-view></ui-view>
+    <div class="app app-default">
+
+        <!-- Side Nav -->
+        <aside class="app-sidebar" id="sidebar">
+          <div class="sidebar-header">
+            <a class="sidebar-brand" ui-sref="home.graphView"><span class="highlight">StudioNET</span> User</a>
+            <button type="button" class="sidebar-toggle">
+              <i class="fa fa-times"></i>
+            </button>
+          </div>
+          <div class="sidebar-menu">
+            <ul class="sidebar-nav">
+              <li class='active'>
+                <a ui-sref="home.graphView">
+                  <div class="icon">
+                    <i class="fa fa-tasks" aria-hidden="true"></i>
+                  </div>
+                  <div class="title">My Graph</div>
+                </a>
+              </li>
+              <li>
+                <a ui-sref="/" class="dropdown-toggle" data-toggle="dropdown">
+                  <div class="icon">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                  </div>
+                  <div class="title">Users Connections</div>
+                </a>
+              </li>
+              <li>
+                <a ui-sref="/">
+                  <div class="icon">
+                    <i class="fa fa-tasks" aria-hidden="true"></i>
+                  </div>
+                  <div class="title">Saved Queries</div>
+                </a>
+              </li>
+              <li>
+                <a href="/#admin">
+                  <div class="icon">
+                    <i class="fa fa-cube" aria-hidden="true"></i>
+                  </div>
+                  <div class="title">My Modules</div>
+                </a>
+              </li>
+              <li>
+                <a ui-sref="home.userDetails">
+                  <div class="icon">
+                    <i class="fa fa-tasks" aria-hidden="true"></i>
+                  </div>
+                  <div class="title">My Profile</div>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="sidebar-footer">
+            <ul class="menu">
+              <li>
+                <a href="/" class="dropdown-toggle" data-toggle="dropdown">
+                  <i class="fa fa-cogs" aria-hidden="true"></i>
+                </a>
+              </li>
+              <li><a href="#"><span class="flag-icon flag-icon-th flag-icon-squared"></span></a></li>
+            </ul>
+          </div>
+        </aside>
+
+        <script type="text/ng-template" id="sidebar-dropdown.tpl.html">
+          <div class="dropdown-background">
+            <div class="bg"></div>
+          </div>
+          <div class="dropdown-container">
+            {{list}}
+          </div>
+        </script>
+
+        <div class="app-container">
+
+
+
+            <ui-view></ui-view>
+
+
+
+            <footer class="app-footer"> 
+              <div class="row">
+                <div class="col-xs-12">
+                  <div class="footer-copyright">
+                    Copyright © 2016 Lorem Ipsum
+                  </div>
+                </div>
+              </div>
+            </footer>
+        </div>
+
+    </div>
     
-</body>
-    <!--JQuery -->
+    <script type="text/javascript" src="../template/html/assets/js/vendor.js"></script>
+    <script type="text/javascript" src="../template/html/assets/js/app.js"></script>
+
+
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 
-    <!-- Bootstrap -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
-    <!-- Cytoscape -->
     <script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js"></script>
 
-    <!-- Angular & Angular Modules -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-resource.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.1/angular-ui-router.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ng-tags-input/3.1.1/ng-tags-input.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/danialfarid-angular-file-upload/12.0.4/ng-file-upload-all.min.js"></script>
 
-    <!-- Angular Modal Service -->
     <script type="text/javascript" src="/user/javascripts/angular-modal-service.js"></script>
 
-    <!-- Angular App -->
     <script type="text/javascript" src="/user/javascripts/angularApp.js"></script>
     
-    <!-- include controllers, services -->
     <script type="text/javascript" src="/user/javascripts/services.js"></script>
     <script type="text/javascript" src="/user/javascripts/controllers/HomeCtrl.js"></script>
     <script type="text/javascript" src="/user/javascripts/controllers/AdminCtrl.js"></script>
     <script type="text/javascript" src="/user/javascripts/controllers/ModuleAdminCtrl.js"></script>
     <script type="text/javascript" src="/user/javascripts/controllers/DetailsModalCtrl.js"></script>
 
-    <!-- d3 -->
-    <script src="//d3js.org/d3.v3.js" charset="utf-8"></script>    
-
+    <script src="//d3js.org/d3.v3.js" charset="utf-8"></script>  
+</body>
 </html>
+
+<script>
+
+$('li').click(function(){
+  $('li').removeClass('active');
+  $(this).addClass('active');
+})
+</script>

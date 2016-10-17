@@ -324,14 +324,3 @@ header{
 }
 
 
-
-/*
- * Layouts - Experimental
- */
-.layouts{
-	position: absolute;
-	top: 60px; 
-	left: 10%;
-
-	z-index: 10;
-}

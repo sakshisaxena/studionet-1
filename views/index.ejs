@@ -2,45 +2,65 @@
 <html>
   <head>
     <title>StudioNet</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    
+
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="template/demo.css" />
+
   </head>
   <body>
-    <div class="row">
-  		<div class="container">
-		  	<div class="col-xs-12">		
-					<h1 class="text-center">StudioNet</h1>
-				</div>
-  		</div>
-  	</div>
+    <div class="app-container">
+      
+      <div class="flex-center">
+        <div class="app-header">
+          <a class="app-brand" href="#"><span class="highlight">StudioNET</span></a>
+          <br> <center>A Graph-based Social Network </center>
+        </div>
+        <div class="app-body">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/9/9b/Social_Network_Analysis_Visualization.png" />
+          <ul class="demo-list">
+                
+                <form action="/auth/openid" method="post" id="form_user">
+                  <input type="hidden" id=user_id type="text" name="openid_identifier" value="https://openid.nus.edu.sg/"/><br/>
+                   <li onclick='enterUser()'>
+                    <a>
+                      <div class="title">NUS Staff / Students</div>
+                      <div class="subtitle">NUSNET OpenID</div>
+                    </a>
+                   </li>                 
+                  </input>
+                </form>
 
-  	<div class="row">
-  		<div class="container">
-  			<div class="col-xs-6 col-xs-offset-3">
-  				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-  				tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-  				quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-  				consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-  				cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-  				proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-  			</div>
-  		</div>
-  	</div>
+                <form action="/auth/openid" method="post">
+                  <input type="hidden" id=user_id type="text" name="openid_identifier" value="https://openid.nus.edu.sg/"/><br/>
+                     <li onclick='enterGuest()'>
+                      <a>
+                        <div class="title">Guest</div>
+                        <div class="subtitle">Viewing Mode</div>
+                      </a>
+                     </li>
+                  </input>
+                </form>
 
-    <div class="row">
-			<div class="container">
-				<div class="col-xs-6 col-xs-offset-3">
-					<h3 class="text-center">StudioNet Home Page</h3>
-<!--           <a class="btn btn-block btn-success" href="/user">To User Page</a>
-          <a class="btn btn-block btn-danger" href="/admin">To Admin Page</a> -->
-					<a class="btn btn-block btn-primary" href="/login">Login</a>
-				</div>
-			</div>
-		</div>
-
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>    
+          </ul>
+        </div>
+        <div class="app-footer">
+          Copyright © 2016 Lorem Ipsum
+        </div>
+      </div>
+    </div>
   </body>
 </html>
 
-<!--- First Page on visiting StudioNET website -->
+<script>
+
+function enterUser(){
+  document.getElementById("form_user").submit();
+}
+
+function enterGuest(){
+  alert("We are still to enable guest entry.")
+  //document.getElementById("form_guest").submit();
+}
+
+
+</script>
