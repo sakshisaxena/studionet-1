@@ -9,7 +9,7 @@ angular.module('studionet')
   
 	$scope.isAdmin = profile.modules.reduce(function(res, curr){
 		return res || curr.role==='Admin';
-	}, false);
+	}, false); 
 
 	$scope.uploadPic = function(avatar) {
     avatar.upload = Upload.upload({
