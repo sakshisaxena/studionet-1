@@ -9,9 +9,9 @@ var MODULE_WIDTH = 15, MODULE_HEIGHT = 15;
 var USER_WIDTH = 20, USER_HEIGHT = 20; 
 var CONTRIBUTION_WIDTH = 15, CONTRIBUTION_HEIGHT = 15;
 
-var MODULE_COLOR = "yellow";
-var USER_COLOR = "blue";
-var CONTRIBUTION_COLOR = "green";
+var MODULE_COLOR = "#FB95AF";
+var USER_COLOR = "#DE9BF9";
+var CONTRIBUTION_COLOR = "#FFD86E";
 
 var EDGE_DEFAULT_COLOR = "#ccc";
 var EDGE_SELECTED_COLOR = "blue";
@@ -60,9 +60,11 @@ var graph_style = {
               'height': 'data(height)',   // mapData(property, a, b, c, d)  => specified range a, b; actual values c, d
               'text-valign': 'center',
               'font-size':'15%',
-              'background-image': 'data(icon)',
-              'background-width': 'data(width)',
-              'background-height': 'data(height)'
+              'background-color': 'data(faveColor)',
+              'border-color': 'data(faveColor)'
+              //'background-image': 'data(icon)',
+              //'background-width': 'data(width)',
+              //'background-height': 'data(height)'
             })
            
           .selector(':selected')
