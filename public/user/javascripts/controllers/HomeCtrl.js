@@ -77,4 +77,65 @@ angular.module('studionet')
 
     };
 
+    $scope.loadFilterData = function(){
+
+     var filterData =
+       [
+        {
+          "id": 1,
+         
+          "module": "AR232",
+          "description": "desc1",
+          "groups":
+        {
+          "group":
+            [
+              { "id": "1", "name": "Regular" },
+              { "id": "2", "name": "Chocolate" },
+              { "id": "3", "name": "Blueberry" },
+              { "id": "4", "name": "Devil's Food" }
+            ]
+        },
+          
+        },
+        {
+          "id": 1,
+         
+          "module": "AR232",
+          "description": "desc1",
+          "groups":
+        {
+          "group":
+            [
+              { "id": "1", "name": "Regular " },
+              { "id": "2", "name": "Chocolate" },
+              { "id": "3", "name": "Blueberry" },
+              { "id": "4", "name": "Devil's Food" }
+            ]
+        },
+          
+        },
+        {
+          "id": 1,
+         
+          "module": "AR232",
+          "description": "desc1",
+          "groups":
+        {
+          "group":
+            [
+              { "id": "1", "name": "Regular" },
+              { "id": "2", "name": "Chocolate" },
+              { "id": "3", "name": "Blueberry" },
+              { "id": "4", "name": "Devil's Food" }
+            ]
+        },
+          
+        }
+      ];
+
+      $scope.filterData=filterData;
+
+};
+
 }]);
