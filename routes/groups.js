@@ -15,8 +15,16 @@ var db = require('seraph')({
 router.route('/')
 
 	// return all groups
-	.get(auth.ensureAuthenticated, auth.ensureSuperAdmin, function(req, res){
+	.get(auth.ensureAuthenticated, function(req, res){
 		
+		// return only name and id associated with each group
+		var query = [
+			'MATCH (g:group) WITH g',
+			'RETURN {name: g.name, id: id(g)}'
+		].join('\n');
+
+
+		/*
 		var query = [
 			'MATCH (g:group) WITH g',
 			'MATCH (g)-[r:MEMBER]->(u:user)',
@@ -24,6 +32,7 @@ router.route('/')
 								'name: g.name, description: g.description' +
 								'id: id(g), + users: collect({id: id(u), role: r.role })}'
 		].join('\n');
+		*/
 
 		db.query(query, function(error, result){
 			if (error)
@@ -66,6 +75,8 @@ router.route('/')
 
 		// if group already exists, return
 		if (groupExists) {
+			// not sure what to feedback to the frontend for this
+			// if already exists
 			res.send("The group with name " + req.body.name " already exists in the database!");
 			return;
 		}
@@ -106,33 +117,24 @@ router.route('/')
 router.route('/:groupId')
 
 	// returns a particular group
-	.get(auth.ensureAuthenticated, auth.isStudent, function(req, res){
+	.get(auth.ensureAuthenticated, function(req, res){
 
-		var query = "match p=(g:group)-[*0..2]->() where id(g)=" + req.params.groupId +" return p";
-
-		apiCall(query, function(data){
-			res.send(data);
-		});
-
-
-		/*		
 		var query = [
-			'MATCH (m:module) WHERE ID(m)=' + req.params.moduleId,
-			'WITH m',
-			'MATCH (m)-[r:MEMBER]->(u:user)',
-			'RETURN {' +
-								'code: m.code, name: m.name, contributionTypes: m.contributionTypes, id: id(m),' + 
-								'users: collect({id: id(u), role: r.role })}'
+			'MATCH (g:group) WHERE ID(g) = {groupIdParam}',
+			'RETURN g'
 		].join('\n');
 
-		db.query(query, function(error, result){
+		var params = {
+			groupIdParam = req.params.groupId
+		};
+
+		db.query(query, params, function(error, result){
 			if (error)
-				console.log('Error retreiving group of id ' + req.params.groupId + ' : ', error);
+				console.log('Error retreiving group ' + req.params.groupId + ':', error);
 			else
-				// return the first item because query always returns an array but REST API expects a single object
 				res.send(result[0]);
+
 		});
-		*/
 
 	})
 
@@ -197,29 +199,25 @@ router.route('/:groupId/users')
 	
 	// get all users for this group (all roles)
 	.get(auth.ensureAuthenticated, auth.isStudent, function(req, res){
-
-		var query = "MATCH path=(g:group)-[:MEMBER]->(u:user) where id(g)="+ req.params.groupId +"\nRETURN path";
-
-		apiCall(query, function(data){
-			res.send(data);
-		});
-
-		/*
+		
 		var query = [
-			'MATCH (m:module)',
-			'WHERE ID(m)=' + req.params.moduleId,
-			'WITH m',
-			'MATCH (m)-[r:MEMBER]->(u)',
-			'RETURN u'
+			'MATCH (g:group) WHERE ID(g) = {groupIdParam}',
+			'WITH g',
+			'MATCH (g)-[r:MEMBER]->(u:user)',
+			'RETURN {name: u.name, id: id(u)}'
 		].join('\n');
 
-		db.query(query, function(error, result){
+		var params = {
+			groupIdParam: req.params.groupId
+		};
+
+		db.query(query, params, function(error, result){
 			if (error)
-				console.log('Error getting all users of module id: ' + req.params.moduleId + ',' + error);
+				console.log('Error fetching list of users for group ', req.params.groupId, error);
 			else
 				res.send(result);
 		});
-		*/
+
 	})
 
 	// link the user with this module
