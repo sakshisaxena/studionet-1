@@ -11,46 +11,90 @@ var db = require('seraph')({
 
 // might change routes to use a better middleware
 
-// route: /api/modules/
+// route: /api/groups/
 router.route('/')
 
-	// return all modules
+	// return all groups
 	.get(auth.ensureAuthenticated, auth.ensureSuperAdmin, function(req, res){
 		
 		var query = [
-			'MATCH (m:module) WITH m',
-			'MATCH (m)-[r:MEMBER]->(u:user)',
+			'MATCH (g:group) WITH g',
+			'MATCH (g)-[r:MEMBER]->(u:user)',
 			'RETURN {' +
-								'code: m.code, name: m.name, contributionTypes: m.contributionTypes, id: id(m),' + 
-								'users: collect({id: id(u), role: r.role })}'
+								'name: g.name, description: g.description' +
+								'id: id(g), + users: collect({id: id(u), role: r.role })}'
 		].join('\n');
 
 		db.query(query, function(error, result){
 			if (error)
-				console.log('Error retrieving all modules: ', error);
+				console.log('Error retrieving all groups: ', error);
 			else
 				res.send(result);
 		});
 
 	})
 
-	// add a new module
-	.post(auth.ensureAuthenticated, auth.ensureSuperAdmin, function(req, res){
+	// create a new group
+	.post(auth.ensureAuthenticated, function(req, res){
+		// TODO: more details for a group?
+		// avatar, etc.
 
-		var query = [
-			'CREATE (m:module {name: {nameParam}, code: {codeParam}, contributionTypes: {typesParam}})',
-			'RETURN m'
-		].join('\n');
-
+		var groupExists;
+		// Param setup
 		var params = {
 			nameParam: req.body.name,
-			codeParam: req.body.code,
-			typesParam: req.body.contributionTypes
+			descriptionParam: req.body.description,
+			restrictedParam: req.body.restricted,
+			groupParentIdParam: req.body.groupParentId,
+			userIdParam: req.user.id;
 		};
 
+		// Query to check if group already exists
+		var query = [
+			'MATCH (g:group {name: {nameParam})',
+			'RETURN count(g)'
+		].join('\n');
+
+		// actual check if group already exists
 		db.query(query, params, function(error, result){
 			if (error)
-				console.log('Error adding module to the database: ', error);
+				console.log('Error looking for the group in database: ', error);
+			else {
+				groupExists = result;
+			}
+		});
+
+		// if group already exists, return
+		if (groupExists) {
+			res.send("The group with name " + req.body.name " already exists in the database!");
+			return;
+		}
+
+		// else try to create the group (link group to its tag, and add owner as admin to group)
+		query = [
+			'CREATE (g:group {name: {nameParam}, description: {descriptionParam}, restricted: {restrictedParam}})',
+			'WITH g',
+			'MATCH (u:user) WHERE id(u)= {userIdParam}',
+			'CREATE UNIQUE (g)-[r:MEMBER {role: "Admin"}]->(u)',
+			'MERGE (t:tag {name: {nameParam}})',
+			'WITH g, t',
+			'CREATE UNIQUE (g)-[r1:TAGGED]->(t)',
+		];
+
+		if (req.body.groupParentId != -1) {
+			// the group has a parent group
+			query.push('WITH g');
+			query.push('MATCH (g1:group) WHERE id(g1)= {groupParentIdParam}');
+			query.push('CREATE UNIQUE (g1)-[r2:SUBGROUP]->(g)');
+		}
+
+		query.push('RETURN g');
+		query = query.join('\n');
+
+		// Actual creating of group using above query
+		db.query(query, params, function(error, result){
+			if (error)
+				console.log('Error occured while creating the group in the database: ', error);
 			else
 				// return the first item because query always returns an array but REST API expects a single object
 				res.send(result[0]);
@@ -58,13 +102,13 @@ router.route('/')
 
 	});
 
-// route: /api/modules/:moduleId
-router.route('/:moduleId')
+// route: /api/groups/:groupId
+router.route('/:groupId')
 
-	// returns a particular module
+	// returns a particular group
 	.get(auth.ensureAuthenticated, auth.isStudent, function(req, res){
 
-		var query = "match p=(m:module)-[*0..2]->() where id(m)=" + req.params.moduleId +" return p";
+		var query = "match p=(g:group)-[*0..2]->() where id(g)=" + req.params.groupId +" return p";
 
 		apiCall(query, function(data){
 			res.send(data);
@@ -83,7 +127,7 @@ router.route('/:moduleId')
 
 		db.query(query, function(error, result){
 			if (error)
-				console.log('Error retreiving module of id ' + req.params.moduleId + ' : ', error);
+				console.log('Error retreiving group of id ' + req.params.groupId + ' : ', error);
 			else
 				// return the first item because query always returns an array but REST API expects a single object
 				res.send(result[0]);
@@ -92,14 +136,14 @@ router.route('/:moduleId')
 
 	})
 
-	// updates an existing module
+	// updates an existing group
 	.put(auth.ensureAuthenticated, auth.ensureSuperAdmin, function(req, res){
 		var query = [
-			'MATCH (m:module)',
-			'WHERE ID(m)=' + req.params.moduleId,
-			'WITH m',
-			'SET m.name={nameParam}, m.code={codeParam}, m.contributionTypes={typesParam}',
-			'RETURN m'
+			'MATCH (g:group)',
+			'WHERE ID(g)=' + req.params.groupId,
+			'WITH g',
+			'SET g.name={nameParam}, g.code={codeParam}, g.contributionTypes={typesParam}',
+			'RETURN g'
 		].join('\n');
 
 		/*
@@ -122,7 +166,7 @@ router.route('/:moduleId')
 
 		db.query(query, params, function(error, result){
 			if (error)
-				console.log('Error updating module of id ' + req.params.moduleId + ' : ', error);
+				console.log('Error updating group with id ' + req.params.groupId + ' : ', error);
 			else
 				// return the first item because query always returns an array but REST API expects a single object
  				res.send(result[0]);
@@ -130,69 +174,31 @@ router.route('/:moduleId')
 
 	})
 
-	// deletes an existing module
+	// deletes an existing group
 	.delete(auth.ensureAuthenticated, auth.ensureSuperAdmin, function(req, res){
 		var query = [
-			'MATCH (m:module)',
-			'WHERE ID(m)=' + req.params.moduleId,
-			'DELETE m'
+			'MATCH (g:group)',
+			'WHERE ID(g)=' + req.params.groupId,
+			'DELETE g'
 		].join('\n');
 
 		db.query(query, function(error, result){
 			if (error)
-				console.log('Error deleting module of id ' + req.params.moduleId + ' : ', error);
+				console.log('Error deleting group with id ' + req.params.groupId + ' : ', error);
 			else
 				// return the first item because query always returns an array but REST API expects a single object
 				res.send(result[0]);
 		})
 	});
 
-router.route('/:moduleId/posts')
-	// get all posts linked to the moduleId
-	.get(auth.ensureAuthenticated, auth.isStudent, function(req, res){
-		var query = 'match p=(m:module)-[r:POST]->() where id(m)='+ req.params.moduleId+' return p';
 
-		apiCall(query, function(data){
-			res.send(data);
-		})
-	})
-
-	// add a post linked to the moduleId
-	.post(auth.ensureAuthenticated, auth.isModerator, function(req, res){
-
-		var query = [
-			'MATCH (m:module) WHERE ID(m)=' + req.params.moduleId,
-			'CREATE (p:post {title: {titleParam}, body: {bodyParam}, postedBy: {authorParam}, lastUpdated:{lastUpdatedParam}, editted: {edittedParam}})',
-			'WITH m, p',
-			'CREATE (m)-[r:POST]->(p)',
-			'RETURN p'
-		].join('\n');
-
-		var params = {
-			titleParam: req.body.title,
-			bodyParam: req.body.body,
-			authorParam: req.user.nusOpenId,
-			lastUpdatedParam: Date.now(),
-			edittedParam: false
-		};
-
-		db.query(query, params, function(error, result){
-			if (error)
-				console.log('Error creating post for module: ' + req.params.moduleId);
-			else
-				res.send(result[0]);
-		});
-	});
-
-
-
-// route: /api/modules/:moduleId/users
-router.route('/:moduleId/users')
+// route: /api/groups/:groupId/users
+router.route('/:groupId/users')
 	
-	// get all users for this module (all roles)
+	// get all users for this group (all roles)
 	.get(auth.ensureAuthenticated, auth.isStudent, function(req, res){
 
-		var query = "MATCH path=(m:module)-[:MEMBER]->(u:user) where id(m)="+ req.params.moduleId +"\nRETURN path";
+		var query = "MATCH path=(g:group)-[:MEMBER]->(u:user) where id(g)="+ req.params.groupId +"\nRETURN path";
 
 		apiCall(query, function(data){
 			res.send(data);
@@ -239,17 +245,17 @@ router.route('/:moduleId/users')
 	.post(auth.ensureAuthenticated, auth.isModerator, function(req, res){
 		var query = [
 			'MATCH (u:user) WHERE ID(u)=' + req.body.userId + ' WITH u',
-			'MATCH (m:module) WHERE ID(m)=' + req.body.moduleId,
-			'CREATE UNIQUE (m)-[r:MEMBER{role: {roleParam}}]->(u)'
+			'MATCH (g:group) WHERE ID(g)=' + req.body.groupId,
+			'CREATE UNIQUE (g)-[r:MEMBER{role: {roleParam}}]->(u)'
 		].join('\n');
 		console.log("i am here query"+query);
 		var params = {
-			roleParam: req.body.moduleRole
+			roleParam: req.body.groupRole
 		};
 
 		db.query(query, params, function(error, result){
 			if (error)
-				console.log('Error linking the user to the module');
+				console.log('Error linking the user to the group');
 			else
 				res.send('success');
 				
@@ -257,23 +263,23 @@ router.route('/:moduleId/users')
 	});
 
 
-// route: /api/modules/:moduleId/users/:userId
-router.route('/:moduleId/users/:userId')
-	// edit the user's role in this module
+// route: /api/groups/:groupId/users/:userId
+router.route('/:groupId/users/:userId')
+	// edit the user's role in this group
 	.put(auth.ensureAuthenticated, auth.isModerator, function(req, res){
 		var query = [
-			'MATCH (m:module)-[r:MEMBER]->(u:user)',
-			'WHERE ID(m)=' + req.params.moduleId + ' AND ID(u)=' + req.params.userId,
+			'MATCH (g:group)-[r:MEMBER]->(u:user)',
+			'WHERE ID(g)=' + req.params.groupId + ' AND ID(u)=' + req.params.userId,
 			'SET r.role = {roleParam}'
 		].join('\n');
 
 		var params = {
-			roleParam: req.body.moduleRole
+			roleParam: req.body.groupRole
 		};
 
 		db.query(query, params, function(error, result){
 			if (error)
-				console.log('Error editting role of user for this module');
+				console.log('Error editting role of user for this group');
 			else
 				res.send('success');
 		});
