@@ -24,7 +24,35 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 
 			}
 		})
-		.state('home.graphView', {
+		.state('user', {
+			url: '/me',
+			templateUrl: '/user/templates/user.html',
+			controller: 'HomeCtrl',
+			resolve: {
+				userProfile: ['profile', function(profile){
+					return profile.getUser() && profile.getModules();
+				}],
+				userModels: ['modelsFactory', 'userProfile', 'profile', function(modelsFactory, userProfile, profile){
+					return modelsFactory.getUserModels(profile.user.nusOpenId);
+				}]
+
+			}
+		})
+		.state('user.details', {
+			url: 'details',
+			templateUrl: '/user/templates/home.userDetails.html',
+			controller: 'HomeCtrl',
+			resolve: {
+				userProfile: ['profile', function(profile){
+					return profile.getUser() && profile.getModules();
+				}],
+				userModels: ['modelsFactory', 'userProfile', 'profile', function(modelsFactory, userProfile, profile){
+					return modelsFactory.getUserModels(profile.user.nusOpenId);
+				}]
+
+			}
+		})
+/*		.state('home.graphView', {
 			url: 'graph',
 			templateUrl: '/user/templates/home.graphView.html',
 			controller: 'HomeCtrl',
@@ -124,7 +152,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 		.state('moduleAdmin.editRoles', {
 			url:'/roles',
 			templateUrl: '/user/templates/moduleAdmin.editRoles.html'
-		})
+		})*/
 
 	$urlRouterProvider.otherwise('/');
 }]);

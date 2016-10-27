@@ -1,0 +1,52 @@
+<!-- Side Nav -->
+<aside class="app-sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <a class="sidebar-brand" href="#"><span class="highlight">StudioNET</span> User</a>
+    <button type="button" class="sidebar-toggle">
+      <i class="fa fa-times"></i>
+    </button>
+  </div>
+  <div class="sidebar-menu">
+    <ul class="sidebar-nav">
+      <!-- user profile -->
+      <li>
+        <a ui-sref="home">
+          <div class="icon">
+            <i class="fa fa-share fa-3x" aria-hidden="true"></i>
+          </div>
+          <div class="title">Graph</div>
+        </a>
+      </li>
+      <!-- modules -->
+      <li>
+        <a ui-sref="home">
+          <div class="icon">
+            <i class="fa fa-cube fa-3x" aria-hidden="true"></i>
+          </div>
+          <div class="title">My Modules</div>
+        </a>
+      </li>
+      <!-- user graph -->
+      <li>
+        <a ui-sref="home">
+          <div class="icon">
+            <i class="fa fa-user fa-3x" aria-hidden="true"></i>
+          </div>
+          <div class="title">User Graph</div>
+        </a>
+      </li>
+      <!-- admin dashboard : only if user is an admin -->
+      <li>
+        <a href="/admin" ng-if="user.superAdmin">
+          <div class="icon">
+            <i class="fa fa-tasks" aria-hidden="true"></i>
+          </div>
+          <div class="title">Admin Dashboard</div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</aside>
+
+
+<ui-view></ui-view>

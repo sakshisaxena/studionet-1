@@ -32,14 +32,14 @@
           <div class="sidebar-menu">
             <ul class="sidebar-nav">
               <li class="active">
-                <a href="/">
+                <a href="/admin">
                   <div class="icon">
                     <i class="fa fa-tasks" aria-hidden="true"></i>
                   </div>
                   <div class="title">Admin Dashboard</div>
                 </a>
               </li>
-              <li class="dropdown ">
+              <li>
                 <a ui-sref="modules" class="dropdown-toggle" data-toggle="dropdown">
                   <div class="icon">
                     <i class="fa fa-cube" aria-hidden="true"></i>
@@ -47,12 +47,20 @@
                   <div class="title">Modules</div>
                 </a>
               </li>
-              <li class="dropdown">
+              <li>
                 <a ui-sref="users" class="dropdown-toggle" data-toggle="dropdown">
                   <div class="icon">
                     <i class="fa fa-user" aria-hidden="true"></i>
                   </div>
                   <div class="title">Users</div>
+                </a>
+              </li>
+              <li>
+                <a ui-sref="users" class="dropdown-toggle" data-toggle="dropdown">
+                  <div class="icon">
+                    <i class="fa fa-bookmark" aria-hidden="true"></i>
+                  </div>
+                  <div class="title">Tags</div>
                 </a>
               </li>
               <li>
@@ -109,10 +117,10 @@
                   </ul>
                   <ul class="nav navbar-nav navbar-left">
                     <li class="navbar-title">Dashboard</li>
-                    <li class="navbar-search hidden-sm">
+<!--                     <li class="navbar-search hidden-sm">
                       <input id="search" type="text" placeholder="Search..">
                       <button class="btn-search"><i class="fa fa-search"></i></button>
-                    </li>
+                    </li> -->
                   </ul>
                   <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown profile">
