@@ -48,19 +48,19 @@ router.route('/')
 		// TODO: more details for a group?
 		// avatar, etc.
 
-		var groupExists;
+		var groupExists; console.log(req.body); console.log(req.body.name);
 		// Param setup
 		var params = {
 			nameParam: req.body.name,
 			descriptionParam: req.body.description,
 			restrictedParam: req.body.restricted,
 			groupParentIdParam: req.body.groupParentId,
-			userIdParam: req.user.id;
+			userIdParam: req.user.id
 		};
 
 		// Query to check if group already exists
 		var query = [
-			'MATCH (g:group {name: {nameParam})',
+			'MATCH (g:group {name: {nameParam}})',
 			'RETURN count(g)'
 		].join('\n');
 
@@ -77,7 +77,7 @@ router.route('/')
 		if (groupExists) {
 			// not sure what to feedback to the frontend for this
 			// if already exists
-			res.send("The group with name " + req.body.name " already exists in the database!");
+			res.send("The group with name " + req.body.name + " already exists in the database!");
 			return;
 		}
 
@@ -125,7 +125,7 @@ router.route('/:groupId')
 		].join('\n');
 
 		var params = {
-			groupIdParam = req.params.groupId
+			groupIdParam : req.params.groupId
 		};
 
 		db.query(query, params, function(error, result){

@@ -27,7 +27,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 		.state('user', {
 			url: '/me',
 			templateUrl: '/user/templates/user.html',
-			controller: 'HomeCtrl',
+			controller: 'UserCtrl',
 			resolve: {
 				userProfile: ['profile', function(profile){
 					return profile.getUser() && profile.getModules();
@@ -39,9 +39,121 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 			}
 		})
 		.state('user.details', {
-			url: 'details',
-			templateUrl: '/user/templates/home.userDetails.html',
-			controller: 'HomeCtrl',
+			url: '/details',
+			templateUrl: '/user/templates/user.details.html',
+			controller: 'UserCtrl',
+			resolve: {
+				userProfile: ['profile', function(profile){
+					return profile.getUser() && profile.getModules();
+				}],
+				userModels: ['modelsFactory', 'userProfile', 'profile', function(modelsFactory, userProfile, profile){
+					return modelsFactory.getUserModels(profile.user.nusOpenId);
+				}]
+
+			}
+		})
+		.state('user.groups', {
+			url: '/groups',
+			templateUrl: '/user/templates/user.groups.html',
+			controller: 'GroupsCtrl',
+			resolve: {
+				userProfile: ['profile', function(profile){
+					return profile.getUser() && profile.getModules();
+				}],
+				userModels: ['modelsFactory', 'userProfile', 'profile', function(modelsFactory, userProfile, profile){
+					return modelsFactory.getUserModels(profile.user.nusOpenId);
+				}]
+
+			}
+		})
+		.state('user.createGroup', {
+			url: '/groups/create',
+			templateUrl: '/user/templates/user.createGroup.html',
+			controller: 'GroupsCtrl',
+			resolve: {
+				userProfile: ['profile', function(profile){
+					return profile.getUser() && profile.getModules();
+				}],
+				userModels: ['modelsFactory', 'userProfile', 'profile', function(modelsFactory, userProfile, profile){
+					return modelsFactory.getUserModels(profile.user.nusOpenId);
+				}]
+
+			}
+		})
+		.state('user.createGroup.step1', {
+			url: '/groups/create/1',
+			templateUrl: '/user/templates/user.createGroup.step1.html',
+			controller: 'GroupsCtrl',
+			resolve: {
+				userProfile: ['profile', function(profile){
+					return profile.getUser() && profile.getModules();
+				}],
+				userModels: ['modelsFactory', 'userProfile', 'profile', function(modelsFactory, userProfile, profile){
+					return modelsFactory.getUserModels(profile.user.nusOpenId);
+				}]
+
+			}
+		})
+		.state('user.createGroup.step2', {
+			url: '/groups/create/2',
+			templateUrl: '/user/templates/user.createGroup.step2.html',
+			controller: 'GroupsCtrl',
+			resolve: {
+				userProfile: ['profile', function(profile){
+					return profile.getUser() && profile.getModules();
+				}],
+				userModels: ['modelsFactory', 'userProfile', 'profile', function(modelsFactory, userProfile, profile){
+					return modelsFactory.getUserModels(profile.user.nusOpenId);
+				}]
+
+			}
+		})
+		.state('user.createGroup.step3', {
+			url: '/groups/create/3',
+			templateUrl: '/user/templates/user.createGroup.step3.html',
+			controller: 'GroupsCtrl',
+			resolve: {
+				userProfile: ['profile', function(profile){
+					return profile.getUser() && profile.getModules();
+				}],
+				userModels: ['modelsFactory', 'userProfile', 'profile', function(modelsFactory, userProfile, profile){
+					return modelsFactory.getUserModels(profile.user.nusOpenId);
+				}]
+
+			}
+		})
+		.state('user.createGroup.step4', {
+			url: '/groups/create/4',
+			templateUrl: '/user/templates/user.createGroup.step4.html',
+			controller: 'GroupsCtrl',
+			resolve: {
+				userProfile: ['profile', function(profile){
+					return profile.getUser() && profile.getModules();
+				}],
+				userModels: ['modelsFactory', 'userProfile', 'profile', function(modelsFactory, userProfile, profile){
+					return modelsFactory.getUserModels(profile.user.nusOpenId);
+				}]
+
+			}
+		})
+		.state('user.groupDetail', {
+			url: '/groups/:groupId',
+			templateUrl: '/user/templates/user.viewGroup.html',
+			controller: 'GroupsCtrl',
+			resolve: {
+				userProfile: ['profile', function(profile){
+					return profile.getUser() && profile.getModules();
+				}],
+				userModels: ['modelsFactory', 'userProfile', 'profile', function(modelsFactory, userProfile, profile){
+					return modelsFactory.getUserModels(profile.user.nusOpenId);
+				}]
+
+			}
+		})
+		.state('user.graph', {
+			url: '/graph',
+			templateUrl: '/user/templates/user.graph.html',
+			controller: 'UserGraphCtrl',
 			resolve: {
 				userProfile: ['profile', function(profile){
 					return profile.getUser() && profile.getModules();

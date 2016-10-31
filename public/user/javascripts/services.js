@@ -18,6 +18,12 @@ angular.module('studionet')
 		});
 	};
 
+	o.getModules = function(){
+		return $http.get('/api/profile/modules').success(function(data){
+			angular.copy(data, o.modules);
+		});
+	};
+
 	return o;
 }])
 
