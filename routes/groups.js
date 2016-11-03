@@ -17,11 +17,24 @@ router.route('/')
 	// return all groups
 	.get(auth.ensureAuthenticated, function(req, res){
 		
-		// return only name and id associated with each group
+		/*
+		 *	TODO:
+		 *	Return name, description, id, parentId, restricted, user-count, frequently used tags (later)
+		 * 
+		 */
+		
 		var query = [
 			'MATCH (g:group) WITH g',
-			'RETURN {name: g.name, id: id(g)}'
-		].join('\n');
+			'RETURN {name: g.name, id: id(g), description: g.description, restricted: g.restricted}'
+		].join('\n'); 
+
+		/*
+		var query = [
+			'MATCH (g:group) WITH g',
+			'MATCH (u:user)-[:MEMBER]-(g)' ,
+			'MATCH (admin:user)<-[:MEMBER {role:\'Admin\'}]-(g)',
+			'RETURN {name: g.name, id: id(g), description: g.description, restricted: g.restricted, users: COUNT(u), owner: admin.name}'
+		].join('\n'); */
 
 
 		/*
@@ -113,6 +126,9 @@ router.route('/')
 
 	});
 
+//? doesn't seem to be working
+
+
 // route: /api/groups/:groupId
 router.route('/:groupId')
 
@@ -120,15 +136,18 @@ router.route('/:groupId')
 	.get(auth.ensureAuthenticated, function(req, res){
 
 		var query = [
-			'MATCH (g:group) WHERE ID(g) = {groupIdParam}',
-			'RETURN g'
+			'MATCH (g:group) WHERE ID(g) = ' + req.params.groupId,
+			'MATCH (u:user)-[:MEMBER]-(g)' ,
+			'MATCH (admin:user)<-[:MEMBER {role:\'Admin\'}]-(g)',
+			'RETURN {name: g.name, id: id(g), description: g.description, restricted: g.restricted, users: COUNT(u), owner: admin.name}'
 		].join('\n');
 
 		var params = {
-			groupIdParam : req.params.groupId
+			groupIdParam : req.params.groupId,
 		};
-
+		
 		db.query(query, params, function(error, result){
+
 			if (error)
 				console.log('Error retreiving group ' + req.params.groupId + ':', error);
 			else
@@ -139,12 +158,12 @@ router.route('/:groupId')
 	})
 
 	// updates an existing group
-	.put(auth.ensureAuthenticated, auth.ensureSuperAdmin, function(req, res){
+	.put(auth.ensureAuthenticated, auth.ensureGroupOwner, function(req, res){
 		var query = [
 			'MATCH (g:group)',
 			'WHERE ID(g)=' + req.params.groupId,
 			'WITH g',
-			'SET g.name={nameParam}, g.code={codeParam}, g.contributionTypes={typesParam}',
+			'SET g.name={nameParam}, g.description={descriptionParam}, g.restricted={restrictedParam}',
 			'RETURN g'
 		].join('\n');
 
@@ -162,8 +181,8 @@ router.route('/:groupId')
 
 		var params = {
 			nameParam: req.body.name,
-			codeParam: req.body.code,
-			typesParam: req.body.contributionTypes
+			descriptionParam: req.body.description,
+			restrictedParam: req.body.restricted
 		};
 
 		db.query(query, params, function(error, result){
@@ -198,7 +217,7 @@ router.route('/:groupId')
 router.route('/:groupId/users')
 	
 	// get all users for this group (all roles)
-	.get(auth.ensureAuthenticated, auth.isStudent, function(req, res){
+	.get(auth.ensureAuthenticated, /*auth.isStudent, */function(req, res){
 		
 		var query = [
 			'MATCH (g:group) WHERE ID(g) = {groupIdParam}',

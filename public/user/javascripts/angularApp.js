@@ -81,7 +81,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 			}
 		})
 		.state('user.createGroup.step1', {
-			url: '/groups/create/1',
+			url: '/1',
 			templateUrl: '/user/templates/user.createGroup.step1.html',
 			controller: 'GroupsCtrl',
 			resolve: {
@@ -95,7 +95,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 			}
 		})
 		.state('user.createGroup.step2', {
-			url: '/groups/create/2',
+			url: '/2',
 			templateUrl: '/user/templates/user.createGroup.step2.html',
 			controller: 'GroupsCtrl',
 			resolve: {
@@ -109,7 +109,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 			}
 		})
 		.state('user.createGroup.step3', {
-			url: '/groups/create/3',
+			url: '/3',
 			templateUrl: '/user/templates/user.createGroup.step3.html',
 			controller: 'GroupsCtrl',
 			resolve: {
@@ -123,7 +123,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 			}
 		})
 		.state('user.createGroup.step4', {
-			url: '/groups/create/4',
+			url: '/4',
 			templateUrl: '/user/templates/user.createGroup.step4.html',
 			controller: 'GroupsCtrl',
 			resolve: {

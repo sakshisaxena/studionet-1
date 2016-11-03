@@ -7,7 +7,16 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 		.state('home', {
 			url: '/',
 			templateUrl: '/admin/templates/home.html',
-			controller: 'HomeCtrl'
+			controller: 'HomeCtrl',
+			resolve: {
+				usersPromise: ['users', function(users){
+					return users.getAll();
+				}],
+				// get modules data before page loads
+				modulesPromise: ['modules', function(modules){
+					return modules.query();
+				}]
+			}
 		})
 		.state('modules', {
 			url: '/modules',
