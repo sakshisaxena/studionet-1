@@ -220,7 +220,7 @@ router.route('/:groupId/users')
 	.get(auth.ensureAuthenticated, /*auth.isStudent, */function(req, res){
 		
 		var query = [
-			'MATCH (g:group) WHERE ID(g) = {groupIdParam}',
+			'MATCH (g:group) WHERE ID(g) = ' + req.params.groupId,
 			'WITH g',
 			'MATCH (g)-[r:MEMBER]->(u:user)',
 			'RETURN {name: u.name, id: id(u)}'
@@ -259,13 +259,24 @@ router.route('/:groupId/users')
 		});
 	})
 */
-	.post(auth.ensureAuthenticated, auth.isModerator, function(req, res){
+	
+	/*
+	 * Add a user to the group
+	 * If group is open, anyone can add himself / herself
+	 * If group is closed, ensure admin is adding the member
+	 * If member exists, the create link
+	 * If member doesn't exist, create the member, add link and send email
+	 * 
+	 */ 
+	.post(auth.ensureAuthenticated, function(req, res){
+
+
 		var query = [
 			'MATCH (u:user) WHERE ID(u)=' + req.body.userId + ' WITH u',
 			'MATCH (g:group) WHERE ID(g)=' + req.body.groupId,
 			'CREATE UNIQUE (g)-[r:MEMBER{role: {roleParam}}]->(u)'
 		].join('\n');
-		console.log("i am here query"+query);
+	
 		var params = {
 			roleParam: req.body.groupRole
 		};

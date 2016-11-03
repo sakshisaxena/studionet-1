@@ -56,6 +56,16 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 					return users.getAll();
 				}]
 			}
+		})
+		.state('tags', {
+			url: '/users',
+			templateUrl: '/admin/templates/tags.html',
+			controller: 'HomeCtrl',
+			resolve: {
+				usersPromise: ['users', function(users){
+					return users.getAll();
+				}]
+			}
 		});
 
 	$urlRouterProvider.otherwise('/');
