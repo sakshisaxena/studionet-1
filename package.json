@@ -23,5 +23,8 @@
     "request": "^2.74.0",
     "seraph": "^0.14.4",
     "serve-favicon": "~2.3.0"
+  },
+  "optionalDependencies": {
+    "nodemon": "^1.11.0"
   }
 }

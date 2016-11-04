@@ -1,68 +1,81 @@
-<style>
-  .modal h3{
-
-     font-size: 14px;
-     font-weight: bold;
-     line-height: 20px;
-     text-transform: uppercase;
-     
-     margin: 0px;
-     padding: 0px;
-
-     display: inline-block;
-  }
-
-  .modal span{
-
-     font-size: 12px;
-     font-style: italic;
-     line-height: 20px;
-     text-transform: none;
-  }
-
-  .modal-header{
-    text-align: center;
-  }
-
-</style>
-
-
-
-
+<link rel='stylesheet' href='/user/stylesheets/modal-style.css' />
+<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
 <div class="modal fade" display='block'>
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" ng-click="close()" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h3 class='content-modal'>{{data.name}}</h3> 
+        <div class="modal-header">
+          <button type="button" class="close" ng-click="close()" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h3 class='content-modal'>{{data.extra.name}}</h3> 
+        </div>
+        <div class="modal-body">
+          <div class='row'>
+            <div class='col-sm-4'>
+              <div>
+                <div id='second-cy'></div>
+                <hr>
+                <button type="button" ng-click="answer()" class="btn btn-primary" id="btn-contribute" data-dismiss="modal">
+                  +
+                </button>
+              </div>
             </div>
-            <div class="modal-body">
-                 <div class='row'>
-                    <div class='col-sm-4'>
-                      <div>
-                        <div id='second-cy'></div>
-                        <hr>
-                        <button type="button" ng-click="answer()" class="btn btn-primary" id="btn-contribute" data-dismiss="modal">
-                          +
-                        </button>
-                      </div>
-                    </div>
-                    <div class='col-sm-8'>
-                      <div class='row'>
-                        <ul class="nav nav-tabs pull-right">
-                          <li class="active"><a href="#">Content</a></li>
-                          <li><a href="#">Statistics</a></li>
-                        </ul>
-                      </div>
-                      <div>
-                        {{data.extra.body}} 
-                        <br><br>
-                        Lorem ipsum Elit in consequat eu magna ut culpa laborum minim ut cillum in nostrud. Lorem ipsum Dolore sed tempor nostrud sed est eu aliqua do anim cupidatat nisi eiusmod sunt non nisi ut eu dolore et sunt esse mollit et ex Excepteur fugiat esse tempor esse qui pariatur culpa commodo qui sed dolore consectetur culpa laborum reprehenderit laboris pariatur amet ea in et officia fugiat velit consectetur occaecat id eiusmod ea elit aliquip exercitation officia occaecat minim incididunt aliquip in Excepteur voluptate consectetur pariatur nisi eiusmod elit ut dolor et tempor sed enim nulla tempor adipisicing non ut consectetur qui voluptate quis pariatur dolore labore ut sit dolor ea nisi pariatur proident et nisi ut culpa consectetur aute eiusmod qui nostrud nostrud sunt incididunt nisi nostrud pariatur nulla ut nulla in qui do dolor qui tempor Excepteur sint consectetur ex eiusmod aliquip irure esse dolore exercitation enim anim dolor reprehenderit commodo occaecat cupidatat veniam Ut ea ea velit nisi enim irure ut magna est enim reprehenderit dolor nostrud minim consequat ut qui eiusmod in magna ad amet commodo in commodo ex cupidatat esse laborum minim aliquip do eiusmod laboris veniam dolor irure mollit dolore consequat eu aliquip in aliquip dolore dolor cillum amet commodo fugiat proident velit nostrud anim Ut tempor esse in minim adipisicing nulla minim aliquip enim elit quis dolor ullamco cupidatat sit.
-                         <button type="button" ng-click="close()" class="btn btn-primary btn-block" data-dismiss="modal">Close</button>
-                       </div>
-                    </div>
-                  </div>
+            <div class='col-sm-8'>
+              <div class='row'>
+                <ul class="nav nav-tabs pull-right">
+                  <li class="active"><a data-target="#content" data-toggle="tab">Content</a></li>
+                  <li><a data-target="#statistics" data-toggle="tab">Statistics</a></li>
+                </ul>
+              </div>
+              <div class="tab-content">
+                <div class='tab-pane fade in active' id='content'>
+                  <b>Contribution's type: </b>{{data.type}}
+                  <br><br>
+                  <b>Contribution's content: </b>{{data.extra.content}} 
+                  <br><br>
+                  <b>Contribution's description: </b>{{data.extra.description}} 
+                  <br><br>
                 </div>
+                <div class='tab-pane fade' id='statistics'>
+                    <h3>This is the column for contributions' statistics.</h3>
+                </div>
+
+                <button type="button" ng-click="close()" class="btn btn-primary btn-block" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!--<div class="container">
+          <h2>Dynamic Tabs</h2>
+          <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" data-target="#home">Home</a></li>
+            <li><a data-toggle="tab" data-target="#menu1">Menu 1</a></li>
+            <li><a data-toggle="tab" data-target="#menu2">Menu 2</a></li>
+            <li><a data-toggle="tab" data-target="#menu3">Menu 3</a></li>
+          </ul>
+
+          <div class="tab-content">
+            <div id="home" class="tab-pane fade in active">
+              <h3>HOME</h3>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            </div>
+            <div id="menu1" class="tab-pane fade">
+              <h3>Menu 1</h3>
+              <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </div>
+            <div id="menu2" class="tab-pane fade">
+              <h3>Menu 2</h3>
+              <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+            </div>
+            <div id="menu3" class="tab-pane fade">
+              <h3>Menu 3</h3>
+              <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+            </div>
+          </div>
+        </div>-->
+
     </div>
   </div>
 </div>
