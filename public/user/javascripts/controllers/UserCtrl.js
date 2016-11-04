@@ -60,13 +60,6 @@ angular.module('studionet')
 	}
 
 
-
-	/*
-	 *	0 - View Mode (No Editing)
-	 *  1 - Editing Mode (only for group owner)
-	 *  2 - Creating Mode
-	 */
-	
 	$scope.displayError = false;
 	$scope.displaySuccess = false;
 	
@@ -168,6 +161,7 @@ angular.module('studionet')
 
 	}
 
+	/*** Editing Group ***/
 	$scope.saveGroupEdit = function(){
 
 		console.log($scope.activeGroup);
@@ -198,12 +192,49 @@ angular.module('studionet')
 	}
 
 
-	$scope.addUser = function(){
+	/*** Adding User *****/
+	$scope.groupUsers = [];
+	$scope.addUserModal = function(group){
+		$scope.groupUsers = []
+		$scope.activeGroup = group;
+		$scope.users = [];
+		console.log($scope.activeGroup);
+		console.log('/api/groups/' + $scope.activeGroup.id + '/users');
 
+		$http.get('/api/users/').success(function(data){
+
+			$http.get('/api/groups/' + $scope.activeGroup.id + '/users').success(function(subdata){
+				
+				$scope.groupUsers = subdata;
+
+				// attach role with this group to the users
+				for(var i=0; i<subdata.length; i++){
+
+					for(j=0; j < data.length; j++){
+
+						if(subdata[i].id == data[j].id){
+							data[j].status = "Yes";
+						}
+						else{
+							data[j].status = "No";
+						}
+					}
+				}
+					
+				$scope.users = data;
+
+			});	
+		});		
+	}
+
+
+	$scope.addUsers = function(){
+
+		// add users in $scope.groupUsers 
+		// POST /api/groups/:groupId/users/
 	}
 
 
 
+}])
 
-
-}]);

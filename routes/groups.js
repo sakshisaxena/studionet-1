@@ -24,7 +24,7 @@ router.route('/')
 		 */
 		
 		var query = [
-			'MATCH (g:group) WITH g',
+			'MATCH (g:group)',
 			'RETURN {name: g.name, id: id(g), description: g.description, restricted: g.restricted}'
 		].join('\n'); 
 
@@ -71,6 +71,8 @@ router.route('/')
 			userIdParam: req.user.id
 		};
 
+		// TODO: Check for tags also
+		//
 		// Query to check if group already exists
 		var query = [
 			'MATCH (g:group {name: {nameParam}})',

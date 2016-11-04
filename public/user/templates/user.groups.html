@@ -41,7 +41,7 @@
                   <button type="button" class="btn btn-link" data-toggle="modal" data-target="#editModal" ng-click='editGroup(group)'>
                     <i class="fa fa-pencil" aria-hidden="true"></i>
                   </button>
-                  <button type="button" class="btn btn-link" data-toggle="modal" data-target="#addUserModal" ng-click='editGroup(group)'>
+                  <button type="button" class="btn btn-link" data-toggle="modal" data-target="#addUserModal" ng-click='addUserModal(group)'>
                       <i class="fa fa-user-plus" aria-hidden="true"></i>
                   </button>
               </td>
@@ -237,34 +237,42 @@
     <div class="modal-content">
 
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title">{{activeGroup.name}} Members</h4>
       </div>
 
       <div class="modal-body">
-
-
-
-
-
-
-
+        <div class='row'>
+          <div class="col-xs-12">
+            <table class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th>NUS OpenID</th>
+                  <th>Name</th>
+                  <th>Member</th>
+                </tr>
+              </thead>
+              <tbody ng-repeat="user in users">
+                <tr>
+                  <th>{{user.nusOpenId}}</th>
+                  <th>{{user.name}}</th>
+                  <th ng-click='user.status=="Yes"? user.status="No" : user.status="Yes"'>{{user.status}}</th>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
       <div class='modal-footer'>
         <!-- buttons -->
         <div class='row'>
-          
-            <!-- Cancel -->
-            <button type="button" class="btn btn-sm btn-danger pull-right" data-dismiss="modal">
-              <i class="fa fa-close fa-2x" aria-hidden="true"></i>
-            </button>
-
             
-            <!-- Subscribe -->
-            <button type="button" class="btn btn-sm btn-success pull-right" ng-click=saveGroup() data-dismiss="modal">
-                  <i class="fa fa-check fa-2x" aria-hidden="true"></i>
-            </button>
+            <!-- Close -->
+            <button type="button" class="btn btn-sm btn-default pull-right" ng-click=addUsers() data-dismiss="modal"> Close </button>
+
+            <!-- Save -->
+            <button type="button" class="btn btn-sm btn-default pull-right" data-dismiss="modal">Save</button>
+
         </div>
       </div>
 
@@ -353,7 +361,7 @@
           <div class='row'>
             
               <!-- Save -->
-              <button type="button" class="btn btn-sm btn-default" ng-click=saveGroup() data-dismiss="modal">
+              <button type="button" class="btn btn-sm btn-default" ng-click=saveGroup()>
                   Create
               </button>
 
