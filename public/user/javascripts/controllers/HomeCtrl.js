@@ -64,7 +64,10 @@ angular.module('studionet')
           title: "A More Complex Example"
         }
       }).then(function(modal) {
-        modal.element.modal();
+        modal.element.modal({
+          backdrop: 'static'
+          // keyboard: false
+        });
 
         /// set data
         modal.scope.setData(data);
