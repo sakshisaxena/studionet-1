@@ -1,27 +1,46 @@
-<div class="row">
+<!-- <div class="row">
 		<div class="col-xs-12">
 			<h1 class='text-center'>Tags 
-<!-- 			<button class="btn btn-default pull-right" ng-click="toggleForm()">Add Tag</button> -->
+			<button class="btn btn-default pull-right" ng-click="toggleForm()">Add Tag</button>
 			</h1>
 		</div>
-		
-		<div class="col-xs-12">
-			<table class="table table-bordered table-hover">
-				<thead>
-					<tr>
-						<th>#</th>
-						<th>Tag</th>
-						<th>DB ID</th>
-					</tr>
-				</thead>
-				<tbody ng-repeat="tag in tags">
-					<tr>
-						<th>{{$index + 1}}</th>
-						<th>{{tag.name}}</th>
-						<th>{{tag.id}}</th>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+	
+</div> -->
 
+<div class='row'>
+	<div class="col-xs-12 col-sm-12">
+		<div class="card card-mini">
+		  <div class="card-header">
+		    <div class="card-title"><h3>All Tags</h3></div>
+		    <ul class="card-action">
+		      <li>
+		        <a href="/admin/#/tags">
+		          <i class="fa fa-refresh"></i>
+		        </a>
+		      </li>
+		    </ul>
+		  </div>
+		  <div class="card-body no-padding table-responsive">
+
+		    <table class="table card-table table-hover">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Tag</th>
+								<th>DB ID</th>
+							</tr>
+						</thead>
+						<tbody ng-repeat="tag in tags">
+							<tr>
+								<th>{{$index + 1}}</th>
+								<th>{{tag.name}}</th>
+								<th>{{tag.id}}</th>
+							</tr>
+						</tbody>
+		    </table>
+		  </div>
+
+		  
+		</div>
+	</div>
 </div>

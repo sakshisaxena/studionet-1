@@ -18,9 +18,9 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 				}]
 			}
 		})
-		.state('modules', {
-			url: '/modules',
-			templateUrl: '/admin/templates/modules.html',
+		.state('groups', {
+			url: '/groups',
+			templateUrl: '/admin/templates/groups.html',
 			controller: 'ModulesCtrl',
 			resolve: {
 				usersPromise: ['users', function(users){
@@ -32,8 +32,8 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 				}]
 			}
 		})
-		.state('module', {
-			url: '/modules/:id',
+		.state('group', {
+			url: '/groups/:id',
 			templateUrl: '/admin/templates/module.html',
 			controller: 'ModuleCtrl',
 			resolve: {

@@ -41,7 +41,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 		.state('user.details', {
 			url: '/details',
 			templateUrl: '/user/templates/user.details.html',
-			controller: 'UserCtrl',
+			controller: 'ProfileCtrl',
 			resolve: {
 				userProfile: ['profile', function(profile){
 					return profile.getUser() && profile.getModules();

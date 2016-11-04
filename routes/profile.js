@@ -72,6 +72,35 @@ router.put('/', auth.ensureAuthenticated, function(req, res){
 });
 */
 
+/*
+ * Allow only name to be changed
+ */
+router.put('/', auth.ensureAuthenticated, function(req, res){
+
+  var query = [
+    'MATCH (u:user) WHERE ID(u)=' + req.user.id,
+    'WITH u',
+    'SET u.name={nameParam}',
+    'RETURN u'
+  ].join('\n');
+
+  var params = {
+      nameParam: req.body.name,
+      // nusOpenIdParam: req.body.nusOpenId, // consider taking this out also, should not change his own account openID
+      // canEditParam: req.body.canEdit, // consider taking this out so that current user cannot edit his own 'can edit' property
+      //yearParam: req.body.year,
+    };
+
+    db.query(query, params, function(error, result){
+      if (error)
+        console.log('Error modifying user: ', error);
+      else
+        res.send(result[0]);
+    });
+});
+
+
+
 // route: /api/profile/user
 // get just the user data for this account
 router.get('/user', auth.ensureAuthenticated, function(req, res){

@@ -27,7 +27,7 @@ angular.module('studionetAdmin')
 
 
 	$http.get('/api/contributions/').success(function(data){
-		$scope.tags = data;
+		$scope.contributions = data;
 	});	
 
 
