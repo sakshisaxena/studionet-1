@@ -9,9 +9,8 @@ angular.module('studionet')
 
   $scope.setData = function(data){
       $scope.data = data;
+      console.log('Data output from DetailsModalCtrl');
       console.log(data);
-
-      
   }
   
   //  This close function doesn't need to use jQuery or bootstrap, because
@@ -24,6 +23,8 @@ angular.module('studionet')
     }, 500); // close, but give 500ms for bootstrap to animate
 
     //$element.modal('hide');
+    $('body').removeClass('modal-open');
+    $('.modal-backdrop').remove();
   };
 
   //  This cancel function must use the bootstrap, 'modal' function because
@@ -32,6 +33,8 @@ angular.module('studionet')
 
     //  Manually hide the modal.
     //$element.modal('hide');
+    // $('body').removeClass('modal-open');
+    // $('.modal-backdrop').remove();
     
     //  Now call close, returning control to the caller.
     close({

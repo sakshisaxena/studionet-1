@@ -1,0 +1,24 @@
+.modal h3{
+
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 20px;
+    text-transform: uppercase;
+    
+    margin: 0px;
+    padding: 0px;
+
+    display: inline-block;
+}
+
+.modal span{
+
+    font-size: 12px;
+    font-style: italic;
+    line-height: 20px;
+    text-transform: none;
+}
+
+.modal-header{
+text-align: center;
+}
