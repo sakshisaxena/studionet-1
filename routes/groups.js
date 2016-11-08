@@ -128,8 +128,6 @@ router.route('/')
 
 	});
 
-//? doesn't seem to be working
-
 
 // route: /api/groups/:groupId
 router.route('/:groupId')
@@ -263,7 +261,7 @@ router.route('/:groupId/users')
 */
 	
 	/*
-	 * Add a user to the group
+	 * Add a user to the group (allow for array of users)
 	 * If group is open, anyone can add himself / herself
 	 * If group is closed, ensure admin is adding the member
 	 * If member exists, the create link

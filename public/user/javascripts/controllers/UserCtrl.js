@@ -169,6 +169,7 @@ angular.module('studionet')
 
 		    	//console.log(data, data);
 				// Add additional data    
+				data.role = $scope.activeGroup.role;
 				$scope.activeGroup = data;
 		    }
 
@@ -210,7 +211,7 @@ angular.module('studionet')
 		$scope.activeGroup.groupParentId = parseInt($scope.activeGroup.groupParentId);
 		console.log($scope.activeGroup);
 
-		/*
+		
 		
 		$http({
 		  method  : 'POST',
@@ -229,7 +230,7 @@ angular.module('studionet')
 		      //$scope.message = data.message;
 		    }
 
-		  })	 */
+		  })	 
 
 		refresh();
 
@@ -302,10 +303,40 @@ angular.module('studionet')
 	}
 
 
-	$scope.addUsers = function(){
+	$scope.addUser = function(user){
 
-		// add users in $scope.groupUsers 
-		// POST /api/groups/:groupId/users/
+		var data = {
+			'userId': user.id,
+			'groupId': $scope.activeGroup.id,
+			'groupRole': 'Member'
+
+		}
+
+
+		if(user.status == "No"){
+
+			// add users in $scope.groupUsers 
+			// POST /api/groups/:groupId/users/
+			$http({
+			  method  : 'POST',
+			  url     : '/api/groups/' + $scope.activeGroup.id +'/users/',
+			  data    : data,  // pass in data as strings
+			  headers : { 'Content-Type': 'application/json' }  // set the headers so angular passing info as form data (not request payload)
+			 })
+			.success(function(data) {
+			    
+			    if(data){
+			    	user.status = "Yes"
+			    }
+
+			  })				
+		}
+		else{
+			// remove user from group
+			user.status = "No";
+		}
+		
+
 	}
 
 

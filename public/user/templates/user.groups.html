@@ -131,7 +131,7 @@
           <div class='col-sm-9'>
             <p><b>User Count </b> {{activeGroup.users}}</p>
             <p><b>Created By </b>{{activeGroup.owner}}</p>
-            <p><b>Type </b>{{activeGroup.restricted == true ? "Closed Group" : "Open Group"}}</p>
+            <p><b>Type </b>{{activeGroup.restricted == "true" ? "Closed Group" : "Open Group"}}</p>
             <!-- <p><b>Frequently Used Tags</b> #tag1, #tag2, #tag3 </p> -->
           </div>
         </div>
@@ -143,9 +143,9 @@
 
 
             <!-- Close -->
-            <button type="button" class="btn btn-sm btn-default" data-dismiss="modal"
+            <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" 
               ng-click = '(activeGroup.role === undefined) ?  joinGroup() : leaveGroup()' >
-              {{ activeGroup.role === undefined ? "Join Group" : "Leave Group" }}
+             {{ activeGroup.role ? (activeGroup.role=="Admin"? "Delete Group" : "Leave Group")  : "Join Group"}} 
             </button>
 
             <!-- Close -->
@@ -252,10 +252,10 @@
                 </tr>
               </thead>
               <tbody ng-repeat="user in users">
-                <tr>
+                <tr ng-click="addUser(user)">
                   <th>{{user.nusOpenId}}</th>
                   <th>{{user.name}}</th>
-                  <th ng-click='user.status=="Yes"? user.status="No" : user.status="Yes"'>{{user.status}}</th>
+                  <th>{{user.status}}</th>
                 </tr>
               </tbody>
             </table>
@@ -268,10 +268,10 @@
         <div class='row'>
             
             <!-- Close -->
-            <button type="button" class="btn btn-sm btn-default pull-right" ng-click=addUsers() data-dismiss="modal"> Close </button>
+            <button type="button" class="btn btn-sm btn-default pull-right" data-dismiss="modal"> Close </button>
 
             <!-- Save -->
-            <button type="button" class="btn btn-sm btn-default pull-right" data-dismiss="modal">Save</button>
+<!--             <button type="button" class="btn btn-sm btn-default pull-right" data-dismiss="modal">Save</button> -->
 
         </div>
       </div>
