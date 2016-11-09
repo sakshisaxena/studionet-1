@@ -1,1 +1,47 @@
-<h1> User Connectivity Graph </h1>
+<link rel='stylesheet' href='./stylesheets/graph-style.css' />
+<script src="https://cdn.rawgit.com/cpettitt/dagre/v0.7.4/dist/dagre.min.js"></script>
+<script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-dagre/1.1.2/cytoscape-dagre.js"></script>
+
+<!-- div to host the information panel on hover -->
+<div id='content-block-hover'></div>
+
+<!-- actual graph container -->
+<div class='graph-container'>
+
+
+  
+  <div class='graph-controls'>
+    <img class='graph-nav-control zoom-extents' src='./img/expand.svg'/>
+  </div>
+
+    <div id='cy'></div>
+   
+</div>
+
+
+<!-- Modal -->
+<ui-view></ui-view>
+
+<!-- create a contribution -->
+<div class="btn-floating" id="help-actions">
+  <div class="btn-bg"></div>
+  <button type="button" class="btn btn-default btn-toggle" data-toggle="toggle" data-target="#help-actions">
+    <i class="icon fa fa-plus"></i>
+    <span class="help-text">Create a contribution</span>
+  </button>
+  <div class="toggle-content">
+    <ul class="actions">
+      <li><a href="#">Website</a></li>
+      <li><a href="#">Documentation</a></li>
+      <li><a href="#">Issues</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+  </div>
+</div>
+
+
+
+
+<!-- Layout files for Cytoscape -->
+<script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-cose-bilkent/1.0.5/cytoscape-cose-bilkent.js"></script>
+ 
