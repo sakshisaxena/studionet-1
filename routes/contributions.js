@@ -10,23 +10,46 @@ var db = require('seraph')({
 
 // route: /api/contributions
 router.route('/')
-	// get all contributions
+	/*
+	 * Returns all contributions, including the name, created by, created on and id of the contribution.
+	 */
 	.get(function(req, res){
-		res.send('placeholder response');
+
+		var query = [
+			'MATCH (c:contribution)',
+			'WITH c',
+			'RETURN ({title: c.title, createdBy: c.createdBy, dateCreated: c.dateCreated, id: id(c)})'		
+		].join('\n');
+
+		db.query(query, function(error, result) {
+			if (error)
+				console.log('Error fetching all contributions in the database');
+			else
+				res.send(result);
+		})
+
 	})
 
-	// create a new contribution linked to the current user
+	/*
+	 * Creates a new contribution linked to the current user.
+	 *
+	 * Links created:
+	 * Reference link -  Might link itself to another contribution if ref != -1
+	 * Tag link - Links itself to the tags specified in the req body, creating them if necessary. 
+	 *           If tags are created, contribution creator will be set to this tags as the creator of these tags.
+	 *
+	 */
 	.post(auth.ensureAuthenticated, function(req, res){
 
 		var query = [
-			'CREATE (c:contribution {title: {contributionTitleParam}, body: {contributionBodyParam},' +
+			'CREATE (c:contribution {createdBy: {createdByParam}, title: {contributionTitleParam}, body: {contributionBodyParam},' +
 			                         'ref: {contributionRefParam}, lastUpdated:{lastUpdatedParam},' +
-			                         'dateCreated: {dateCreatedParam}, editted: {edittedParam},' +
-			                         'labels: {contributionLabelParam}, contributionTypes: {contributionTypesParam}}) WITH c',
-			'MATCH (u:user) WHERE id(u)=' + req.user.id,
+			                         'dateCreated: {dateCreatedParam}, editted: {edittedParam}}) WITH c',
+			'MATCH (u:user) WHERE id(u)={createdByParam}',
 			'CREATE (u)-[r:CREATED]->(c)'
 		];
 
+		// This is where the reference link is created, if necessary.
 		// if not linked to anything, put -1
 		// reference type: REPLYTO, 
 		if (parseInt(req.body.ref) !== -1){
@@ -34,11 +57,21 @@ router.route('/')
 			query.push('CREATE (c)-[r1:{refTypeParam}]->(c1)')
 		}
 
+		// This is where the tag links are created, if necessary.
+		// Furthermore, if a tag does not exist yet, create them and set the user as the creator.
+		var tagString = 'FOREACH (tagName in {tagsParam} |'
+										+ 'MERGE (t: tag {name: tagName})'
+										+ 'ON CREATE SET t.createdBy = {createdByParam}'
+										+ 'CREATE UNIQUE (c)-[r2:TAGGED]->(t)'; // link the contribution to this tag
+		query.push(tagString);
+
 		query = query.join('\n');
 
 		var date = Date.now();
 
 		var params = {
+			tagsParam: req.user.tags,
+			createdByParam: req.user.id,
 			contributionTitleParam: req.body.title,
 			contributionBodyParam: req.body.body,
 			contributionRefParam: req.body.ref, 
@@ -46,11 +79,7 @@ router.route('/')
 			dateCreatedParam: date,
 			refTypeParam: req.body.refType,
 			edittedParam: false,
-			contributionLabelParam: req.body.labels, //tags
-			contributionTypesParam: req.body.contributionTypes,
-			contributionDescriptionParam: 'This is a short description of the post', 
-			contributionContentParam: 'Lorem ipsum Eiusmod velit amet irure voluptate elit nulla qui aliquip voluptate occaecat minim culpa eiusmod.'
-		};
+			};
 
 		db.query(query, params, function(error, result){
 			if (error)
@@ -61,15 +90,19 @@ router.route('/')
 
 	});
 
-
 // route: /api/contributions/:contributionId
 router.route('/:contributionId')
+	// Get a specific contribution details by its id: contribution content, contribution statistics & author information
 	.get(auth.ensureAuthenticated, function(req, res){
 
 		var query = [
-			'MATCH (c:contribution) WHERE ID(c)=' + req.params.contributionId,
+			'MATCH (c:contribution) WHERE ID(c)={contributionIdParam}',
 			'RETURN c'
 		].join('\n');
+
+		var params = {
+			contributionIdParam: req.params.contributionId
+		}
 
 		db.query(query, function(error, result){
 			if (error)

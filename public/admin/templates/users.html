@@ -1,31 +1,28 @@
 
-<!-- 	<div class="col-xs-12">
-		<div class="col-xs-12" ng-show="showForm">
-			<h3>Add a new user</h3>
-			<form ng-submit="addNewUser()">
-				<div class="form-group">
-					<input type="text" class="form-control" placeholder="Name of User" ng-model="userName">
-				</div>
-				<div class="form-group">
-					<input type="text" class="form-control" placeholder="User NUS OpenID" ng-model="userNusOpenId">
-				</div>
-				<button class="btn btn-success pull-right">Add user</button>
-			</form>
-		</div>
-	</div> -->
-
 <div class='row'>
 	<div class="col-xs-12 col-sm-12">
 		<div class="card card-mini">
 		  <div class="card-header">
 		    <div class="card-title"><h3>All Users</h3></div>
-		    <ul class="card-action">
-		      <li>
-		        <a href="#users">
-		          <i class="fa fa-refresh"></i>
-		        </a>
-		      </li>
-		    </ul>
+		      <nav>
+		            <ul class="pagination">
+		              <li>
+		                <a href="#" aria-label="Previous">
+		                  <span aria-hidden="true">&laquo;</span>
+		                </a>
+		              </li>
+		              <li><a href="#">1</a></li>
+		              <li class="active"><a href="#">2</a></li>
+		              <li><a href="#">3</a></li>
+		              <li><a href="#">4</a></li>
+		              <li><a href="#">5</a></li>
+		              <li>
+		                <a href="#" aria-label="Next">
+		                  <span aria-hidden="true">&raquo;</span>
+		                </a>
+		              </li>
+		            </ul>
+		        </nav>
 		  </div>
 		  <div class="card-body no-padding table-responsive">
 
