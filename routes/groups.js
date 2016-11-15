@@ -25,7 +25,8 @@ router.route('/')
 		
 		var query = [
 			'MATCH (g:group)',
-			'RETURN {name: g.name, id: id(g), description: g.description, restricted: g.restricted}'
+			'OPTIONAL MATCH (g)-[:SUBGROUP]->(p:group)',
+			'RETURN {name: g.name, id: id(g), description: g.description, restricted: g.restricted, parentId: id(p)}'
 		].join('\n'); 
 
 		/*
