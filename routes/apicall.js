@@ -12,7 +12,7 @@ function apiCall(query, callback){
                       {
                         "statement": query,
                         "resultDataContents": [
-                          "graph"
+                          "graph", "row"
                         ],
                         "includeStats": true
                       }
@@ -26,7 +26,7 @@ function apiCall(query, callback){
         url: db_loc
       };
 
-      request(options, function (err, result, body) {
+      request(options, function (err, result, body) { 
         if (err) {
           inspect(err, 'error posting json')
           return
@@ -39,5 +39,6 @@ function apiCall(query, callback){
         callback(body.results[0].data);
       });
 };
+
 
 module.exports = apiCall;
