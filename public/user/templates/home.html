@@ -14,12 +14,66 @@
   <div class="sidebar-menu">
     <ul class="sidebar-nav">
 
-      <!-- filters -->
-      <label class="radio-inline"><input type="radio" name="layout-radio" value='CIRCLE_GRAPH_LAYOUT' >Filter 1</label>
-      <label class="radio-inline"><input type="radio" name="layout-radio" value='CIRCLE_GRAPH_LAYOUT' >Filter 2</label>
-      <label class="radio-inline"><input type="radio" name="layout-radio" value='CIRCLE_GRAPH_LAYOUT' >Filter 3</label>
-      <label class="radio-inline"><input type="radio" name="layout-radio" value='CIRCLE_GRAPH_LAYOUT' >Filter 4</label>
+      <!--filters try -->
 
+          <div class="col-lg-4">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <i class="glyphicon glyphicon-th-list"></i> Account Manager - [extra-buttons = true] <a href="#" data-toggle="modal" data-target="#AccountManagerTreeModal"><i class="pull-right glyphicon glyphicon-plus" style="color:white;"></i></a>
+                    </div>
+                              <multiselect-searchtree data-input-model="data" multi-select="true"
+                                            data-output-model="selectedItem2" data-callback="CustomCallback(item, selectedItems)"
+                                            data-select-only-leafs="false" extra-buttons="true"></multiselect-searchtree>
+                </div>                
+            </div>
+      
+
+      <!-- filters -->
+      <li class="dropdown">
+        <div id="filters">
+            <input id="search" type="text" placeholder="Search.." ng-model="searchText" >
+            <!-- <button class="btn-search" ><i class="fa fa-search"></i></button> -->
+            <div ng-init="filterData"></div>
+
+              <div id="searchTextResults" >
+                <div class="collapse-menu filter-class">
+                  
+                  <h4>By Author</h4>
+                  <div class="filter-option">
+                    <ul ng-repeat="f in filterData | filter:searchText">
+                      <div ng-if="f.parent === -1" id="{{f.id}}" class="mainGroup">
+                        <li> <input type="checkbox" ng-model="f.id"> {{f.name}} </input>
+                              <div class="subgroups">
+
+                              </div>
+                        </li>
+                      </div>
+                    
+
+                    </ul>
+                    <script>
+                    $('.filter-option').load(function() {
+                        alert("HI");
+                        var scope = angular.element("#filters").scope();
+                        for(var i=0; i<scope.filterData.length;i++){
+                          var d= scope.filterData[i];
+                        
+                          if(d.parent!=-1){
+                            console.log("yes");
+                            $('#'+d.parent).find('div').append('<input type="checkbox" ng-model="'+d.id+'"> '+ d.name+'</input> <br>');
+                          }
+                        }
+                    });
+                </script>
+                </div>
+
+                </div>
+            
+              </div>
+         
+        </div>
+        </li>
+      
 
       <!-- user profile -->
       <li>

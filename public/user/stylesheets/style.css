@@ -324,3 +324,14 @@ header{
 }
 
 
+
+/*
+ *	Graph Filters 
+ */
+ #searchTextResults{
+ 	margin-left:-50px;
+ }
+
+ .subgroups{
+ 	margin-left: 20%;
+ }
