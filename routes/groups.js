@@ -105,7 +105,7 @@ router.route('/')
 			'CREATE UNIQUE (g)-[r:MEMBER {role: "Admin"}]->(u)',
 			'MERGE (t:tag {name: {nameParam}})',
 			'WITH g, t',
-			'CREATE UNIQUE (g)-[r1:TAGGED]->(t)',
+			'CREATE UNIQUE (g)-[r1:TAG]->(t)',
 		];
 
 		if (req.body.groupParentId != -1) {
