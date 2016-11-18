@@ -81,6 +81,16 @@ router.route('/')
 			edittedParam: false,
 			};
 
+		/*
+		 *	Only to allow creationg of synthetic data; 
+		 *	Changes creating user from actual user to user specified;
+		 *	!! Remove in production
+		 * 
+		 */
+		params.createdByParam = req.body.author;		
+
+
+
 		db.query(query, params, function(error, result){
 			if (error)
 				console.log('Error creating new post for user : ' + req.user.nusOpenId);
