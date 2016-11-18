@@ -34,3 +34,32 @@ angular.module('studionetAdmin')
 
 
 }]);
+
+
+/*
+ *	Remove in production
+ *
+ *
+ * 
+ */
+angular.module('studionetAdmin').controller('TestCtrl', ['$scope', '$http', function($scope, $http){
+
+	$scope.users = [];
+	$scope.tags = [];
+	$scope.contributions = [];
+	
+	$http.get('/api/users/').success(function(data){
+		$scope.users = data;
+	});		
+
+	$http.get('/api/tags/').success(function(data){
+		$scope.tags = data;
+	});		
+
+
+	$http.get('/api/contributions/').success(function(data){
+		$scope.contributions = data;
+	});	
+
+
+}]);

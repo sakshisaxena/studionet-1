@@ -18,6 +18,16 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 				}]
 			}
 		})
+		/*
+		 *  Should be remove in production; 
+		 *  Only for testing purposes to create synthetic data set
+		 *  Remove TestCtrl from HomeCtrl file
+		 */ 
+		.state('testing', {
+			url: '/tests',
+			templateUrl: '/admin/templates/testing.html',
+			controller: 'TestCtrl'
+		})
 		.state('groups', {
 			url: '/groups',
 			templateUrl: '/admin/templates/groups.html',
