@@ -36,6 +36,20 @@ angular.module('studionet')
 
     };
 
+    $scope.selectedItem2 = {};
+
+    $scope.filterRequest = function(data){
+
+        //alert($scope.selectedItem2);
+        var selectedFilters = $scope.selectedItem2;
+        var grp=[];
+        for(var j=0;j<selectedFilters.length;j++){
+          grp.push(selectedFilters[j].id);
+        }
+        alert(grp);
+
+    };
+
 $(document).ready(function() { 
 
      $(".filter-heading").click(function(){
