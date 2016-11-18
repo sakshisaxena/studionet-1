@@ -19,7 +19,7 @@
       <!--filters try -->
 
           <div>
-                <div class="filter-panel panel panel-primary" >
+                <div class="filter-panel panel badge-success" >
                     <div class="filter-heading">
                         </i> Author <a href="#" data-toggle="modal" data-target="#AccountManagerTreeModal"></a>
                     </div>
@@ -27,8 +27,17 @@
                                             data-output-model="selectedItem2" data-callback="CustomCallback(item, selectedItems)"
                                             data-select-only-leafs="false" extra-buttons="false" class="filter1" style="display:none"></multiselect-searchtree>
                 </div>
+
+                 <div class="filter-panel panel badge-success" >
+                    <div class="filter-heading">
+                        </i> Tags <a href="#" data-toggle="modal" data-target="#AccountManagerTreeModal"></a>
+                    </div>
+                              <multiselect-searchtree data-input-model="dataTags" multi-select="true"
+                                            data-output-model="selectedItem3" data-callback="CustomCallback(item, selectedItems)"
+                                            data-select-only-leafs="false" extra-buttons="false" class="filter1" style="display:none"></multiselect-searchtree>
+                </div>
                 
-                  <div class="icon apply-filter" ng-click="filterRequest()">
+                  <div class="icon apply-filter" ng-click="filterRequest()" style="cursor:pointer">
                     <i class="fa fa-shopping-basket" aria-hidden="true"></i>
                   </div>
                   <div class="title">Filter Graph</div>

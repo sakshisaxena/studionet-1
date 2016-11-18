@@ -337,11 +337,11 @@ header{
  }
 
  .filter-panel{
- 	margin-left: 20%;
+ 	margin-left: 10px;
  	margin-right: 1px;
  	margin-bottom: 0px;
  	font-size: 12px;
- 	width: 70%;
+ 	width: 180px;
  	position: relative;
  }
 

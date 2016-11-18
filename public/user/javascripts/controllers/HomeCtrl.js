@@ -46,6 +46,11 @@ angular.module('studionet')
         for(var j=0;j<selectedFilters.length;j++){
           grp.push(selectedFilters[j].id);
         }
+        var selectedFilters2 = $scope.selectedItem3;
+        
+        for(var j=0;j<selectedFilters2.length;j++){
+          grp.push(selectedFilters2[j].id);
+        }
         alert(grp);
 
     };
@@ -57,6 +62,23 @@ $(document).ready(function() {
      });
 
 
+      $http.get('/api/tags/').success(function(data){
+        console.log("tags");
+        console.log(data);
+        var tags = [];
+        var list = data;
+        for(var i=0;i<list.length;i++){
+          var obj ={
+            name: list[i].name,
+            id: list[i].id,
+            
+            isExpanded: false,
+            children:[]
+          }
+          tags.push(obj);
+        }
+        $scope.dataTags= angular.copy(tags);
+      });
       
       $http.get('/api/groups/').success(function(data){
         
@@ -125,21 +147,7 @@ $(document).ready(function() {
 
 
       
-$('#search').trigger('click');
 
-
-     $('#search').click(function(){
-                        
-                        var scope = angular.element("#filters").scope();
-                        for(var i=0; i<scope.filterData.length;i++){
-                        var d= scope.filterData[i];
-                        
-                        if(d.parent!=-1){
-                          console.log("yes");
-                          $('#'+d.parent).find('div').append('<input type="checkbox" ng-model="'+d.id+'"> '+ d.name+'</input> <br>');
-                        }
-                      }
-                      });
 });
 
 
@@ -153,16 +161,6 @@ $('#search').trigger('click');
 
 
 
-$('.filter-option').load(function() {
-        var scope = angular.element("#filters").scope();
-                        for(var i=0; i<scope.filterData.length;i++){
-                        var d= scope.filterData[i];
-                        
-                        if(d.parent!=-1){
-                          console.log("yes");
-                          $('#'+d.parent).find('div').append('<input type="checkbox" ng-model="'+d.id+'"> '+ d.name+'</input> <br>');
-                        }
-                      }
-});
+
 
 }]);
