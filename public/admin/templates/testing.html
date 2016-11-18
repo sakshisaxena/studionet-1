@@ -1,0 +1,58 @@
+<div class='row'>
+	<div class="col-xs-12 col-sm-12">
+		<div class="card card-mini">
+			<div class="card-header">
+		    	<div class="card-title"><h3>Create a contribution</h3></div>
+		    </div>
+		    <div class="card-body">
+		    	<div class='row'>
+			    	<div class='col-sm-6'>
+			    		<div class='row'>
+							<label for="singleSelect"> Author: </label><br>
+						    <select name="singleSelect" id="singleSelect" ng-model="contributionData.author">
+						      <option ng-repeat="user in users" value={{user.id}}>{{user.name}}</option>
+						    </select>
+						</div>
+
+			    		<div class='row'>
+							<label for="singleSelect"> Linked to: </label><br>
+						    <select name="singleSelect" id="singleSelect" ng-model="contributionData.ref">
+						      <option ng-repeat="contribution in contributions" value={{contribution.id}}>{{contribution.title}}</option>
+						    </select>
+						</div>
+
+					    <br>
+
+					    <div class='row'>
+				    		<input value='Title' ng-model="contributionData.title"></input>
+				    	</div>
+			    	</div>
+			    	<div class='col-sm-6'>
+			    		<div class='row'>
+							<label for="singleSelect"> Tags: </label><br>
+						    <select ng-model="contributionData.tags" multiple>
+						      <option ng-repeat="tag in tags" value="{{tag.name}}">{{tag.name}}</option>
+						    </select>
+						    <input ng-model="tag"></input><button ng-click=addTag()>Add</button>
+						</div>
+
+						<br>
+
+					    <div class='row'>
+				    		<input type="textarea" rows=5></input>
+				    	</div>
+				    </div>
+				</div>
+				<div class='row'>
+					<button type="button" class="btn btn-default">Submit</button>
+				</div>
+		    </div>
+		</div>
+	</div>
+</div>
+
+<div class='row'>
+	<div class="col-xs-12 col-sm-12">
+{{ contributionData }}
+	</div>
+</div>

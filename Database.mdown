@@ -1,0 +1,366 @@
+### Core Components, Relationships and Properties
+
+#### Users Properties
+
+- nusOpenId
+- canEdit
+- name
+- superAdmin
+- invitedBy (userID)
+- invitedOn
+- joinedOn
+
+#### User Relationship
+-User <- Group   [:MEMBER {role: "Admin"/"User"}]
+-User <- Group   [:CREATED {on: "Date"}]
+-User -> Tag [:CREATED {createdOn : "Date"}]
+-User -> Contribution [:CREATED {createdOn : "Date"}]
+-User -> Contribution [:VIEWED {count: 0, lastViewed : "Date"}]
+-User -> Contribution [:RATED {rating: 0, lastRated : "Date"}]
+
+#### Groups Properties
+
+- restricted
+- name
+- description
+
+#### Group Relationship
+-User <- Group   [:MEMBER {role: "Admin"/"User", on:'Date'}]
+-Group -> Group [:SUBGROUP]
+-Group -> Tag [:TAG]
+
+#### Tag Properties
+
+- name
+- createdBy (userID)
+
+#### Tag Relationships
+-User -> Tag [:CREATED {createdOn : "Date"}]
+-Group -> Tag [:TAG]
+-Contribution -> Tag [:TAGGED {createdBy: user-id}]
+
+
+#### Contribution Properties
+
+- title
+- body
+- ref
+- lastUpdated
+- editted
+- content-type
+
+#### Contribution Relationships
+-User -> Contribution [:CREATED {createdOn : "Date"}]
+-User -> Contribution [:VIEWED {count: 0, lastViewed : "Date"}]
+-User -> Contribution [:RATED {rating: 0, lastRated : "Date"}]
+-Contribution -> Tag [:TAGGED {createdBy: user-id}]
+-Contribution -> Contribution [:LINKED {by: <id>, relationship: "question/answer/comment/--"}]
+
+
+
+####### Dummy Database
+
+
+### Dummy Users (JS Code) 
+
+
+var users = [{"name":"Zak","surname":"White","gender":"male","region":"England"},{"name":"Tyler","surname":"Anderson","gender":"male","region":"England"},{"name":"Gabriel","surname":"Lee","gender":"male","region":"England"},{"name":"William","surname":"Clarke","gender":"male","region":"England"},{"name":"Aidan","surname":"Wilson","gender":"male","region":"England"},{"name":"Francesca","surname":"Hunt","gender":"female","region":"England"},{"name":"Bailey","surname":"Roberts","gender":"male","region":"England"},{"name":"Edward","surname":"Edwards","gender":"male","region":"England"},{"name":"Georgia","surname":"Morris","gender":"female","region":"England"},{"name":"Bethany","surname":"Scott","gender":"female","region":"England"},{"name":"Eve","surname":"Ross","gender":"female","region":"England"},{"name":"Paige","surname":"Richards","gender":"female","region":"England"},{"name":"Paige","surname":"Palmer","gender":"female","region":"England"},{"name":"Michael","surname":"Cook","gender":"male","region":"England"},{"name":"Alexander","surname":"Cooper","gender":"male","region":"England"},{"name":"Ryan","surname":"Cooper","gender":"male","region":"England"},{"name":"Abigail","surname":"Parker","gender":"female","region":"England"},{"name":"Oscar","surname":"James","gender":"male","region":"England"},{"name":"Max","surname":"Rogers","gender":"male","region":"England"},{"name":"Mia","surname":"Wilkinson","gender":"female","region":"England"},{"name":"Bailey","surname":"Jones","gender":"male","region":"England"},{"name":"Thomas","surname":"Owen","gender":"male","region":"England"},{"name":"Madeleine","surname":"Butler","gender":"female","region":"England"},{"name":"Erin","surname":"Fox","gender":"female","region":"England"},{"name":"Christopher","surname":"Young","gender":"male","region":"England"},{"name":"Sienna","surname":"Holmes","gender":"female","region":"England"},{"name":"Ava","surname":"Cox","gender":"female","region":"England"},{"name":"Brooke","surname":"Hill","gender":"female","region":"England"},{"name":"Christopher","surname":"Walker","gender":"male","region":"England"},{"name":"Katie","surname":"Lloyd","gender":"female","region":"England"},{"name":"Lucy","surname":"Scott","gender":"female","region":"England"},{"name":"Finlay","surname":"Rogers","gender":"male","region":"England"},{"name":"Rebecca","surname":"Knight","gender":"female","region":"England"},{"name":"Lauren","surname":"White","gender":"female","region":"England"},{"name":"Harriet","surname":"Moore","gender":"female","region":"England"},{"name":"Leon","surname":"Brown","gender":"male","region":"England"},{"name":"Sean","surname":"Watson","gender":"male","region":"England"},{"name":"Abbie","surname":"Matthews","gender":"female","region":"England"},{"name":"Taylor","surname":"Clarke","gender":"male","region":"England"},{"name":"Max","surname":"Clarke","gender":"male","region":"England"},{"name":"Skye","surname":"Rose","gender":"female","region":"England"},{"name":"Amelia","surname":"Jones","gender":"female","region":"England"},{"name":"Abbie","surname":"Phillips","gender":"female","region":"England"},{"name":"Jake","surname":"Ward","gender":"male","region":"England"},{"name":"Alex","surname":"Saunders","gender":"male","region":"England"},{"name":"Riley","surname":"Cooper","gender":"male","region":"England"},{"name":"Lola","surname":"Parker","gender":"female","region":"England"},{"name":"Bailey","surname":"Wright","gender":"male","region":"England"},{"name":"Freddie","surname":"Carter","gender":"male","region":"England"},{"name":"Georgia","surname":"Matthews","gender":"female","region":"England"},{"name":"Lola","surname":"Graham","gender":"female","region":"England"},{"name":"Molly","surname":"Cook","gender":"female","region":"England"},{"name":"Rebecca","surname":"Stevens","gender":"female","region":"England"},{"name":"Naomi","surname":"Adams","gender":"female","region":"England"},{"name":"Bradley","surname":"Khan","gender":"male","region":"England"},{"name":"Amber","surname":"Reid","gender":"female","region":"England"},{"name":"Evie","surname":"Robertson","gender":"female","region":"England"},{"name":"Caitlin","surname":"Richardson","gender":"female","region":"England"},{"name":"Reece","surname":"Marshall","gender":"male","region":"England"},{"name":"Alicia","surname":"Carter","gender":"female","region":"England"}]
+
+var str = "";
+for(var i=0; i < users.length; i++){
+	
+	var user = users[i];
+	str += " CREATE (u" + i + ":user { nusOpenId: \"" + user.name + "\", name: \"" + user.name + " " + user.surname + "\", " + 
+	       "canEdit: true, " + 
+	       "superAdmin: false, " +
+	       "invitedBy: 1, " +
+	       "invitedOn: \"January 1, 2017\", " +
+	       "joinedOn: \"January 1, 2017\" }) "
+
+
+
+}
+
+str += " RETURN u0"
+console.log(str);
+
+
+
+---------- January 1, 2017 -----------------------------
+
+# Patrick creates first module for Digital Design on January 1, 2017
+MATCH (n:user) WHERE n.nusOpenId = 'AKIPHTJ'
+CREATE (g:group {name: 'AR2302-Digital Design', restricted: false, description: 'Digital Design Module in the Architecture Department'})
+CREATE (t:tag {name: 'AR2302-Digital Design'})
+CREATE (g) - [:TAG] -> (t)
+CREATE (n) - [:CREATED {on:'January 1, 2017'}] -> (g)
+CREATE (g) - [:MEMBER {role : "Admin", on:'January 1, 2017'}] -> (n)
+RETURN n, g, t
+
+
+# Patrick invites all users to be member of this module
+MATCH (u:user) WHERE NOT u.nusOpenId = 'AKIPHTJ'
+MATCH (g:group {name: 'AR2302-Digital Design', restricted: false, description: 'Digital Design Module in the Architecture Department'})
+CREATE (g) - [:MEMBER {role : "Member", on:'January 1, 2017'}] -> (u)
+RETURN u, g
+
+
+# Patrick creates subgroup of Digital Design - for Spring 2017
+MATCH (n:user) WHERE n.nusOpenId = 'AKIPHTJ'
+MATCH (pg:group {name: 'AR2302-Digital Design', restricted: false, description: 'Digital Design Module in the Architecture Department'})
+CREATE (g:group {name: 'AR2302-Digital Design-Spring17', restricted: false, description: 'Digital Design Module - Spring 2017'})
+CREATE (t:tag {name: 'AR2302-Digital Design-Spring17'})
+CREATE (g) - [:TAG] -> (t)
+CREATE (pg) - [:SUBGROUP] -> (g)
+CREATE (n) - [:CREATED {on:'January 1, 2017'}] -> (g)
+CREATE (g) - [:MEMBER {role : "Admin", on:'January 1, 2017'}] -> (n)
+RETURN n, g, t
+
+
+# Patrick invites all users to be member of this subgroup
+MATCH (u:user) WHERE NOT u.nusOpenId = 'AKIPHTJ'
+MATCH (g:group {name: 'AR2302-Digital Design-Spring17', restricted: false, description: 'Digital Design Module - Spring 2017'})
+CREATE (g) - [:MEMBER {role : "Member", on:'January 1, 2017'}] -> (u)
+RETURN u, g
+
+
+# Patrick creates 6 groups of 10 students each
+MATCH (n:user) WHERE n.nusOpenId = 'AKIPHTJ'
+MATCH (pg:group {name: 'AR2302-Digital Design-Spring17', restricted: false, description: 'Digital Design Module - Spring 2017'})
+CREATE (g:group {name: 'AR2302-Digital Design-Spring17-Team1', restricted: false, description: 'Digital Design Module - Spring 2017 - Team1'})
+CREATE (t:tag {name: 'AR2302-Digital Design-Spring17-Team1'})
+CREATE (g) - [:TAG] -> (t)
+CREATE (pg) - [:SUBGROUP] -> (g)
+CREATE (n) - [:CREATED {on:'January 1, 2017'}] -> (g)
+CREATE (g) - [:MEMBER {role : "Admin", on:'January 1, 2017'}] -> (n)
+RETURN n, g, t
+
+MATCH (n:user) WHERE n.nusOpenId = 'AKIPHTJ'
+MATCH (pg:group {name: 'AR2302-Digital Design-Spring17', restricted: false, description: 'Digital Design Module - Spring 2017'})
+CREATE (g:group {name: 'AR2302-Digital Design-Spring17-Team2', restricted: false, description: 'Digital Design Module - Spring 2017 - Team2'})
+CREATE (t:tag {name: 'AR2302-Digital Design-Spring17-Team2'})
+CREATE (g) - [:TAG] -> (t)
+CREATE (pg) - [:SUBGROUP] -> (g)
+CREATE (n) - [:CREATED {on:'January 1, 2017'}] -> (g)
+CREATE (g) - [:MEMBER {role : "Admin", on:'January 1, 2017'}] -> (n)
+RETURN n, g, t
+
+MATCH (n:user) WHERE n.nusOpenId = 'AKIPHTJ'
+MATCH (pg:group {name: 'AR2302-Digital Design-Spring17', restricted: false, description: 'Digital Design Module - Spring 2017'})
+CREATE (g:group {name: 'AR2302-Digital Design-Spring17-Team3', restricted: false, description: 'Digital Design Module - Spring 2017 - Team3'})
+CREATE (t:tag {name: 'AR2302-Digital Design-Spring17-Team3'})
+CREATE (g) - [:TAG] -> (t)
+CREATE (pg) - [:SUBGROUP] -> (g)
+CREATE (n) - [:CREATED {on:'January 1, 2017'}] -> (g)
+CREATE (g) - [:MEMBER {role : "Admin", on:'January 1, 2017'}] -> (n)
+RETURN n, g, t
+
+MATCH (n:user) WHERE n.nusOpenId = 'AKIPHTJ'
+MATCH (pg:group {name: 'AR2302-Digital Design-Spring17', restricted: false, description: 'Digital Design Module - Spring 2017'})
+CREATE (g:group {name: 'AR2302-Digital Design-Spring17-Team4', restricted: false, description: 'Digital Design Module - Spring 2017 - Team4'})
+CREATE (t:tag {name: 'AR2302-Digital Design-Spring17-Team4'})
+CREATE (g) - [:TAG] -> (t)
+CREATE (pg) - [:SUBGROUP] -> (g)
+CREATE (n) - [:CREATED {on:'January 1, 2017'}] -> (g)
+CREATE (g) - [:MEMBER {role : "Admin", on:'January 1, 2017'}] -> (n)
+RETURN n, g, t
+
+MATCH (n:user) WHERE n.nusOpenId = 'AKIPHTJ'
+MATCH (pg:group {name: 'AR2302-Digital Design-Spring17', restricted: false, description: 'Digital Design Module - Spring 2017'})
+CREATE (g:group {name: 'AR2302-Digital Design-Spring17-Team5', restricted: false, description: 'Digital Design Module - Spring 2017 - Team5'})
+CREATE (t:tag {name: 'AR2302-Digital Design-Spring17-Team5'})
+CREATE (g) - [:TAG] -> (t)
+CREATE (pg) - [:SUBGROUP] -> (g)
+CREATE (n) - [:CREATED {on:'January 1, 2017'}] -> (g)
+CREATE (g) - [:MEMBER {role : "Admin", on:'January 1, 2017'}] -> (n)
+RETURN n, g, t
+
+MATCH (n:user) WHERE n.nusOpenId = 'AKIPHTJ'
+MATCH (pg:group {name: 'AR2302-Digital Design-Spring17', restricted: false, description: 'Digital Design Module - Spring 2017'})
+CREATE (g:group {name: 'AR2302-Digital Design-Spring17-Team6', restricted: false, description: 'Digital Design Module - Spring 2017 - Team6'})
+CREATE (t:tag {name: 'AR2302-Digital Design-Spring17-Team6'})
+CREATE (g) - [:TAG] -> (t)
+CREATE (pg) - [:SUBGROUP] -> (g)
+CREATE (n) - [:CREATED {on:'January 1, 2017'}] -> (g)
+CREATE (g) - [:MEMBER {role : "Admin", on:'January 1, 2017'}] -> (n)
+RETURN n, g, t
+
+
+
+<Change restricted to true>
+
+---------- January 2, 2017 -----------------------------
+
+# Members of the Subgroups join (Normal users start from 7, because I deleted one user before and the ID didn't reset)
+MATCH (u:user) WHERE ID(u) > 6 AND ID(u) < 17
+MATCH (g:group {name: 'AR2302-Digital Design-Spring17-Team1', restricted: true, description: 'Digital Design Module - Spring 2017 - Team1'})
+CREATE (g) - [:MEMBER {role : "Member", on:'January 2, 2017'}] -> (u)
+RETURN u, g
+
+---------- January 3, 2017 -----------------------------
+MATCH (u:user) WHERE ID(u) > 16 AND ID(u) < 27
+MATCH (g:group {name: 'AR2302-Digital Design-Spring17-Team2', restricted: true, description: 'Digital Design Module - Spring 2017 - Team2'})
+CREATE (g) - [:MEMBER {role : "Member", on:'January 3, 2017'}] -> (u)
+RETURN u, g
+
+---------- January 4, 2017 -----------------------------
+MATCH (u:user) WHERE ID(u) > 26 AND ID(u) < 37
+MATCH (g:group {name: 'AR2302-Digital Design-Spring17-Team3', restricted: true, description: 'Digital Design Module - Spring 2017 - Team3'})
+CREATE (g) - [:MEMBER {role : "Member", on:'January 4, 2017'}] -> (u)
+RETURN u, g
+
+---------- January 5, 2017 -----------------------------
+MATCH (u:user) WHERE ID(u) > 36 AND ID(u) < 47
+MATCH (g:group {name: 'AR2302-Digital Design-Spring17-Team4', restricted: true, description: 'Digital Design Module - Spring 2017 - Team4'})
+CREATE (g) - [:MEMBER {role : "Member", on:'January 5, 2017'}] -> (u)
+RETURN u, g
+
+---------- January 6, 2017 -----------------------------
+MATCH (u:user) WHERE ID(u) > 46 AND ID(u) < 57
+MATCH (g:group {name: 'AR2302-Digital Design-Spring17-Team5', restricted: true, description: 'Digital Design Module - Spring 2017 - Team5'})
+CREATE (g) - [:MEMBER {role : "Member", on:'January 6, 2017'}] -> (u)
+RETURN u, g
+
+---------- January 7, 2017 -----------------------------
+MATCH (u:user) WHERE ID(u) > 56 AND ID(u) < 67
+MATCH (g:group {name: 'AR2302-Digital Design-Spring17-Team6', restricted: true, description: 'Digital Design Module - Spring 2017 - Team6'})
+CREATE (g) - [:MEMBER {role : "Member", on:'January 7, 2017'}] -> (u)
+RETURN u, g
+
+
+
+---------- January 8, 2017 -----------------------------
+# Patrick created assignment 1 and tagged with 4 tags
+MATCH (n:user) WHERE n.nusOpenId = 'AKIPHTJ'
+MATCH (t0:tag {name: 'AR2302-Digital Design-Spring17'})
+CREATE (c:contribution {title: 'Assignment1', body: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', lastUpdated: 'January 8, 2017', edited: false, content_type:'text'})
+CREATE (n) - [:CREATED {on:'January 8, 2017'}] -> (c)
+CREATE (t1:tag {name: 'Assignments'})
+CREATE (n) - [:CREATED {on:'January 8, 2017'}] -> (t1)
+CREATE (t2:tag {name: 'Grasshopper'})
+CREATE (n) - [:CREATED {on:'January 8, 2017'}] -> (t2)
+CREATE (t3:tag {name: 'Parametric Modeling'})
+CREATE (n) - [:CREATED {on:'January 8, 2017'}] -> (t3)
+CREATE (c) - [:TAGGED] -> (t0)
+CREATE (c) - [:TAGGED] -> (t1)
+CREATE (c) - [:TAGGED] -> (t2)
+CREATE (c) - [:TAGGED] -> (t3)
+RETURN c
+
+
+# 10 people viewed assignment
+MATCH (u:user) WHERE ID(u) > 56 AND ID(u) < 67
+MATCH (c:contribution {title: 'Assignment1', body: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', lastUpdated: 'January 8, 2017', edited: false, content_type:'text'})
+CREATE (u) - [:VIEWED {count: 1, lastViewed: 'January 8, 2017'}] -> (c)
+RETURN u, c
+
+
+
+
+----- January 9, 2017 --------------------------------
+MATCH (u:user) WHERE ID(u) > 43 AND ID(u) < 48
+MATCH (c:contribution {title: 'Assignment1', body: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', lastUpdated: 'January 8, 2017', edited: false, content_type:'text'})
+CREATE (u) - [:VIEWED {count: 3, lastViewed: 'January 9, 2017'}] -> (c)
+RETURN u, c
+
+
+
+----- January 10, 2017 --------------------------------
+MATCH (u:user) WHERE ID(u) > 6 AND ID(u) < 43
+MATCH (c:contribution {title: 'Assignment1', body: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', lastUpdated: 'January 8, 2017', edited: false, content_type:'text'})
+CREATE (u) - [:VIEWED {count: 1, lastViewed: 'January 10, 2017'}] -> (c)
+RETURN u, c
+
+
+
+----- January 11, 2017 --------------------------------
+## User number 11 asks a question about the grading criteria for the assignment
+MATCH (u:user) WHERE ID(u) = 11
+MATCH (t0:tag {name: 'AR2302-Digital Design-Spring17'})
+MATCH (c0:contribution {title: 'Assignment1', body: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', lastUpdated: 'January 8, 2017', edited: false, content_type:'text'})
+CREATE (c1:contribution {title: 'Grading Criteria', body: 'What would be the grading criteria for this assignment?', lastUpdated: 'January 11, 2017', edited: false, content_type:'text'})
+CREATE (u) - [:CREATED {on:'January 11, 2017'}] -> (c1)
+CREATE (c0) - [:LINKED {by: 11, relationship: 'question'}] -> (c1)
+CREATE (c1) - [:TAGGED] -> (t0)
+RETURN u, c1
+
+
+
+## Patrick answers question
+MATCH (u:user) WHERE ID(u) = 1
+MATCH (t0:tag {name: 'AR2302-Digital Design-Spring17'})
+MATCH (c0:contribution {title: 'Assignment1', body: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', lastUpdated: 'January 8, 2017', edited: false, content_type:'text'})
+MATCH (c1:contribution {title: 'Grading Criteria', body: 'What would be the grading criteria for this assignment?', lastUpdated: 'January 11, 2017', edited: false, content_type:'text'})
+CREATE (c2:contribution {title: 'Grading Criteria', body: 'Grading criteria and resources - Lorem ipsum Ut nulla tempor anim ex esse incididunt labore nostrud ad cupidatat Excepteur eiusmod officia anim sunt irure reprehenderit aliquip mollit.', lastUpdated: 'January 11, 2017', edited: false, content_type:'pdf'})
+CREATE (u) - [:CREATED {on:'January 11, 2017'}] -> (c2)
+CREATE (c0) - [:LINKED {by: 1, relationship: 'resource'}] -> (c2)
+CREATE (c1) - [:LINKED {by: 1, relationship: 'answer'}] -> (c2)
+CREATE (c2) - [:TAGGED] -> (t0)
+RETURN u, c2
+
+
+
+
+----- January 12, 2017 --------------------------------
+## student creates a study group for tampines
+MATCH (u:user) WHERE ID(u) = 20
+CREATE (g:group {name: 'StudyGroup-Tampines', restricted: false, description: 'Study Group for Architecture students in Tampines'})
+CREATE (t:tag {name: 'StudyGroup-Tampines'})
+CREATE (g) - [:TAG] -> (t)
+CREATE (u) - [:CREATED {on:'January 12, 2017'}] -> (g)
+CREATE (g) - [:MEMBER {role : "Admin", on:'January 12, 2017'}] -> (u)
+RETURN u, g, t
+
+
+
+----- January 15, 2017 --------------------------------
+## student creates a study group for tampines
+MATCH (u:user) WHERE ID(u) = 45
+CREATE (g:group {name: 'Grasshopper Enthusiasts', restricted: false, description: 'All Grasshopper Enthusiasts - please share resources and models.'})
+CREATE (t:tag {name: 'Grasshopper Enthusiasts'})
+CREATE (g) - [:TAG] -> (t)
+CREATE (u) - [:CREATED {on:'January 15, 2017'}] -> (g)
+CREATE (g) - [:MEMBER {role : "Admin", on:'January 15, 2017'}] -> (u)
+RETURN u, g, t
+
+
+
+## 25 students join group
+MATCH (u:user) WHERE ID(u) > 20 AND ID(u) < 45
+MATCH (g:group {name: 'Grasshopper Enthusiasts', restricted: false, description: 'All Grasshopper Enthusiasts - please share resources and models.'})
+CREATE (g) - [:MEMBER {role : "Member", on:'January 15, 2017'}] -> (u)
+RETURN u, g
+
+
+
+----- January 16, 2017 --------------------------------

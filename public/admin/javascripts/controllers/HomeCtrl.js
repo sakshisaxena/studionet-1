@@ -47,6 +47,9 @@ angular.module('studionetAdmin').controller('TestCtrl', ['$scope', '$http', func
 	$scope.users = [];
 	$scope.tags = [];
 	$scope.contributions = [];
+
+	$scope.contributionData = { 'tags' : [] };
+	$scope.tag = "";
 	
 	$http.get('/api/users/').success(function(data){
 		$scope.users = data;
@@ -61,5 +64,11 @@ angular.module('studionetAdmin').controller('TestCtrl', ['$scope', '$http', func
 		$scope.contributions = data;
 	});	
 
+
+	$scope.addTag = function(tag){
+
+		$scope.contributionData.tags.push(tag || $scope.tag)
+		$scope.tag = "";
+	}
 
 }]);

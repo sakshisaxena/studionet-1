@@ -87,7 +87,7 @@ router.route('/')
 		 *	!! Remove in production
 		 * 
 		 */
-		params.createdByParam = req.body.user.id;		
+		params.createdByParam = req.body.author;		
 
 
 
