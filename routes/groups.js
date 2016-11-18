@@ -25,7 +25,8 @@ router.route('/')
 		
 		var query = [
 			'MATCH (g:group)',
-			'RETURN {name: g.name, id: id(g), description: g.description, restricted: g.restricted}'
+			'OPTIONAL MATCH (g)-[:SUBGROUP]->(p:group)',
+			'RETURN {name: g.name, id: id(g), description: g.description, restricted: g.restricted, parentId: id(p)}'
 		].join('\n'); 
 
 		/*
@@ -104,7 +105,7 @@ router.route('/')
 			'CREATE UNIQUE (g)-[r:MEMBER {role: "Admin"}]->(u)',
 			'MERGE (t:tag {name: {nameParam}})',
 			'WITH g, t',
-			'CREATE UNIQUE (g)-[r1:TAGGED]->(t)',
+			'CREATE UNIQUE (g)-[r1:TAG]->(t)',
 		];
 
 		if (req.body.groupParentId != -1) {

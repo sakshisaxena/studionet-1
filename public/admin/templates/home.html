@@ -49,28 +49,6 @@
     </div>
 </div>
 
-<!-- <div class="row">
-  <div class="col-xs-12">
-    <div class="card card-banner card-chart card-green no-br">
-      <div class="card-header">
-        <div class="card-title">
-          <div class="title">Activity</div>
-        </div>
-        <ul class="card-action">
-          <li>
-            <a href="/">
-              <i class="fa fa-refresh"></i>
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div class="card-body">
-        <div class="ct-chart-sale"></div>
-      </div>
-    </div>
-  </div>
-</div> -->
-
 <div class="row">
   
   <!-- some list -->
@@ -78,32 +56,55 @@
 	<div class="card card-mini">
 	  <div class="card-header">
 	    <div class="card-title"><h3>All Contributions</h3></div>
-	    <ul class="card-action">
+<!-- 	    <ul class="card-action">
 	      <li>
 	        <a href="/admin">
 	          <i class="fa fa-refresh"></i>
 	        </a>
 	      </li>
-	    </ul>
+	    </ul> -->
+      <nav>
+            <ul class="pagination">
+              <li>
+                <a href="#" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <li><a href="#">1</a></li>
+              <li class="active"><a href="#">2</a></li>
+              <li><a href="#">3</a></li>
+              <li><a href="#">4</a></li>
+              <li><a href="#">5</a></li>
+              <li>
+                <a href="#" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+        </nav>
 	  </div>
 	  <div class="card-body no-padding table-responsive">
 
-	    <table class="table card-table">
-	      	<thead>
-		        <tr>
-					<th>#</th>
-					<th>Title</th>
-					<th>Author</th>
-		        </tr>
-	      	</thead>
-			<tbody>
-				<tr>
-				    <td></td>
-					<td>No Contributions Yet</td>
-					<td></td>
-				</tr>
-			</tbody>
-	    </table>
+        <table class="table card-table table-hover">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Created On</th>
+                <th>DB ID</th>
+              </tr>
+            </thead>
+            <tbody ng-repeat="contribution in contributions">
+              <tr>
+                <th>{{$index + 1}}</th>
+                <th>{{contribution.title}}</th>
+                <th>{{contribution.createdBy}}</th>
+                <th>{{contribution.dateCreated}}</th>
+                <th>{{contribution.id}}</th>
+              </tr>
+            </tbody>
+        </table>
 	  </div>
 
 

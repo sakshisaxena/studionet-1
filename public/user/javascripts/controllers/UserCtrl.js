@@ -343,3 +343,89 @@ angular.module('studionet')
 
 }])
 
+
+/*
+ *
+ *	Controller for Graph View
+ *	
+ * 
+ */
+
+.controller('UserGraphCtrl', ['$scope', 'profile', '$http', function($scope, profile, $http){
+
+
+	$scope.user = profile.user;
+	$scope.modules = profile.modules;
+
+	$http({
+		  method  : 'GET',
+		  url     : '/graph/all/users',
+		 })
+		.success(function(data) {
+			    
+		    if (data == undefined) {
+				console.log("Error fetching Group Data")
+		    } else {
+
+
+						var data = data;
+
+						var colors = {
+						"Arsenal":         "#da4480"
+						,"Aston Villa":    "#5ab449"
+						,"Bournemouth":    "#7f5acd"
+						,"Chelsea":        "#aab740"
+						,"Crystal Palace": "#ce58c0"
+						,"Everton":        "#50a26e"
+						,"Leicester City": "#d1434b"
+						,"Liverpool":      "#45c0bc"
+						,"Manchester City":"#ce5929"
+						,"Manchester Utd": "#4e7bda"
+						,"Newcastle Utd":  "#d49d3c"
+						,"Norwich City":   "#6660a3"
+						,"Southampton":    "#7b853c"
+						,"Stoke City":     "#b58dde"
+						,"Sunderland":     "#97622e"
+						,"Swansea City":   "#609dd6"
+						,"Tottenham":      "#e29074"
+						,"Watford":        "#9c4b88"
+						,"West Bromwich":  "#ab505f"
+						,"West Ham Utd":   "#dc85b6"
+						};
+
+						var sortOrder = data.map(function(d){
+							return d[0]
+						});
+						
+						function sort(a,b){ return d3.ascending(sortOrder.indexOf(a),sortOrder.indexOf(b)); }
+
+						var ch = viz.ch().data(data)
+						      .padding(.01)
+						      .sort(sort)
+						    .innerRadius(430)
+						    .outerRadius(450)
+						    .duration(1000)
+						    .chordOpacity(0.3)
+						    .labelPadding(.03)
+						      .fill(function(d){ return colors[d];});
+
+						var width=1200, height=1100;
+
+						var svg = d3.select("#user-graph").append("svg").attr("height",height).attr("width",width);
+
+						svg.append("g").attr("transform", "translate(550,450)").call(ch);
+
+						// adjust height of frame in bl.ocks.org
+						d3.select(self.frameElement).style("height", height+"px").style("width", width+"px");   
+							    }
+
+		  })
+
+
+
+  
+
+
+}])
+
+

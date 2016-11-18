@@ -11,13 +11,16 @@ var db = require('seraph')({
 // route: /api/tags/
 router.route('/')
 
-	// return all tags
+	/*
+	 * Returns the list of all tags with name, createdBy, contributionCount, id
+	 */
 	.get(auth.ensureAuthenticated, function(req, res){
 		
 		// return only name and id associated with each tag
 		var query = [
 			'MATCH (t:tag) WITH t',
-			'RETURN {name: t.name, id: id(t)}'
+			'MATCH ()-[r:TAGGED]->(t)',
+			'RETURN {name: t.name, createdBy: t.createdBy, contributionCount: count(r), id: id(t)}'
 		].join('\n');
 
 		db.query(query, function(error, result){

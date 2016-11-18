@@ -16,7 +16,7 @@ router.route('/')
 
 		// AKM - needs a direction or it sends double
 		var query = [
-									'MATCH p=()-[]->() RETURN p'
+									'MATCH p=(contribution)-[]->(contribution) RETURN p'
 								].join('\n');
 
 		apiCall(query, function(data){
@@ -46,6 +46,7 @@ router.route('/')
 		});
 
   });
+
 
 // route: /graph/all/me
 router.route('/me')
@@ -122,6 +123,36 @@ router.route('/me')
 			}
 		});
 		*/
+
+	});
+
+	// route: /graph/users
+	router.route('/users')
+
+		// return whole graph
+		.get(auth.ensureAuthenticated, function(req, res){
+
+			// AKM - needs a direction or it sends double
+			var query = [
+							'MATCH (a:user)-[r*0..2]-(b:user)',
+							'WHERE NOT ID(a) =ID(b)',
+							'RETURN a.name, b.name, COUNT(r)'
+						].join('\n');
+		
+			apiCall(query, function(data){	
+
+				var rows = [];
+				
+				data.forEach(function(row){
+
+					rows.push(row.row);
+
+					
+				});
+
+				res.send(rows);
+
+			});
 
 	});
 

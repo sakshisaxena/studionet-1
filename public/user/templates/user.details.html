@@ -27,7 +27,7 @@
                 <p><strong>Last Logged In: </strong>{{user.lastLoggedIn | date: 'medium'}}</p>
                 <p><strong>Super Admin: </strong>{{user.superAdmin}}</p>
                 <div class='row'>
-                  <div class='col-sm-4'>
+                  <div class='col-sm-6'>
                     <p>
                       <strong>Groups ( {{modules.length}} ) :</strong>
                       <ul ng-repeat="module in modules">
@@ -35,7 +35,7 @@
                       </ul>
                     </p>
                   </div>
-                  <div class='col-sm-4'>
+                  <div class='col-sm-6'>
                   <p>
                     <strong>Contributions ( {{modules.length}} ) :</strong>
                     <ul ng-repeat="module in modules">
@@ -43,14 +43,14 @@
                     </ul>
                   </p>
                   </div>
-                  <div class='col-sm-4'>
+<!--                   <div class='col-sm-4'>
                   <p>
                     <strong>Filters ( {{modules.length}} ) :</strong>
                     <ul ng-repeat="module in modules">
                       <li>---placeholder filters---</li>
                     </ul>
                   </p>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>
