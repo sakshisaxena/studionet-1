@@ -1,4 +1,6 @@
 <link rel='stylesheet' href='./stylesheets/graph-style.css' />
+<!-- include javascript for filters -->
+
 <script src="https://cdn.rawgit.com/cpettitt/dagre/v0.7.4/dist/dagre.min.js"></script>
 <script src="https://cdn.rawgit.com/cytoscape/cytoscape.js-dagre/1.1.2/cytoscape-dagre.js"></script>
 
@@ -16,21 +18,28 @@
 
       <!--filters try -->
 
-          <div class="col-lg-4">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <i class="glyphicon glyphicon-th-list"></i> Account Manager - [extra-buttons = true] <a href="#" data-toggle="modal" data-target="#AccountManagerTreeModal"><i class="pull-right glyphicon glyphicon-plus" style="color:white;"></i></a>
+          <div>
+                <div class="filter-panel panel panel-primary" >
+                    <div class="filter-heading">
+                        </i> Author <a href="#" data-toggle="modal" data-target="#AccountManagerTreeModal"></a>
                     </div>
                               <multiselect-searchtree data-input-model="data" multi-select="true"
                                             data-output-model="selectedItem2" data-callback="CustomCallback(item, selectedItems)"
-                                            data-select-only-leafs="false" extra-buttons="true"></multiselect-searchtree>
-                </div>                
-            </div>
-      
+                                            data-select-only-leafs="false" extra-buttons="false" class="filter1" style="display:none"></multiselect-searchtree>
+                </div>
+                
+                  <div class="icon apply-filter">
+                    <i class="fa fa-shopping-basket" aria-hidden="true"></i>
+                  </div>
+                  <div class="title">Filter Graph</div>
+                              
+          </div>
+
+      <!--filters try end-->
 
       <!-- filters -->
       <li class="dropdown">
-        <div id="filters">
+        <div id="filters" style="display:none" >
             <input id="search" type="text" placeholder="Search.." ng-model="searchText" >
             <!-- <button class="btn-search" ><i class="fa fa-search"></i></button> -->
             <div ng-init="filterData"></div>
@@ -51,21 +60,7 @@
                     
 
                     </ul>
-                    <script>
-                    $('.filter-option').load(function() {
-                        alert("HI");
-                        var scope = angular.element("#filters").scope();
-                        for(var i=0; i<scope.filterData.length;i++){
-                          var d= scope.filterData[i];
-                        
-                          if(d.parent!=-1){
-                            console.log("yes");
-                            $('#'+d.parent).find('div').append('<input type="checkbox" ng-model="'+d.id+'"> '+ d.name+'</input> <br>');
-                          }
-                        }
-                    });
-                </script>
-                </div>
+                  </div>
 
                 </div>
             

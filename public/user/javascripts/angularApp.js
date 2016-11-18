@@ -1,4 +1,4 @@
-var app = angular.module('studionet', ['ui.router', 'ngTagsInput', 'ngFileUpload', 'angularModalService'])
+var app = angular.module('studionet', ['ui.router', 'ngTagsInput', 'ngFileUpload', 'angularModalService', 'multiselect-searchtree'])
 									.run(['profile', function(profile){
 										/*
 										profile.getUser();

@@ -38,74 +38,77 @@ angular.module('studionet')
 
 $(document).ready(function() { 
 
+     $(".filter-heading").click(function(){
+        $(this).siblings().toggle();
+     });
 
 
-
-
-     var filterData =
-       [
-        {
-          "id": 1,
-         
-          "module": "AR232",
-          "description": "desc1",
-          "groups":
-        
-          [
-              { "id": "1", "name": "Regular" },
-              { "id": "2", "name": "Chocolate" },
-              { "id": "3", "name": "Blueberry" },
-              { "id": "4", "name": "Devil's Food" }
-            ]
-        ,
-          
-        },
-        {
-          "id": 1,
-         
-          "module": "AR232",
-          "description": "desc1",
-          "groups":
-            [
-              { "id": "1", "name": "Regular " },
-              { "id": "2", "name": "Chocolate" },
-              { "id": "3", "name": "Blueberry" },
-              { "id": "4", "name": "Devil's Food" }
-            ]
-        
-          
-        },
-        {
-          "id": 1,
-         
-          "module": "AR232",
-          "description": "desc1",
-          "groups":
-            [
-              { "id": "1", "name": "abc" },
-              { "id": "2", "name": "Chocolate" },
-              { "id": "3", "name": "Blueberry" },
-              { "id": "4", "name": "Devil's Food" }
-            ]
-          
-        }
-      ];
-
-
-      var filterData1;
-      $http.get('/api/groups/').success(function(data){
-        //filterData1 = data;  
-        //console.log(filterData1);
-        filterData1 = [{"parent":202,"name":"Group 1a","description":"Subgroup 1 of Group 1","id":204,"restricted":"false"},
-        {"parent":206,"name":"Group 2a","description":"Subgroup of Group 2","id":208,"restricted":"false"},
-        {"parent":-1,"name":"Group 1","id":202,"description":"AR2332","restricted":"false"},
-        {"parent":-1,"name":"Group 2","id":206,"description":"A2321","restricted":"false"}
-        ];
-        console.log(filterData1);
-        $scope.filterData=filterData1;
-                
       
+      $http.get('/api/groups/').success(function(data){
+        
+      
+        $scope.filterData=data;
+        var list=data;
+        var groups = [];
+        var mainGrps = [];
+        var numGrp=0;
+        for(var i=0;i<list.length;i++){
+          
+          var obj = {
+            name: list[i].name,
+            id: list[i].id,
+            parentId: list[i].parentId,
+            isExpanded: false,
+            children:[]
+          }
+          mainGrps.push(obj);
+          groups[list[i].id] = obj;
+        }
+       
+        for(var b=0;b<list.length;b++){
+          var parent = list[b].parentId;
+          if(groups[parent]!=null){
+
+            groups[parent].children.push(list[b].id);
+
+          }
+        }
+        
+        
+        var grpList = [];
+       /* for(var j=0;j<mainGrps.length;j++){
+          if( mainGrps[j].children.length >0){
+            for(var k=0; k < mainGrps[j].children.length; k++){
+              mainGrps[j].children[k] = groups[mainGrps[j].children[k]];
+            }
+          }
+        }*/
+            //grpList[j] = groups[[j]];
+          for(var j=0;j<mainGrps.length;j++){
+            var key = mainGrps[j].id;
+            if(groups.hasOwnProperty(key)){
+              for(var i=0;i<groups[key].children.length;i++){
+                var id = groups[key].children[i];
+                mainGrps[j].children[i] = groups[id];
+             }
+            }
+          }
+
+       
+        //console.log(mainGrps);
+        for(var j=0;j<mainGrps.length;j++){
+          
+          if(mainGrps[j].parentId!=null){
+            
+            mainGrps.splice(j,1);
+            j--;
+          }
+        }
+        $scope.data = angular.copy(mainGrps);
+        $scope.datas = angular.copy(mainGrps);  
+        
       }); 
+
 
       
 $('#search').trigger('click');
@@ -123,12 +126,17 @@ $('#search').trigger('click');
                         }
                       }
                       });
-
-
-
-
-
 });
+
+
+        $scope.CustomCallback = function (item, selectedItems) {
+            if (selectedItems !== undefined && selectedItems.length >= 80) {
+                return false;
+            } else {
+                return true;
+            }
+        };
+
 
 
 $('.filter-option').load(function() {
