@@ -317,21 +317,42 @@ jAni.play().promise().then(function(){
 
       // display modal only if node is a contribution
       if(data.type == 'contribution'){
+           var predecessors = node.predecessors();
+           var successors = node.successors();
+           var nodeTree = [];
+           for(var i = predecessors.nodes().length - 1; i >= 0; i--){
+             //Recursively get edges (and their sources) coming into the nodes in the collection (i.e. the incomers, the incomers' incomers, ...)
+             var nodeItem = predecessors.nodes()[i];
+             if(nodeItem.data().type == 'contribution'){
+                nodeTree.push(nodeItem.data());
+                console.log(nodeItem.data());
+              }
+           }
+           nodeTree.push(data);
+           successors.nodes().forEach(function(nodeItem){
+              //Recursively get edges (and their targets) coming out of the nodes in the collection (i.e. the outgoers, the outgoers' outgoers, ...).
+              if(nodeItem.data().type == 'contribution'){
+                nodeTree.push(nodeItem.data());
+                console.log(nodeItem.data());
+              }
+           })
 
-           var route = "/api/" + data.type + "s/" + data.id;
+           var RecursiveGetData = function(index){
+              var route = "/api/" + nodeTree[index].type + "s/" + nodeTree[index].id;
+              $.get( route , function(result) {
+                  //console.log("test on clicking onto a contribution");
+                  nodeTree[index].db_data = result;
+                  if(index == nodeTree.length - 1){
+                    angular.element($('.graph-container')).scope().showDetailsModal(nodeTree);
+                  }
+                  else{
+                    RecursiveGetData(++index);
+                  }
+              });
+           };
 
-            $.get( route , function( extra_data ) {
-
-
-                 data.extra = extra_data;
-                 angular.element($('.graph-container')).scope().showDetailsModal(data);
-
-            });
-
-
-        
+           RecursiveGetData(0);
       }
-
     });
 
     cy.on('click', function(){
