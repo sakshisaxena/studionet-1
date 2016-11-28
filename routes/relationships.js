@@ -8,8 +8,24 @@ var db = require('seraph')({
   pass: process.env.DB_PASS
 });
 
+
+/*
+ * Get all legal relationships
+ */
+var constants = require('../datastructure/constants.js');
+var relationships = constants.relationships;
+
+
 // route: /api/relationships
 router.route('/')
+	
+	/*
+	 * Returns a list of all legal relationships
+	 */
+	.get(auth.ensureAuthenticated, function(req, res){
+		res.send(relationships);
+	})
+
 	.post(auth.ensureAuthenticated, function(req, res){
 
 		// LIKE, VIEW: 					relationship between user and contribution, check if node user is you

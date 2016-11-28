@@ -62,7 +62,7 @@ router.route('/')
 		// TODO: more details for a group?
 		// avatar, etc.
 
-		var groupExists; console.log(req.body); console.log(req.body.name);
+		var groupExists; 
 		// Param setup
 		var params = {
 			nameParam: req.body.name,

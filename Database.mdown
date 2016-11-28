@@ -58,5 +58,10 @@
 - User -> Contribution [:VIEWED {count: 0, lastViewed : "Date"}]
 - User -> Contribution [:RATED {rating: 0, lastRated : "Date"}]
 - Contribution -> Tag [:TAGGED {createdBy: user-id}]
-- Contribution -> Contribution [:LINKED {by: <id>, relationship: "question/answer/comment/--"}]
+- Contribution -> Contribution [:QUESTION ]
+- Contribution -> Contribution [:ANSWER ]
+- Contribution -> Contribution [:COMMENT ]
+- Contribution -> Contribution [:RESOURCE {createdBy: <id>}]
+- Contribution -> Contribution [:INSPIRED {createdBy: <id>}]
+- Contribution -> Contribution [:RELATED {createdBy: <id>, note: "---description of the relationship---"}]
 

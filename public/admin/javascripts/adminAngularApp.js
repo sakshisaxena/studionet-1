@@ -57,6 +57,20 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 				}]
 			}
 		})
+		.state('contributions', {
+			url: '/contributions',
+			templateUrl: '/admin/templates/contributions.html',
+			controller: 'ModulesCtrl',
+			resolve: {
+				usersPromise: ['users', function(users){
+					return users.getAll();
+				}],
+				// get modules data before page loads
+				modulesPromise: ['modules', function(modules){
+					return modules.query();
+				}]
+			}
+		})		
 		.state('users', {
 			url: '/users',
 			templateUrl: '/admin/templates/users.html',

@@ -46,7 +46,7 @@ router.route('/')
 			                         'ref: {contributionRefParam}, lastUpdated:{lastUpdatedParam},' +
 			                         'dateCreated: {dateCreatedParam}, editted: {edittedParam}}) WITH c',
 			'MATCH (u:user) WHERE id(u)={createdByParam}',
-			'CREATE (u)-[r:CREATED]->(c)'
+			'CREATE (u)-[r:CREATED]->(c) WITH c'
 		];
 
 		// This is where the reference link is created, if necessary.
@@ -54,15 +54,23 @@ router.route('/')
 		// reference type: REPLYTO, 
 		if (parseInt(req.body.ref) !== -1){
 			query.push('MATCH (c1:contribution) where id(c1)={contributionRefParam}')
-			query.push('CREATE (c)-[r1:{refTypeParam}]->(c1)')
+			query.push('CREATE (c)-[r1:' + req.body.refType +']->(c1) WITH c')
 		}
 
 		// This is where the tag links are created, if necessary.
 		// Furthermore, if a tag does not exist yet, create them and set the user as the creator.
+		var tagString = 'UNWIND {tagsParam} as tagname '
+						+ 'MERGE (t:tag {name : tagname}) '
+						+ 'ON CREATE '
+						+ 'SET t.createdBy = {createdByParam} '
+						+ 'CREATE UNIQUE (c)-[r2:TAGGED]->(t) '
+
+	  	/*
 		var tagString = 'FOREACH (tagName in {tagsParam} |'
 										+ 'MERGE (t: tag {name: tagName})'
 										+ 'ON CREATE SET t.createdBy = {createdByParam}'
 										+ 'CREATE UNIQUE (c)-[r2:TAGGED]->(t)'; // link the contribution to this tag
+		*/
 		query.push(tagString);
 
 		query = query.join('\n');
@@ -70,14 +78,14 @@ router.route('/')
 		var date = Date.now();
 
 		var params = {
-			tagsParam: req.user.tags,
-			createdByParam: req.user.id,
+			createdByParam: parseInt(req.user.id),
+			tagsParam: req.body.tags,
 			contributionTitleParam: req.body.title,
 			contributionBodyParam: req.body.body,
-			contributionRefParam: req.body.ref, 
+			contributionRefParam: parseInt(req.body.ref), 
 			lastUpdatedParam: date,
 			dateCreatedParam: date,
-			refTypeParam: req.body.refType,
+			refTypeParam: req.body.refType, 
 			edittedParam: false,
 			};
 
@@ -88,16 +96,18 @@ router.route('/')
 		 *	!! Remove in production
 		 * 
 		 */
-		params.createdByParam = req.body.author;		// remove in production
+		if(auth.ensureSuperAdmin)
+			params.createdByParam = parseInt(req.body.author);		// remove in production
 
-
-
+		
 		db.query(query, params, function(error, result){
 			if (error)
-				console.log('Error creating new post for user : ' + req.user.nusOpenId);
-			else
+				console.log('Error creating new post for user : ', error);
+			else{
+				console.log(result[0]);
 				res.send(result[0]);
-		});
+			}
+		}); 
 
 	});
 
@@ -106,21 +116,32 @@ router.route('/:contributionId')
 	// Get a specific contribution details by its id: contribution content, contribution statistics & author information
 	.get(auth.ensureAuthenticated, function(req, res){
 
-		var query = [
-			// 'MATCH (c:contribution) WHERE ID(c)={contributionIdParam}',
+		var params = {
+			contributionIdParam: parseInt(req.params.contributionId)
+		}
+
+/*		var query = [
+			//'MATCH (c:contribution) WHERE ID(c)= {contributionIdParam}'
 			'MATCH (c:contribution) WHERE ID(c)=' + req.params.contributionId,
 			'RETURN c'
-		].join('\n');
+		];*/
 
-		var params = {
-			contributionIdParam: req.params.contributionId
-		}
+		//query.push('RETURN c');
+		var query = [];
+		query.push('MATCH (g1:contribution) WHERE id(g1)= {contributionIdParam}')
+		query.push('WITH g1')
+		query.push('RETURN g1');
+		query = query.join('\n');
+		console.log(query);
+
 
 		db.query(query, params, function(error, result){
 			if (error)
 				console.log('Error fetching contribution of id: ' + req.params.contributionId);
-			else
+			else{
+				console.log(result[0]);
 				res.send(result[0]);
+			}
 		});
 
 	})
