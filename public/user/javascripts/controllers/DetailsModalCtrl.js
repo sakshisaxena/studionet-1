@@ -4,7 +4,7 @@ angular.module('studionet')
 	$scope.name = "Jane Doe";
   $scope.age = 12;
   
-  $scope.data = {};
+  $scope.data = [];
 
 
   $scope.setData = function(data){

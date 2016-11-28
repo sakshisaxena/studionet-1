@@ -3,11 +3,11 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
 <div class="modal fade" display='block'>
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-lg" ng-repeat='contribution in data'>
     <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" ng-click="close()" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h3 class='content-modal'>{{data.extra.name}}</h3> 
+          <h3 class='content-modal'>{{contribution.db_data.name}}</h3> 
         </div>
         <div class="modal-body">
           <div class='row'>
@@ -29,53 +29,23 @@
               </div>
               <div class="tab-content">
                 <div class='tab-pane fade in active' id='content'>
-                  <b>Contribution's type: </b>{{data.type}}
+                  <b>Contribution's id: </b>{{contribution.id}}
                   <br><br>
-                  <b>Contribution's content: </b>{{data.extra.content}} 
+                  <b>Contribution's type: </b>{{contribution.type}}
                   <br><br>
-                  <b>Contribution's description: </b>{{data.extra.description}} 
+                  <b>Contribution's content: </b>{{contribution.db_data.content}} 
+                  <br><br>
+                  <b>Contribution's description: </b>{{contribution.db_data.description}} 
                   <br><br>
                 </div>
                 <div class='tab-pane fade' id='statistics'>
                     <h3>This is the column for contributions' statistics.</h3>
                 </div>
-
                 <button type="button" ng-click="close()" class="btn btn-primary btn-block" data-dismiss="modal">Close</button>
                 </div>
             </div>
           </div>
         </div>
-
-
-        <!--<div class="container">
-          <h2>Dynamic Tabs</h2>
-          <ul class="nav nav-tabs">
-            <li class="active"><a data-toggle="tab" data-target="#home">Home</a></li>
-            <li><a data-toggle="tab" data-target="#menu1">Menu 1</a></li>
-            <li><a data-toggle="tab" data-target="#menu2">Menu 2</a></li>
-            <li><a data-toggle="tab" data-target="#menu3">Menu 3</a></li>
-          </ul>
-
-          <div class="tab-content">
-            <div id="home" class="tab-pane fade in active">
-              <h3>HOME</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-            </div>
-            <div id="menu1" class="tab-pane fade">
-              <h3>Menu 1</h3>
-              <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-            </div>
-            <div id="menu2" class="tab-pane fade">
-              <h3>Menu 2</h3>
-              <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
-            </div>
-            <div id="menu3" class="tab-pane fade">
-              <h3>Menu 3</h3>
-              <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-            </div>
-          </div>
-        </div>-->
-
     </div>
   </div>
 </div>

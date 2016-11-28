@@ -89,8 +89,6 @@ router.route('/')
 		 */
 		params.createdByParam = req.body.author;		
 
-
-
 		db.query(query, params, function(error, result){
 			if (error)
 				console.log('Error creating new post for user : ' + req.user.nusOpenId);
@@ -106,7 +104,8 @@ router.route('/:contributionId')
 	.get(auth.ensureAuthenticated, function(req, res){
 
 		var query = [
-			'MATCH (c:contribution) WHERE ID(c)={contributionIdParam}',
+			// 'MATCH (c:contribution) WHERE ID(c)={contributionIdParam}',
+			'MATCH (c:contribution) WHERE ID(c)=' + req.params.contributionId,
 			'RETURN c'
 		].join('\n');
 
@@ -114,7 +113,7 @@ router.route('/:contributionId')
 			contributionIdParam: req.params.contributionId
 		}
 
-		db.query(query, function(error, result){
+		db.query(query, params, function(error, result){
 			if (error)
 				console.log('Error fetching contribution of id: ' + req.params.contributionId);
 			else
