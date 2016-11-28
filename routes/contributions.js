@@ -81,13 +81,16 @@ router.route('/')
 			edittedParam: false,
 			};
 
+
 		/*
 		 *	Only to allow creationg of synthetic data; 
 		 *	Changes creating user from actual user to user specified;
 		 *	!! Remove in production
 		 * 
 		 */
-		params.createdByParam = req.body.author;		
+		params.createdByParam = req.body.author;		// remove in production
+
+
 
 		db.query(query, params, function(error, result){
 			if (error)
