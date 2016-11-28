@@ -12,12 +12,12 @@
 
 #### User Relationship
 
--User <- Group   [:MEMBER {role: "Admin"/"User"}]
--User <- Group   [:CREATED {on: "Date"}]
--User -> Tag [:CREATED {createdOn : "Date"}]
--User -> Contribution [:CREATED {createdOn : "Date"}]
--User -> Contribution [:VIEWED {count: 0, lastViewed : "Date"}]
--User -> Contribution [:RATED {rating: 0, lastRated : "Date"}]
+- User <- Group   [:MEMBER {role: "Admin"/"User"}]
+- User <- Group   [:CREATED {on: "Date"}]
+- User -> Tag [:CREATED {createdOn : "Date"}]
+- User -> Contribution [:CREATED {createdOn : "Date"}]
+- User -> Contribution [:VIEWED {count: 0, lastViewed : "Date"}]
+- User -> Contribution [:RATED {rating: 0, lastRated : "Date"}]
 
 #### Groups Properties
 
@@ -27,9 +27,9 @@
 
 #### Group Relationship
 
--User <- Group   [:MEMBER {role: "Admin"/"User", on:'Date'}]
--Group -> Group [:SUBGROUP]
--Group -> Tag [:TAG]
+- User <- Group   [:MEMBER {role: "Admin"/"User", on:'Date'}]
+- Group -> Group [:SUBGROUP]
+- Group -> Tag [:TAG]
 
 #### Tag Properties
 
@@ -38,9 +38,9 @@
 
 #### Tag Relationships
 
--User -> Tag [:CREATED {createdOn : "Date"}]
--Group -> Tag [:TAG]
--Contribution -> Tag [:TAGGED {createdBy: user-id}]
+- User -> Tag [:CREATED {createdOn : "Date"}]
+- Group -> Tag [:TAG]
+- Contribution -> Tag [:TAGGED {createdBy: user-id}]
 
 
 #### Contribution Properties
@@ -54,9 +54,9 @@
 
 #### Contribution Relationships
 
--User -> Contribution [:CREATED {createdOn : "Date"}]
--User -> Contribution [:VIEWED {count: 0, lastViewed : "Date"}]
--User -> Contribution [:RATED {rating: 0, lastRated : "Date"}]
--Contribution -> Tag [:TAGGED {createdBy: user-id}]
--Contribution -> Contribution [:LINKED {by: <id>, relationship: "question/answer/comment/--"}]
+- User -> Contribution [:CREATED {createdOn : "Date"}]
+- User -> Contribution [:VIEWED {count: 0, lastViewed : "Date"}]
+- User -> Contribution [:RATED {rating: 0, lastRated : "Date"}]
+- Contribution -> Tag [:TAGGED {createdBy: user-id}]
+- Contribution -> Contribution [:LINKED {by: <id>, relationship: "question/answer/comment/--"}]
 
