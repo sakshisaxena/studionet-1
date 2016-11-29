@@ -3,6 +3,7 @@
 	width: 90%;
 	margin-left: 5%;
 	padding-left: 0px !important;
+	overflow-y: hidden;
 }
 
 aside.app-sidebar{

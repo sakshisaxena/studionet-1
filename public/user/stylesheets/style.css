@@ -202,6 +202,13 @@ header{
 }
 
 
+p.hover-content img{
+	width: 150px !important; 
+	height: 150px !important; 
+	display: block;
+}
+
+
 
 
 
@@ -211,17 +218,15 @@ header{
 
 /* ---- Graph Container ---- */
 .graph-container{
-	height: 775px; 
+	height: 775px;
+	//width: 100vh; 
 
-	//margin: 10px 25px 10px 25px;
+	margin: 0px 25px 10px 25px;
 
 	position: relative;
-	padding: 20px 15px 30px 15px;
+	padding: 0px 15px 30px 15px;
 }
 
-.bread-crumbs{
-	float: left;
-}
 
 .graph-controls{
 
@@ -234,7 +239,7 @@ header{
 	margin-top: 0px; 
 	padding: 0px 0 0px 0;
 
-	z-index: 7;
+	z-index: 20;
 }
 
 .graph-nav-control{

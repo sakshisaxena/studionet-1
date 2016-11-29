@@ -1,4 +1,4 @@
-var app = angular.module('studionet', ['ui.router', 'ngTagsInput', 'ngFileUpload', 'angularModalService', 'multiselect-searchtree', 'angular-ranger'])
+var app = angular.module('studionet', ['ui.router','ui.bootstrap', 'ngTagsInput', 'ngFileUpload', 'angularModalService', 'multiselect-searchtree', 'angular-ranger'])
 									.run(function($rootScope){
 /*									    $rootScope.value = {
 									        min: 5,

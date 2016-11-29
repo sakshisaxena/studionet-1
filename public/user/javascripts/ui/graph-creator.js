@@ -13,7 +13,7 @@ var MODULE_COLOR = "#FB95AF";
 var USER_COLOR = "#DE9BF9";
 var CONTRIBUTION_COLOR = "#D02F2F";
 
-var EDGE_DEFAULT_COLOR = "#ccc";
+var EDGE_DEFAULT_COLOR = "#222";
 var EDGE_SELECTED_COLOR = "blue";
 var EDGE_DEFAULT_STRENGTH = 3;
 var EDGE_DEFAULT_WEIGHT = 3;
@@ -85,7 +85,7 @@ var graph_style = {
               'source-arrow-color': 'data(faveColor)',
               'content' : 'data(label)',
               'font-size':'15%',
-              'color': '#d8d8d8',
+              'color': '#222',
               'edge-text-rotation': 'autorotate',
               'target-arrow-color': 'data(faveColor)'
             })
@@ -137,11 +137,17 @@ var createGraphNode = function(node){
           }
     }
     else if(node.type=="contribution"){
+
           node.faveShape = CONTRIBUTION_SHAPE;
           node.faveColor = CONTRIBUTION_COLOR;
           node.width = CONTRIBUTION_WIDTH;
           node.height = CONTRIBUTION_HEIGHT;
-          node.icon = 'url(./img/contribution.png)' //'url(../../img/zoom-in.svg/)';
+
+          if(node.name == 'StudioNET'){
+             node.width = CONTRIBUTION_WIDTH + 10;
+             node.height = CONTRIBUTION_HEIGHT + 10;
+             node.faveColor = "#222";
+          }
     }
     else {
           node.faveShape = CONTRIBUTION_SHAPE;
@@ -175,12 +181,9 @@ var createHoverBox = function( node, extra ){
     
     var html_content = $('<div></div>').addClass(node.type);
     
-    var heading = $('<div></div>').addClass('heading').html(node.id + " " + (node.name || extra.name));
+    var heading = $('<h4></h4>').html(node.name || node.title);
     html_content.append(heading);
-
-    var statsContainer = $('<div></div>').addClass('stats-container');
-
-    
+   
 
     if(node.type == "module"){
       var stat1 = $('<div></div>').addClass('stats').html('Users <br> 243');
@@ -195,15 +198,16 @@ var createHoverBox = function( node, extra ){
       statsContainer.append(stat2);
     }
     else if(node.type == "contribution"){
-      var stat1 = $('<div></div>').addClass('stats').html('Views <br> 243');
-      statsContainer.append(stat1);
-      var stat2 = $('<div></div>').addClass('stats').html('Likes <br> 10');
-      statsContainer.append(stat2);
-      var stat3 = $('<div></div>').addClass('stats').html('Links <br> 45');
-      statsContainer.append(stat3);
+
+
+
+      var lastUpdated = $('<p></p>').html('Last Updated : ' + Date(extra.lastUpdated).substr(0, 10));
+      var mini_content = $('<p class=\'hover-content\'></p>').html(extra.body.substr(0, 100) + "...");
+        
+      html_content.append(lastUpdated);
+      html_content.append(mini_content);
     }
 
-    html_content.append(statsContainer);
     return html_content;
 
 }
@@ -236,46 +240,46 @@ var makeGraph = function(dNodes, dEdges){
     var winHeight = window.innerHeight/2;
 
 
-    //cy.$("#"+id).renderedPosition({x:winWidth, y:winHeight});
-/*    if($("input[name='layout-radio']:checked").val()=="COSE_GRAPH_LAYOUT"){
-      cy.$("#"+id).lock();
-      cy.$("#"+id).renderedPosition({x:560, y:300});
-      
-    }*/
 
-    var jAni = cy.$('#'+id).animation({
-      renderedPosition:{x:winWidth, y:winHeight},
-      duration: 1000
-    });
-
-    jAni.play().promise().then(function(){
-      console.log('animation done');
-    });
-
+    /*
+     *
+     *  Show hover-box on mouse in
+     * 
+     */
     cy.on('mouseover','node', function(evt){
 
-      var data = evt.cyTarget.data();
-      var directlyConnected = evt.cyTarget.neighborhood();
-      var x = evt.cyPosition.x;
-      var y = evt.cyPosition.y;
+      //alert("hello world")
+
+
+      /* 
+       *  Highlight connections
+       * 
+       */
+      cy.elements().removeClass('highlighted');
+      var node = evt.cyTarget;
+      var data = node.data();
+      var directlyConnected = node.neighborhood();
+      node.addClass('highlighted');
+      directlyConnected.nodes().addClass('highlighted');
+      node.connectedEdges().addClass('highlighted');
+
+      /*
+       * Track mouse-position
+       */
       var x2, y2;
-    $(document).mousemove(function(event) {
-        x2 = event.pageX;
-        y2= event.pageY;
-        
-    });
+      $(document).mousemove(function(event) {
+          x2 = event.pageX;
+          y2= event.pageY;
+          
+      });
 
     
       var route = "/api/" + data.type + "s/" + data.id;
-
-     
-      $('#content-block-hover').hide();
-
       $.get( route , function( extra_data ) {
             
             $('#content-block-hover').css('position','absolute');
-            $('#content-block-hover').css('top',y2 + 10 );
-            $('#content-block-hover').css('left',x2 + 10);
+            $('#content-block-hover').css('top', y2);
+            $('#content-block-hover').css('left', x2);
 
 
             $('#content-block-hover').html( createHoverBox(data, extra_data) );
@@ -287,9 +291,13 @@ var makeGraph = function(dNodes, dEdges){
     });
 
 
+    /*
+     * Remove hover-box on mouse out
+     */
     cy.on('mouseout','node', function(evt){
 
       cy.elements().css({ content: " " });
+      cy.elements().removeClass('highlighted');
 
       if(cy.$('node:selected')){
         $('#content-block-hover').html("");
@@ -354,18 +362,6 @@ var makeGraph = function(dNodes, dEdges){
       }
     });
 
-    cy.on('click', function(){
-        var node = cy.$('node:selected');  
-
-        if(node == undefined){
-         
-        }
-        else{
-        
-
-        }
-
-    })
     
 }
 
