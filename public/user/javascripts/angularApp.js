@@ -1,10 +1,12 @@
-var app = angular.module('studionet', ['ui.router', 'ngTagsInput', 'ngFileUpload', 'angularModalService', 'multiselect-searchtree'])
-									.run(['profile', function(profile){
-										/*
-										profile.getUser();
-										profile.getModules();
-										*/
-									}]);
+var app = angular.module('studionet', ['ui.router', 'ngTagsInput', 'ngFileUpload', 'angularModalService', 'multiselect-searchtree', 'angular-ranger'])
+									.run(function($rootScope){
+/*									    $rootScope.value = {
+									        min: 5,
+									        max: 18,
+									        value: 12
+									    };*/
+									});
+
 
 app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', function($stateProvider, $urlRouterProvider, tagsInputConfigProvider){
 

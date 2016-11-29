@@ -11,13 +11,13 @@ angular.module('multiselect-searchtree').run(['$templateCache', function ($templ
       "                       class=\"form-control\">\n" +
       " <span class=\"clear-button\" ng-click=\"clearFilter($event)\" ng-style=\"clearSearchIconStyle\"><span class=\"item-close\"></span></span>\n" +
       "                      <span class=\"input-group-addon\">" +
-      "                     <i class=\"glyphicon glyphicon-search\"  ng-click=\"clearFilter($event)\"></i>" +
+      "                     <i class=\"fa fa-search\"  ng-click=\"clearFilter($event)\"></i>" +
       "                      </span>" +
      "                      <span class=\"input-group-addon\" ng-if=\"extraButtons\" style=\"cursor: pointer;\" ng-click=\"onSelectAll(inputModel,$event)\">" +
-      "                     <i class=\"glyphicon glyphicon-ok\"></i> Select All" +
+      "                     <i class=\"fa fa-ok\"></i> Select All" +
       "                      </span>" +
 	       "                      <span class=\"input-group-addon\" ng-if=\"extraButtons\" style=\"cursor: pointer;\" ng-click=\"onClearAll(inputModel,$event)\">" +
-      "                     <i class=\"glyphicon glyphicon-remove\"></i> Clear All" +
+      "                     <i class=\"fa fa-remove\"></i> Clear All" +
       "                      </span>" +
       "                  </div>" +           
       "            </div>\n" +

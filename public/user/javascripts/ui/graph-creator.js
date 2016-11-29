@@ -3,15 +3,15 @@
  */
 var MODULE_SHAPE = "rectangle";
 var USER_SHAPE = "ellipse"
-var CONTRIBUTION_SHAPE = "rectangle"
+var CONTRIBUTION_SHAPE = "ellipse"
 
 var MODULE_WIDTH = 15, MODULE_HEIGHT = 15;
 var USER_WIDTH = 20, USER_HEIGHT = 20; 
-var CONTRIBUTION_WIDTH = 15, CONTRIBUTION_HEIGHT = 15;
+var CONTRIBUTION_WIDTH = 8, CONTRIBUTION_HEIGHT = 8;
 
 var MODULE_COLOR = "#FB95AF";
 var USER_COLOR = "#DE9BF9";
-var CONTRIBUTION_COLOR = "#FFD86E";
+var CONTRIBUTION_COLOR = "#D02F2F";
 
 var EDGE_DEFAULT_COLOR = "#ccc";
 var EDGE_SELECTED_COLOR = "blue";
@@ -218,15 +218,14 @@ var makeGraph = function(dNodes, dEdges){
     // if cytoscape canvas is defined, assign that
     if(arguments[2] != undefined)
       graph_style.container = document.getElementById(arguments[2]);
-    console.log(arguments);
 
     graph_style.elements = {
         nodes: dNodes.map( function(node){ return createGraphNode(node) } ), 
         edges: dEdges.map( function(edge){ return createGraphEdge(edge) } )
     }
 
-    graph_style.layout = eval($("input[name='layout-radio']:checked").val());
-    console.log($("input[name='layout-radio']:checked").val());
+    //graph_style.layout = eval($("input[name='layout-radio']:checked").val());
+    graph_style.layout = COSE_GRAPH_LAYOUT;
 
     cy = cytoscape( graph_style );
 
@@ -235,22 +234,23 @@ var makeGraph = function(dNodes, dEdges){
     
     var winWidth = window.innerWidth/2;
     var winHeight = window.innerHeight/2;
-    console.log("here:" +winWidth+" "+winHeight);
-    cy.$("#"+id).renderedPosition({x:winWidth, y:winHeight});
-    if($("input[name='layout-radio']:checked").val()=="COSE_GRAPH_LAYOUT"){
+
+
+    //cy.$("#"+id).renderedPosition({x:winWidth, y:winHeight});
+/*    if($("input[name='layout-radio']:checked").val()=="COSE_GRAPH_LAYOUT"){
       cy.$("#"+id).lock();
       cy.$("#"+id).renderedPosition({x:560, y:300});
       
-    }
+    }*/
 
     var jAni = cy.$('#'+id).animation({
       renderedPosition:{x:winWidth, y:winHeight},
       duration: 1000
     });
 
-jAni.play().promise().then(function(){
-  console.log('animation done');
-});
+    jAni.play().promise().then(function(){
+      console.log('animation done');
+    });
 
     cy.on('mouseover','node', function(evt){
 
@@ -264,7 +264,6 @@ jAni.play().promise().then(function(){
         y2= event.pageY;
         
     });
-    console.log("pos:"+x+" "+y);
 
     
       var route = "/api/" + data.type + "s/" + data.id;
