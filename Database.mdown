@@ -24,6 +24,7 @@
 - restricted
 - name
 - description
+- dateCreated
 
 #### Group Relationship
 

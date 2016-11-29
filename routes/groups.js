@@ -61,6 +61,7 @@ router.route('/')
 	.post(auth.ensureAuthenticated, function(req, res){
 		// TODO: more details for a group?
 		// avatar, etc.
+		var date = Date.now();
 
 		var groupExists; 
 		// Param setup
@@ -68,8 +69,9 @@ router.route('/')
 			nameParam: req.body.name,
 			descriptionParam: req.body.description,
 			restrictedParam: req.body.restricted,
-			groupParentIdParam: req.body.groupParentId,
-			userIdParam: req.user.id
+			groupParentIdParam: parseInt(req.body.groupParentId),
+			userIdParam: req.user.id,
+			dateCreatedParam: date
 		};
 
 		// TODO: Check for tags also
@@ -99,7 +101,7 @@ router.route('/')
 
 		// else try to create the group (link group to its tag, and add owner as admin to group)
 		query = [
-			'CREATE (g:group {name: {nameParam}, description: {descriptionParam}, restricted: {restrictedParam}})',
+			'CREATE (g:group {name: {nameParam}, description: {descriptionParam}, restricted: {restrictedParam}, dateCreated: {dateCreatedParam}})',
 			'WITH g',
 			'MATCH (u:user) WHERE id(u)= {userIdParam}',
 			'CREATE UNIQUE (g)-[r:MEMBER {role: "Admin"}]->(u)',
@@ -118,7 +120,22 @@ router.route('/')
 		query.push('RETURN g');
 		query = query.join('\n');
 
-		// Actual creating of group using above query
+
+		/*
+		 *
+		 *	For testing and creating synthetic data 
+		 *	Remove in production
+		 * 
+		 */
+		if(auth.ensureSuperAdmin && req.body.author && req.body.createdAt){
+
+			params.userIdParam = parseInt(req.body.author);		// remove in production
+			params.dateCreatedParam = Date(req.body.createdAt);
+		}
+
+		/*
+		 *	Actual creating of group using above query
+		 */ 
 		db.query(query, params, function(error, result){
 			if (error)
 				console.log('Error occured while creating the group in the database: ', error);

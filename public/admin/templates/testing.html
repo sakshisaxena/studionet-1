@@ -1,3 +1,18 @@
+<style>
+select, input{
+	width: 300px;
+}
+
+input.wide{
+	width: 450px;
+}
+
+select.tag-list{
+	height: 250px; 
+	margin-bottom: 20px;
+}
+
+</style>
 <!-- Functionalities to create synthetic datasets -->
 
 <!-- Create a contribution -->
@@ -16,7 +31,7 @@
 					    <br><br>
 
 						<label for="singleSelect"> Reply To: </label>
-					    <select name="singleSelect" id="singleSelect" ng-model="contributionData.ref">
+					    <select class='replyTo' name="singleSelect" id="singleSelect" ng-model="contributionData.ref">
 					      <option ng-repeat="contribution in contributions" value={{contribution.id}}>{{contribution.title}} ({{contribution.id}})</option>
 					    </select>
 
@@ -32,21 +47,31 @@
 						<br><br>					    	
 
 					    <label for="singleSelect"> Tags: </label><br>
-					    <select ng-model="contributionData.tags" multiple>
+					    <select class='tag-list' ng-model="contributionData.tags" multiple>
 					      <option ng-repeat="tag in tags" value="{{tag.name}}">{{tag.name}}</option>
 					    </select>
-					    <br>
+
+
 					    <input ng-model="tag"></input><button ng-click=addTag()>Add a Tag</button>
 			    	</div>
 
 			    	<div class='col-sm-8'>
 						<label for="Title"> Contribution Title: </label>
-			    		<input value='Title' ng-model="contributionData.title"></input>
+						<br>
+			    		<input class='wide' value='Title' ng-model="contributionData.title"></input>
 
 						<br><br>
 
-						<label for="Title"> Contribution Content: </label><br>
-				    	<textarea rows="10" cols="70" ng-model="contributionData.body"></textarea>
+						<label for="Title"> Contribution Content: </label>
+						<br>
+				    	<textarea class='wide' rows="10" cols="70" ng-model="contributionData.body"></textarea>
+
+				    	<br><br>
+
+				    	<label for="Date"> Date and Time </label>
+						<br>
+				    	<input type="datetime-local" name="time" ng-model="contributionData.createdAt"></input>
+
 				    </div>
 
 				</div>
@@ -77,9 +102,61 @@
 		    </div>
 		    <div class="card-body">
 		    	<p>
-			    	<div class='row'>
+			    		<div class='row'>
+							<div class='col-sm-4'>
+								<label for="singleSelect"> By Author: </label>
+							    <select name="singleSelect" id="singleSelect" ng-model="groupData.author">
+							      <option ng-repeat="user in users" value={{user.id}}>{{user.name}}</option>
+							    </select>
 
-			    		Lorem ipsum Cillum officia laborum fugiat veniam irure cillum elit ut in in fugiat aliqua ad magna irure fugiat laborum consectetur nisi dolor esse dolore laborum deserunt dolor ex ex velit laboris occaecat laborum amet ut et ex laboris dolor mollit occaecat veniam adipisicing cupidatat irure in laboris in id velit aute officia aliqua occaecat non aute magna et qui velit laboris qui ut deserunt dolor fugiat veniam in aliquip sit sint aliquip aliqua proident nisi id in ex ex elit mollit pariatur dolor quis commodo velit irure pariatur voluptate aute nisi amet dolore labore sunt mollit culpa ad dolore ut enim Excepteur in in mollit enim aliquip velit cillum anim dolore nostrud eu quis labore ea aute id culpa in officia pariatur Excepteur tempor aute esse nisi id in veniam culpa dolor commodo veniam Duis aliqua ea dolore eu deserunt reprehenderit eu in nisi enim qui veniam magna occaecat ex occaecat in minim in fugiat ullamco non in minim mollit aute dolor consequat ut dolore Duis aliquip.
+							    <br><br>
+
+								<label for="singleSelect"> Subgroup of: </label>
+							    <select class='replyTo' name="singleSelect" id="singleSelect" ng-model="groupData.groupParentId">
+							      <option ng-repeat="group in groups" value={{group.id}}>{{group.name}} ({{group.id}})</option>
+							    </select>
+
+							    <br><br>
+								
+								Restricted: 
+							    <input type="checkbox" checked={{groupData.restricted}} ng-model="groupData.restricted" />
+
+						    </div>
+
+						    <div class='col-sm-8'>
+								<label for="Title"> Group Name: </label>
+								<br>
+					    		<input class='wide' value='Title' ng-model="groupData.name"></input>
+
+								<br><br>
+
+								<label for="Title"> Group Description: </label>
+								<br>
+						    	<textarea class='wide' rows="10" cols="70" ng-model="groupData.description"></textarea>
+
+						    	<br><br>
+
+						    	<label for="Date"> Date and Time </label>
+								<br>
+						    	<input type="datetime-local" name="time" ng-model="groupData.createdAt"></input>
+
+							</div>
+						</div>
+
+						<!-- Request sent -->
+						<div class='row'>
+						    <div class="col-sm-12">
+						    	<br><br><br>
+								
+								<span><b> Request Data:  </b></span> 
+								<span>{{ groupData }}</span>
+
+								<br><br>
+								<button type="button" class="btn btn-primary pull-right" ng-click='createNewGroup()'>Create Group</button>
+							</div>
+						</div>
+
+			    	</div>
 				</p>
 		    </div>
 		</div>

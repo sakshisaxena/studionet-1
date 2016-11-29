@@ -96,8 +96,12 @@ router.route('/')
 		 *	!! Remove in production
 		 * 
 		 */
-		if(auth.ensureSuperAdmin)
+		if(auth.ensureSuperAdmin && req.body.author && req.body.createdAt){
+
 			params.createdByParam = parseInt(req.body.author);		// remove in production
+			params.dateCreatedParam = Date(req.body.createdAt);
+			params.lastUpdatedParam = Date(req.body.createdAt);
+		}
 
 		
 		db.query(query, params, function(error, result){

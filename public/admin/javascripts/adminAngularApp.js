@@ -82,7 +82,7 @@ app.config(['$stateProvider', '$urlRouterProvider', 'tagsInputConfigProvider', f
 			}
 		})
 		.state('tags', {
-			url: '/users',
+			url: '/tags',
 			templateUrl: '/admin/templates/tags.html',
 			controller: 'HomeCtrl',
 			resolve: {
